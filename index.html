@@ -241,22 +241,22 @@
   .x-follow {
     margin-top: 40px;
     background: var(--card); border: 1px solid var(--border);
-    padding: 28px 32px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 20px; flex-wrap: wrap;
+    padding: 36px 32px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 20px; text-align: center;
   }
-  .x-follow-left { display: flex; align-items: center; gap: 16px; }
-  .x-icon { width: 36px; height: 36px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .x-icon svg { width: 18px; height: 18px; fill: #000; }
-  .x-text-main { font-family: var(--mono); font-size: 13px; color: var(--white); margin-bottom: 3px; }
-  .x-text-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.06em; }
+  .x-follow-left { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .x-icon { width: 48px; height: 48px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .x-icon svg { width: 22px; height: 22px; fill: #000; }
+  .x-text-main { font-family: var(--mono); font-size: 15px; color: var(--white); margin-bottom: 3px; }
+  .x-text-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; }
   .x-btn {
-    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em;
     color: var(--bg); background: var(--white);
-    padding: 11px 24px; text-decoration: none;
-    transition: opacity 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 7px;
+    padding: 13px 36px; text-decoration: none;
+    transition: opacity 0.2s; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px;
   }
-  .x-btn svg { width: 13px; height: 13px; fill: #000; }
+  .x-btn svg { width: 14px; height: 14px; fill: #000; }
   .x-btn:hover { opacity: 0.85; }
 
   /* Footer */
@@ -295,14 +295,14 @@
   </div>
   <div class="ticker-strip">
     <div class="ticker-inner">
-      <span class="ti">NQ <span class="val">19,842.50</span> <span class="dn">▼ −187.25 (−0.93%)</span></span>
+      <span class="ti" id="nq-price-tick">NQ <span class="val" id="nq-price">—</span> <span id="nq-change">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–10:30 EST</span></span>
       <span class="ti">LAST TRADE <span class="up">+542 PTS ✓</span></span>
       <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
       <!-- duplicate for seamless loop -->
-      <span class="ti">NQ <span class="val">19,842.50</span> <span class="dn">▼ −187.25 (−0.93%)</span></span>
+      <span class="ti" id="nq-price-tick2">NQ <span class="val" id="nq-price2">—</span> <span id="nq-change2">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–10:30 EST</span></span>
@@ -624,6 +624,38 @@
 
   fetchSignal();
   setInterval(fetchSignal, 60000);
+
+  async function fetchNQPrice() {
+    try {
+      const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/NQ%3DF?interval=1m&range=1d', {
+        headers: { 'User-Agent': 'Mozilla/5.0' }
+      });
+      const data = await res.json();
+      const meta = data?.chart?.result?.[0]?.meta;
+      if (!meta) return;
+      const price   = meta.regularMarketPrice;
+      const prev    = meta.previousClose || meta.chartPreviousClose;
+      const change  = price - prev;
+      const changePct = ((change / prev) * 100).toFixed(2);
+      const isUp    = change >= 0;
+      const priceStr  = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const changeStr = (isUp ? '+' : '') + change.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct + '%)';
+      const cls = isUp ? 'up' : 'dn';
+      const arrow = isUp ? '▲' : '▼';
+
+      ['', '2'].forEach(s => {
+        const p = document.getElementById('nq-price' + s);
+        const c = document.getElementById('nq-change' + s);
+        if (p) p.textContent = priceStr;
+        if (c) { c.textContent = arrow + ' ' + changeStr; c.className = cls; }
+      });
+    } catch(e) {
+      console.log('Price fetch error:', e);
+    }
+  }
+
+  fetchNQPrice();
+  setInterval(fetchNQPrice, 30000);
 
   let allHistory = [];
   let visibleCount = 10;
