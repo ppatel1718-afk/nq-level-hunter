@@ -502,6 +502,35 @@
   const SUPABASE_URL = 'https://xnejaababytfevuhlfru.supabase.co';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuZWphYWJhYnl0ZmV2dWhsZnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MjQwNTMsImV4cCI6MjA4OTEwMDA1M30.GSsRgvip5zZ7id9HEQZmoLjFSOAddJHiD9EyIa9mUgs';
 
+  function cleanField(val) {
+    if (!val) return '—';
+    if (typeof val === 'number') return val.toLocaleString();
+    if (typeof val === 'object') {
+      const v = val.detail || val.direction || val.type || val.session || val.level || val.zone || Object.values(val)[0];
+      return cleanField(v);
+    }
+    if (typeof val === 'string') {
+      val = val.replace(/```json|```/g, '').trim();
+      try {
+        const parsed = JSON.parse(val);
+        return cleanField(parsed);
+      } catch(e) {}
+      if (val.length > 60) val = val.substring(0, 60) + '...';
+      return val;
+    }
+    return String(val);
+  }
+
+  function cleanNumber(val) {
+    if (!val) return '—';
+    if (typeof val === 'number') return val.toLocaleString();
+    if (typeof val === 'string') {
+      const n = parseFloat(val.replace(/[^0-9.]/g, ''));
+      return isNaN(n) ? '—' : n.toLocaleString();
+    }
+    return '—';
+  }
+
   async function fetchSignal() {
     try {
       const res = await fetch(
@@ -512,7 +541,15 @@
       if (!data || data.length === 0) return;
       const s = data[0];
 
-      const sig = (s.signal || 'WAIT').toUpperCase();
+      let sig = 'WAIT';
+      if (typeof s.signal === 'string') {
+        const raw = s.signal.toUpperCase();
+        if (raw.includes('SHORT')) sig = 'SHORT';
+        else if (raw.includes('LONG')) sig = 'LONG';
+        else if (raw.includes('WAIT')) sig = 'WAIT';
+        else sig = raw;
+      }
+
       const isShort = sig === 'SHORT';
       const isLong  = sig === 'LONG';
       const isWait  = sig === 'WAIT';
@@ -523,24 +560,17 @@
       sigEl.style.color = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
       sigEl.style.border = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
 
-      const tcard = document.querySelector('.tcard');
-      if (tcard) tcard.style.setProperty('--top-color', isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280');
-      if (tcard) tcard.querySelector('::before');
-      const topBar = document.querySelector('.tcard');
-      if (topBar) {
-        const before = document.createElement('style');
-        before.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
-        document.head.appendChild(before);
-      }
+      const before = document.createElement('style');
+      before.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
+      document.head.appendChild(before);
 
       const ts = new Date(s.created_at);
       const timeStr = ts.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
-      document.getElementById('tc-timestamp').textContent = `${s.timeframe || '15M'} · ${timeStr}`;
+      document.getElementById('tc-timestamp').textContent = `15M · ${timeStr}`;
 
-      const col = isShort ? 'r' : isLong ? 'g' : '';
       const set = (id, val, cls) => {
         const el = document.getElementById(id);
-        if (el) { el.textContent = val || '—'; el.className = 'tc-v' + (cls ? ' ' + cls : ''); }
+        if (el) { el.textContent = cleanField(val); el.className = 'tc-v' + (cls ? ' ' + cls : ''); }
       };
 
       set('tc-ema',      s.ema_filter, isShort ? 'r' : isLong ? 'g' : '');
@@ -548,17 +578,19 @@
       set('tc-sweep',    s.sweep,      'y');
       set('tc-fvg',      s.fvg,        isWait ? '' : 'g');
       set('tc-killzone', s.killzone,   isWait ? '' : 'g');
-      set('tc-entry',    s.entry ? Number(s.entry).toLocaleString() : '—', '');
-      set('tc-sl',       s.stop_loss ? Number(s.stop_loss).toLocaleString() : '—', 'r');
-      set('tc-tp1',      s.tp1 ? Number(s.tp1).toLocaleString() : '—', 'g');
-      set('tc-tp2',      s.tp2 ? Number(s.tp2).toLocaleString() : '—', 'g');
 
-      const ticker = document.querySelector('.ticker-inner');
-      if (ticker && s.entry) {
-        const items = ticker.querySelectorAll('.ti');
-        if (items[0]) items[0].innerHTML = `NQ <span class="val">${Number(s.entry).toLocaleString()}</span>`;
-        if (items[1]) items[1].innerHTML = `SIGNAL <span class="${isShort ? 'dn' : isLong ? 'up' : 'val'}">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>`;
-      }
+      const entryEl = document.getElementById('tc-entry');
+      if (entryEl) { entryEl.textContent = cleanNumber(s.entry); entryEl.className = 'tc-v'; }
+      const slEl = document.getElementById('tc-sl');
+      if (slEl) { slEl.textContent = cleanNumber(s.stop_loss); slEl.className = 'tc-v r'; }
+      const tp1El = document.getElementById('tc-tp1');
+      if (tp1El) { tp1El.textContent = cleanNumber(s.tp1); tp1El.className = 'tc-v g'; }
+      const tp2El = document.getElementById('tc-tp2');
+      if (tp2El) { tp2El.textContent = cleanNumber(s.tp2); tp2El.className = 'tc-v g'; }
+
+      const items = document.querySelectorAll('.ticker-inner .ti');
+      if (items[0]) items[0].innerHTML = `NQ <span class="val">${cleanNumber(s.entry)}</span>`;
+      if (items[1]) items[1].innerHTML = `SIGNAL <span class="${isShort ? 'dn' : isLong ? 'up' : 'val'}">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>`;
 
     } catch(e) {
       console.log('Signal fetch error:', e);
