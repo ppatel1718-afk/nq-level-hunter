@@ -413,33 +413,57 @@
 <section class="section reveal">
   <div class="lbl">Verified Calls</div>
   <div class="stitle">Public calls.<br>Real levels.</div>
-  <p class="sbody">Every signal posted before entry. Every result logged.</p>
-  <div class="track">
-    <div class="trc">
-      <div class="trc-date">MAR 10 2025 · LONDON</div>
-      <div class="trc-pts y">RUNNING</div>
-      <div class="trc-desc">NQ short from 25,122<br>Overnight continuation<br>London sweep → NY FVG</div>
+  <p class="sbody">Every signal posted before entry. Every result logged automatically.</p>
+
+  <!-- Live stats bar -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:2px;margin-bottom:32px;" id="stats-bar">
+    <div style="background:var(--card);border:1px solid var(--border);padding:20px;font-family:var(--mono);text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:var(--green);" id="stat-wins">—</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:0.1em;">WINS</div>
     </div>
-    <div class="trc">
-      <div class="trc-date">MAR 12 2025 · NY OPEN</div>
-      <div class="trc-pts">+542</div>
-      <div class="trc-desc">NQ short from ~24,855<br>TP1: 24,622 (+233 pts)<br>TP2: 24,397 (+458 pts)</div>
+    <div style="background:var(--card);border:1px solid var(--border);padding:20px;font-family:var(--mono);text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:var(--red);" id="stat-losses">—</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:0.1em;">LOSSES</div>
     </div>
-    <div class="trc" style="background:rgba(38,166,154,0.04);">
-      <div class="trc-date">MARCH TOTAL</div>
-      <div class="trc-pts">+775</div>
-      <div class="trc-desc">Combined points<br>2 NQ setups<br>Both aligned with 4H bias</div>
+    <div style="background:var(--card);border:1px solid var(--border);padding:20px;font-family:var(--mono);text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:var(--green);" id="stat-winrate">—</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:0.1em;">WIN RATE</div>
     </div>
-    <!-- ES Coming Soon -->
-    <div class="es-card">
-      <div class="es-soon">COMING SOON</div>
-      <div class="es-ticker">ES</div>
-      <div class="es-desc">
-        E-mini S&amp;P 500<br>
-        Trade cards launching soon<br>
-        Follow on X for updates
-      </div>
+    <div style="background:var(--card);border:1px solid var(--border);padding:20px;font-family:var(--mono);text-align:center;">
+      <div style="font-size:28px;font-weight:700;color:var(--green);" id="stat-pts">—</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:0.1em;">TOTAL PTS</div>
     </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+    <button onclick="filterHistory('ALL')" id="filter-ALL" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:var(--green);color:var(--bg);border:none;cursor:pointer;">ALL</button>
+    <button onclick="filterHistory('WIN')" id="filter-WIN" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">WINS</button>
+    <button onclick="filterHistory('LOSS')" id="filter-LOSS" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">LOSSES</button>
+    <button onclick="filterHistory('RUNNING')" id="filter-RUNNING" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">RUNNING</button>
+  </div>
+
+  <!-- History table -->
+  <div style="background:var(--card);border:1px solid var(--border);font-family:var(--mono);">
+    <!-- Header -->
+    <div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
+      <span>DATE</span>
+      <span>SIGNAL</span>
+      <span>ENTRY</span>
+      <span>SL</span>
+      <span>TP1</span>
+      <span>TP2</span>
+      <span>RESULT</span>
+    </div>
+    <!-- Rows injected by JS -->
+    <div id="history-rows">
+      <div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);">Loading signal history...</div>
+    </div>
+  </div>
+
+  <!-- Load more -->
+  <div style="text-align:center;margin-top:16px;">
+    <button onclick="loadMore()" id="load-more-btn" style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:10px 28px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;display:none;">LOAD MORE</button>
   </div>
 </section>
 
@@ -601,6 +625,97 @@
   fetchSignal();
   setInterval(fetchSignal, 60000);
 
+  let allHistory = [];
+  let visibleCount = 10;
+  let activeFilter = 'ALL';
+
+  async function fetchHistory() {
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/signals?order=created_at.desc&limit=100`,
+        { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+      );
+      const data = await res.json();
+      if (!data || data.length === 0) {
+        document.getElementById('history-rows').innerHTML = '<div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);">No signals yet. First one coming soon.</div>';
+        return;
+      }
+      allHistory = data;
+      updateStats(data);
+      renderHistory();
+    } catch(e) {
+      console.log('History fetch error:', e);
+    }
+  }
+
+  function updateStats(data) {
+    const closed = data.filter(s => s.outcome && s.outcome !== 'RUNNING');
+    const wins   = data.filter(s => s.outcome === 'WIN').length;
+    const losses = data.filter(s => s.outcome === 'LOSS').length;
+    const rate   = closed.length > 0 ? Math.round((wins / closed.length) * 100) : 0;
+    let totalPts = 0;
+    data.forEach(s => {
+      if (s.result) {
+        const n = parseFloat(String(s.result).replace(/[^0-9.-]/g, ''));
+        if (!isNaN(n)) totalPts += n;
+      }
+    });
+    document.getElementById('stat-wins').textContent    = wins;
+    document.getElementById('stat-losses').textContent  = losses;
+    document.getElementById('stat-winrate').textContent = closed.length > 0 ? rate + '%' : '—';
+    document.getElementById('stat-pts').textContent     = totalPts > 0 ? '+' + totalPts : '—';
+  }
+
+  function renderHistory() {
+    const filtered = activeFilter === 'ALL' ? allHistory : allHistory.filter(s => (s.outcome || 'RUNNING').toUpperCase() === activeFilter);
+    const visible  = filtered.slice(0, visibleCount);
+    const btn      = document.getElementById('load-more-btn');
+    btn.style.display = filtered.length > visibleCount ? 'inline-block' : 'none';
+
+    if (visible.length === 0) {
+      document.getElementById('history-rows').innerHTML = '<div style="padding:24px;text-align:center;font-size:12px;color:var(--muted);">No signals match this filter.</div>';
+      return;
+    }
+
+    document.getElementById('history-rows').innerHTML = visible.map(s => {
+      const outcome = (s.outcome || 'RUNNING').toUpperCase();
+      const sig     = (s.signal  || '—').toUpperCase();
+      const isShort = sig === 'SHORT';
+      const isLong  = sig === 'LONG';
+      const sigCol  = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
+      const outcomeCol = outcome === 'WIN' ? '#26a69a' : outcome === 'LOSS' ? '#ef5350' : '#f59e0b';
+      const ts = new Date(s.created_at);
+      const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+      const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+      return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
+        <span style="color:var(--muted);">${dateStr}<br><span style="font-size:10px;">${timeStr}</span></span>
+        <span style="color:${sigCol};font-weight:700;">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>
+        <span style="color:var(--text);">${s.entry ? Number(s.entry).toLocaleString() : '—'}</span>
+        <span style="color:#ef5350;">${s.stop_loss ? Number(s.stop_loss).toLocaleString() : '—'}</span>
+        <span style="color:#26a69a;">${s.tp1 ? Number(s.tp1).toLocaleString() : '—'}</span>
+        <span style="color:#26a69a;">${s.tp2 ? Number(s.tp2).toLocaleString() : '—'}</span>
+        <span style="color:${outcomeCol};font-weight:700;">${s.result || outcome}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function filterHistory(f) {
+    activeFilter = f;
+    visibleCount = 10;
+    ['ALL','WIN','LOSS','RUNNING'].forEach(k => {
+      const btn = document.getElementById('filter-' + k);
+      if (btn) { btn.style.background = k === f ? 'var(--green)' : 'transparent'; btn.style.color = k === f ? 'var(--bg)' : 'var(--muted)'; }
+    });
+    renderHistory();
+  }
+
+  function loadMore() {
+    visibleCount += 10;
+    renderHistory();
+  }
+
+  fetchHistory();
+
   async function submitEmail() {
     const email = document.getElementById('email-input').value;
     const msg = document.getElementById('email-msg');
@@ -609,26 +724,9 @@
       msg.textContent = 'Please enter a valid email.';
       return;
     }
-    msg.style.color = '#f59e0b';
-    msg.textContent = 'Subscribing...';
-    try {
-      const res = await fetch('https://api.beehiiv.com/v2/publications/pub_e8db8b5c-cda0-4fa2-bdc6-b7472f977979/subscriptions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, reactivate_existing: false, send_welcome_email: true })
-      });
-      if (res.ok) {
-        msg.style.color = '#26a69a';
-        msg.textContent = '✓ You are in! Check your email.';
-        document.getElementById('email-input').value = '';
-      } else {
-        msg.style.color = '#ef5350';
-        msg.textContent = 'Something went wrong. Try again.';
-      }
-    } catch(e) {
-      msg.style.color = '#ef5350';
-      msg.textContent = 'Something went wrong. Try again.';
-    }
+    window.open('https://nqlevelhunter.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank');
+    msg.style.color = '#26a69a';
+    msg.textContent = '✓ Opening signup page — complete it there!';
   }
 </script>
 </body>
