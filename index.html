@@ -299,13 +299,13 @@
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
-      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts">+355 PTS ✓</span></span>
+      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts2">+320 PTS ✓</span></span>
       <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
       <!-- duplicate for seamless loop -->
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
-      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts">+355 PTS ✓</span></span>
+      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts2">+320 PTS ✓</span></span>
       <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
     </div>
   </div>
@@ -362,9 +362,9 @@
 
     <div style="flex:1;min-width:230px;max-width:340px;">
       <div style="font-family:var(--mono);margin-bottom:26px;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:10px;">RESULT — MAR 12</div>
-        <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">+355</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">points · TP2 hit</div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:10px;">TOTAL POINTS</div>
+        <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">+320</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">across all closed trades</div>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);padding:18px;font-family:var(--mono);">
         <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:13px;">WHAT YOU GET — FREE</div>
@@ -674,6 +674,8 @@
     document.getElementById('stat-pts').textContent     = totalPts > 0 ? '+' + totalPts : '—';
     const tickerPts = document.getElementById('ticker-pts');
     if (tickerPts && totalPts > 0) tickerPts.textContent = '+' + totalPts + ' PTS ✓';
+    const tickerPts2 = document.getElementById('ticker-pts2');
+    if (tickerPts2 && totalPts > 0) tickerPts2.textContent = '+' + totalPts + ' PTS ✓';
     const resultPts = document.getElementById('result-pts');
     if (resultPts && totalPts > 0) resultPts.textContent = '+' + totalPts;
   }
