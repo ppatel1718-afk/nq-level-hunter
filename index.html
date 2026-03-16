@@ -296,14 +296,14 @@
   </div>
   <div class="ticker-strip">
     <div class="ticker-inner">
-      <span class="ti" id="nq-price-tick">NQ <span class="val" id="nq-price">—</span> <span id="nq-change">—</span></span>
+      <span class="ti">NQ <span class="val" id="nq-price">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
       <span class="ti">LAST TRADE <span class="up">+542 PTS ✓</span></span>
       <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
       <!-- duplicate for seamless loop -->
-      <span class="ti" id="nq-price-tick2">NQ <span class="val" id="nq-price2">—</span> <span id="nq-change2">—</span></span>
+      <span class="ti">NQ <span class="val" id="nq-price2">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
@@ -625,6 +625,10 @@
       const items = document.querySelectorAll('.ticker-inner .ti');
       if (items[0]) items[0].innerHTML = `NQ <span class="val">${cleanNumber(s.entry)}</span>`;
       if (items[1]) items[1].innerHTML = `SIGNAL <span class="${isShort ? 'dn' : isLong ? 'up' : 'val'}">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>`;
+      const p1 = document.getElementById('nq-price');
+      const p2 = document.getElementById('nq-price2');
+      if (p1) p1.textContent = cleanNumber(s.entry);
+      if (p2) p2.textContent = cleanNumber(s.entry);
 
     } catch(e) {
       console.log('Signal fetch error:', e);
@@ -633,27 +637,6 @@
 
   fetchSignal();
   setInterval(fetchSignal, 60000);
-
-  async function fetchNQPrice() {
-    try {
-      const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/NQ%3DF?interval=1m&range=1d&cors=true');
-      const data = await res.json();
-      const meta = data?.chart?.result?.[0]?.meta;
-      if (!meta) throw new Error('no meta');
-      const price = meta.regularMarketPrice;
-      const prev  = meta.previousClose || meta.chartPreviousClose;
-      const change = price - prev;
-      const changePct = ((change / prev) * 100).toFixed(2);
-      const isUp = change >= 0;
-      const priceStr  = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      const changeStr = (isUp ? '+' : '') + change.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct + '%)';
-      const arrow = isUp ? '▲' : '▼';
-      const cls   = isUp ? 'up' : 'dn';
-      ['', '2'].forEach(s => {
-        const p = document.getElementById('nq-price' + s);
-        const c = document.getElementById('nq-change' + s);
-        if (p) p.textContent = priceStr;
-        if (c) { c.textContent = arrow + ' ' + changeStr; c.className = cls; }
       });
     } catch(e) {
       try {
@@ -673,8 +656,6 @@
     }
   }
 
-  fetchNQPrice();
-  setInterval(fetchNQPrice, 30000);
 
   let allHistory = [];
   let visibleCount = 10;
