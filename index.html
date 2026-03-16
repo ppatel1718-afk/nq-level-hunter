@@ -637,25 +637,6 @@
 
   fetchSignal();
   setInterval(fetchSignal, 60000);
-      });
-    } catch(e) {
-      try {
-        const r2 = await fetch('https://api.twelvedata.com/price?symbol=NQ1%21&apikey=demo');
-        const d2 = await r2.json();
-        if (d2.price) {
-          const p = parseFloat(d2.price);
-          const priceStr = p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          ['', '2'].forEach(s => {
-            const el = document.getElementById('nq-price' + s);
-            if (el) el.textContent = priceStr;
-          });
-        }
-      } catch(e2) {
-        console.log('Price fetch failed:', e2);
-      }
-    }
-  }
-
 
   let allHistory = [];
   let visibleCount = 10;
