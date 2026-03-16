@@ -296,14 +296,12 @@
   </div>
   <div class="ticker-strip">
     <div class="ticker-inner">
-      <span class="ti">NQ <span class="val" id="nq-price">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
       <span class="ti">LAST TRADE <span class="up">+542 PTS ✓</span></span>
       <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
       <!-- duplicate for seamless loop -->
-      <span class="ti">NQ <span class="val" id="nq-price2">—</span></span>
       <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
@@ -625,10 +623,7 @@
       const items = document.querySelectorAll('.ticker-inner .ti');
       if (items[0]) items[0].innerHTML = `NQ <span class="val">${cleanNumber(s.entry)}</span>`;
       if (items[1]) items[1].innerHTML = `SIGNAL <span class="${isShort ? 'dn' : isLong ? 'up' : 'val'}">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>`;
-      const p1 = document.getElementById('nq-price');
-      const p2 = document.getElementById('nq-price2');
-      if (p1) p1.textContent = cleanNumber(s.entry);
-      if (p2) p2.textContent = cleanNumber(s.entry);
+
 
     } catch(e) {
       console.log('Signal fetch error:', e);
