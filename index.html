@@ -636,22 +636,19 @@
 
   async function fetchNQPrice() {
     try {
-      const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/NQ%3DF?interval=1m&range=1d', {
-        headers: { 'User-Agent': 'Mozilla/5.0' }
-      });
+      const res = await fetch('https://query1.finance.yahoo.com/v8/finance/chart/NQ%3DF?interval=1m&range=1d&cors=true');
       const data = await res.json();
       const meta = data?.chart?.result?.[0]?.meta;
-      if (!meta) return;
-      const price   = meta.regularMarketPrice;
-      const prev    = meta.previousClose || meta.chartPreviousClose;
-      const change  = price - prev;
+      if (!meta) throw new Error('no meta');
+      const price = meta.regularMarketPrice;
+      const prev  = meta.previousClose || meta.chartPreviousClose;
+      const change = price - prev;
       const changePct = ((change / prev) * 100).toFixed(2);
-      const isUp    = change >= 0;
+      const isUp = change >= 0;
       const priceStr  = price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const changeStr = (isUp ? '+' : '') + change.toFixed(2) + ' (' + (isUp ? '+' : '') + changePct + '%)';
-      const cls = isUp ? 'up' : 'dn';
       const arrow = isUp ? '▲' : '▼';
-
+      const cls   = isUp ? 'up' : 'dn';
       ['', '2'].forEach(s => {
         const p = document.getElementById('nq-price' + s);
         const c = document.getElementById('nq-change' + s);
@@ -659,7 +656,20 @@
         if (c) { c.textContent = arrow + ' ' + changeStr; c.className = cls; }
       });
     } catch(e) {
-      console.log('Price fetch error:', e);
+      try {
+        const r2 = await fetch('https://api.twelvedata.com/price?symbol=NQ1%21&apikey=demo');
+        const d2 = await r2.json();
+        if (d2.price) {
+          const p = parseFloat(d2.price);
+          const priceStr = p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          ['', '2'].forEach(s => {
+            const el = document.getElementById('nq-price' + s);
+            if (el) el.textContent = priceStr;
+          });
+        }
+      } catch(e2) {
+        console.log('Price fetch failed:', e2);
+      }
     }
   }
 
