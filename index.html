@@ -209,24 +209,6 @@
   .trc-pts.y { color: var(--yellow); }
   .trc-desc { font-size: 11px; color: var(--muted); line-height: 1.9; }
 
-  /* ES Coming Soon card */
-  .es-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-style: dashed; padding: 24px 20px; font-family: var(--mono);
-    position: relative; overflow: hidden;
-    display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
-  }
-  .es-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--border); }
-  .es-soon {
-    display: inline-block;
-    font-size: 9px; letter-spacing: 0.18em;
-    background: rgba(245,158,11,0.12);
-    color: var(--yellow); border: 1px solid rgba(245,158,11,0.25);
-    padding: 4px 10px; margin-bottom: 14px;
-  }
-  .es-ticker { font-size: 28px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
-  .es-desc { font-size: 11px; color: var(--muted); line-height: 1.9; }
-
   /* Pricing */
   .pw { max-width: 400px; margin: 56px auto 0; }
   .pc { background: var(--card); border: 1px solid var(--green); padding: 44px 36px; text-align: center; font-family: var(--mono); position: relative; }
@@ -358,7 +340,7 @@
         <div class="tc-lr"><span class="tc-lbl">TP1 (2R)</span><span class="tc-v g" id="tc-tp1">—</span></div>
         <div class="tc-lr"><span class="tc-lbl">TP2 (3R)</span><span class="tc-v g" id="tc-tp2">—</span></div>
       </div>
-      <!-- STATUS BANNER — shows when trade is closed -->
+      <!-- STATUS BANNER -->
       <div id="tc-status-banner" style="display:none;margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;"></div>
     </div>
 
@@ -595,13 +577,13 @@
       }
 
       // Top bar colour
-      const before = document.createElement('style');
+      const styleTag = document.createElement('style');
       if (isClosed) {
-        before.textContent = `.tcard::before { background: ${s.outcome === 'WIN' ? '#26a69a' : '#6b7280'} !important; }`;
+        styleTag.textContent = `.tcard::before { background: ${s.outcome === 'WIN' ? '#26a69a' : '#6b7280'} !important; }`;
       } else {
-        before.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
+        styleTag.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
       }
-      document.head.appendChild(before);
+      document.head.appendChild(styleTag);
 
       // Timestamp
       const ts = new Date(s.created_at);
@@ -627,14 +609,15 @@
       document.getElementById('tc-tp1').textContent   = cleanNumber(s.tp1);
       document.getElementById('tc-tp2').textContent   = cleanNumber(s.tp2);
 
-      // Status banner for closed trades
+      // Status banner
       const banner = document.getElementById('tc-status-banner');
       if (isClosed && s.outcome === 'WIN') {
+        const resultLabel = s.result === 'TP2' ? 'TP2 HIT' : 'TP1 HIT';
         banner.style.display = 'block';
         banner.style.background = 'rgba(38,166,154,0.12)';
         banner.style.color = '#26a69a';
         banner.style.border = '1px solid rgba(38,166,154,0.25)';
-        banner.textContent = `✓ TRADE CLOSED — TP1 HIT · +${s.points || 0} PTS · ${new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+        banner.textContent = `✓ TRADE CLOSED — ${resultLabel} · +${s.points || 0} PTS · ${new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
       } else if (isClosed && s.outcome === 'LOSS') {
         banner.style.display = 'block';
         banner.style.background = 'rgba(239,83,80,0.1)';
@@ -694,7 +677,6 @@
     const closed = wins + losses;
     const rate   = closed > 0 ? Math.round((wins / closed) * 100) : 0;
 
-    // Use points column — clean and accurate
     let totalPts = 0;
     data.forEach(s => {
       if (s.points) totalPts += Number(s.points);
@@ -745,7 +727,7 @@
       const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
       const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
       const resultLabel = outcome === 'WIN'
-        ? `TP1 ✓ +${s.points || 0}pts`
+        ? `${s.result || 'TP1'} ✓ +${s.points || 0}pts`
         : outcome === 'LOSS' ? 'SL ✗' : outcome;
       return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
         <span style="color:var(--muted);">${dateStr}<br><span style="font-size:10px;">${timeStr}</span></span>
