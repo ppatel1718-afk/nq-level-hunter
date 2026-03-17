@@ -43,7 +43,7 @@
     z-index: 0;
   }
 
-  /* ══ NAV ══ */
+  /* NAV */
   nav {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -80,7 +80,7 @@
   }
   .nav-cta:hover { opacity: 0.82; }
 
-  /* ══ TICKER ══ */
+  /* TICKER */
   .ticker-strip {
     height: 40px; overflow: hidden;
     display: flex; align-items: center;
@@ -106,7 +106,7 @@
   .ti .dn  { color: var(--red); }
   .ti .yl  { color: var(--yellow); }
 
-  /* ══ HERO ══ */
+  /* HERO */
   .hero {
     position: relative; min-height: 100vh;
     display: flex; flex-direction: column;
@@ -155,7 +155,7 @@
   .hero-note { margin-top: 22px; font-family: var(--mono); font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
   .hero-note strong { color: var(--yellow); }
 
-  /* ══ SECTIONS ══ */
+  /* SECTIONS */
   .section { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 100px 24px; }
   .lbl { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em; color: var(--green); text-transform: uppercase; margin-bottom: 14px; }
   .stitle { font-family: var(--mono); font-size: clamp(26px, 4vw, 44px); font-weight: 700; color: var(--white); line-height: 1.1; margin-bottom: 16px; }
@@ -282,7 +282,7 @@
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
+<!-- NAV -->
 <nav>
   <div class="nav-main">
     <div class="nav-logo">NQ <span>LEVEL HUNTER</span></div>
@@ -296,22 +296,22 @@
   </div>
   <div class="ticker-strip">
     <div class="ticker-inner">
-      <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
+      <span class="ti">SIGNAL <span id="ticker-signal-1" class="up">LOADING...</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
-      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts2">+320 PTS ✓</span></span>
-      <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
+      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts-1">+0 PTS</span></span>
+      <span class="ti">WIN RATE <span class="up" id="ticker-wr-1">TRACKING LIVE</span></span>
       <!-- duplicate for seamless loop -->
-      <span class="ti">SIGNAL <span class="up">SHORT ACTIVE</span></span>
+      <span class="ti">SIGNAL <span id="ticker-signal-2" class="up">LOADING...</span></span>
       <span class="ti">200 EMA <span class="val">OVERHEAD</span> <span class="dn">BEARISH</span></span>
       <span class="ti">KILLZONE <span class="yl">NY OPEN 08:00–12:00 EST</span></span>
-      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts2">+320 PTS ✓</span></span>
-      <span class="ti">WIN RATE <span class="up">TRACKING LIVE</span></span>
+      <span class="ti">TOTAL PTS <span class="up" id="ticker-pts-2">+0 PTS</span></span>
+      <span class="ti">WIN RATE <span class="up" id="ticker-wr-2">TRACKING LIVE</span></span>
     </div>
   </div>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-eyebrow">NQ · Smart Money · Free Signals</div>
   <h1>
@@ -329,7 +329,7 @@
   <p class="hero-note"><strong>FREE</strong> · No credit card · Signal alerts via email</p>
 </section>
 
-<!-- ══ TRADE CARD ══ -->
+<!-- TRADE CARD -->
 <section class="section reveal" id="signal">
   <div class="lbl">Live Signal Format</div>
   <div class="stitle">Every update.<br>Same card.</div>
@@ -358,12 +358,14 @@
         <div class="tc-lr"><span class="tc-lbl">TP1 (2R)</span><span class="tc-v g" id="tc-tp1">—</span></div>
         <div class="tc-lr"><span class="tc-lbl">TP2 (3R)</span><span class="tc-v g" id="tc-tp2">—</span></div>
       </div>
+      <!-- STATUS BANNER — shows when trade is closed -->
+      <div id="tc-status-banner" style="display:none;margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;"></div>
     </div>
 
     <div style="flex:1;min-width:230px;max-width:340px;">
       <div style="font-family:var(--mono);margin-bottom:26px;">
         <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:10px;">TOTAL POINTS</div>
-        <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">+320</div>
+        <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">—</div>
         <div style="font-size:12px;color:var(--muted);margin-top:4px;">across all closed trades</div>
       </div>
       <div style="background:var(--card);border:1px solid var(--border);padding:18px;font-family:var(--mono);">
@@ -381,7 +383,7 @@
   </div>
 </section>
 
-<!-- ══ PROCESS ══ -->
+<!-- PROCESS -->
 <section class="section reveal" id="how">
   <div class="lbl">The Process</div>
   <div class="stitle">No discretion.<br>No guessing.</div>
@@ -413,7 +415,7 @@
   </div>
 </section>
 
-<!-- ══ TRACK RECORD ══ -->
+<!-- TRACK RECORD -->
 <section class="section reveal">
   <div class="lbl">Verified Calls</div>
   <div class="stitle">Public calls.<br>Real levels.</div>
@@ -449,7 +451,6 @@
 
   <!-- History table -->
   <div style="background:var(--card);border:1px solid var(--border);font-family:var(--mono);">
-    <!-- Header -->
     <div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
       <span>DATE</span>
       <span>SIGNAL</span>
@@ -459,19 +460,17 @@
       <span>TP2</span>
       <span>RESULT</span>
     </div>
-    <!-- Rows injected by JS -->
     <div id="history-rows">
       <div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);">Loading signal history...</div>
     </div>
   </div>
 
-  <!-- Load more -->
   <div style="text-align:center;margin-top:16px;">
     <button onclick="loadMore()" id="load-more-btn" style="font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:10px 28px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;display:none;">LOAD MORE</button>
   </div>
 </section>
 
-<!-- ══ JOIN ══ -->
+<!-- JOIN -->
 <section class="section reveal" id="join" style="text-align:center;">
   <div class="lbl">Membership</div>
   <div class="stitle">Free to join.<br>Everything included.</div>
@@ -496,7 +495,6 @@
     </div>
   </div>
 
-  <!-- X Follow CTA -->
   <div class="x-follow" style="max-width:400px;margin:40px auto 0;">
     <div class="x-follow-left">
       <div class="x-icon">
@@ -514,7 +512,7 @@
   </div>
 </section>
 
-<!-- ══ FOOTER ══ -->
+<!-- FOOTER -->
 <footer>
   <div class="fl">NQ <span>LEVEL HUNTER</span></div>
   <div class="fn">Not financial advice. Trading futures carries significant risk of loss. Past performance does not guarantee future results. Trade responsibly.</div>
@@ -540,10 +538,7 @@
     }
     if (typeof val === 'string') {
       val = val.replace(/```json|```/g, '').trim();
-      try {
-        const parsed = JSON.parse(val);
-        return cleanField(parsed);
-      } catch(e) {}
+      try { const parsed = JSON.parse(val); return cleanField(parsed); } catch(e) {}
       if (val.length > 60) val = val.substring(0, 60) + '...';
       return val;
     }
@@ -563,36 +558,52 @@
   async function fetchSignal() {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/signals?order=created_at.desc&limit=1`,
+        `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=1`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const data = await res.json();
       if (!data || data.length === 0) return;
       const s = data[0];
 
+      const status = (s.status || 'OPEN').toUpperCase();
+      const isClosed = status === 'CLOSED';
+
       let sig = 'WAIT';
-      if (typeof s.signal === 'string') {
-        const raw = s.signal.toUpperCase();
+      if (typeof s.direction === 'string') {
+        const raw = s.direction.toUpperCase();
         if (raw.includes('SHORT')) sig = 'SHORT';
         else if (raw.includes('LONG')) sig = 'LONG';
-        else if (raw.includes('WAIT')) sig = 'WAIT';
-        else sig = raw;
+        else sig = 'WAIT';
       }
 
       const isShort = sig === 'SHORT';
       const isLong  = sig === 'LONG';
       const isWait  = sig === 'WAIT';
 
+      // Signal badge
       const sigEl = document.getElementById('tc-signal');
-      sigEl.textContent = isShort ? 'SHORT ▼' : isLong ? 'LONG ▲' : 'WAIT —';
-      sigEl.style.background = isShort ? 'rgba(239,83,80,0.1)' : isLong ? 'rgba(38,166,154,0.1)' : 'rgba(107,114,128,0.1)';
-      sigEl.style.color = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
-      sigEl.style.border = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
+      if (isClosed) {
+        sigEl.textContent = s.outcome === 'WIN' ? 'TP HIT ✓' : s.outcome === 'LOSS' ? 'SL HIT ✗' : 'CLOSED';
+        sigEl.style.background = s.outcome === 'WIN' ? 'rgba(38,166,154,0.1)' : 'rgba(239,83,80,0.1)';
+        sigEl.style.color = s.outcome === 'WIN' ? '#26a69a' : '#ef5350';
+        sigEl.style.border = s.outcome === 'WIN' ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(239,83,80,0.25)';
+      } else {
+        sigEl.textContent = isShort ? 'SHORT ▼' : isLong ? 'LONG ▲' : 'WAIT —';
+        sigEl.style.background = isShort ? 'rgba(239,83,80,0.1)' : isLong ? 'rgba(38,166,154,0.1)' : 'rgba(107,114,128,0.1)';
+        sigEl.style.color = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
+        sigEl.style.border = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
+      }
 
+      // Top bar colour
       const before = document.createElement('style');
-      before.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
+      if (isClosed) {
+        before.textContent = `.tcard::before { background: ${s.outcome === 'WIN' ? '#26a69a' : '#6b7280'} !important; }`;
+      } else {
+        before.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
+      }
       document.head.appendChild(before);
 
+      // Timestamp
       const ts = new Date(s.created_at);
       const timeStr = ts.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
       document.getElementById('tc-timestamp').textContent = `15M · ${timeStr}`;
@@ -603,27 +614,48 @@
       };
 
       set('tc-ema',      s.ema_filter, isShort ? 'r' : isLong ? 'g' : '');
-      set('tc-bias',     s.bias_4h,    isShort ? 'r' : isLong ? 'g' : '');
-      set('tc-1h',       s.bias_1h,    isShort ? 'r' : isLong ? 'g' : '');
+      set('tc-bias',     s.htf_bias,   isShort ? 'r' : isLong ? 'g' : '');
+      set('tc-1h',       s.entry_5m,   isShort ? 'r' : isLong ? 'g' : '');
       set('tc-sweep',    s.sweep,      'y');
       set('tc-fvg',      s.fvg,        isWait ? '' : 'g');
       set('tc-5m',       s.entry_5m,   isWait ? '' : 'g');
       set('tc-killzone', s.killzone,   isWait ? '' : 'g');
       set('tc-confluence', s.confluence ? s.confluence + '/8' : '—/8', 'y');
 
-      const entryEl = document.getElementById('tc-entry');
-      if (entryEl) { entryEl.textContent = cleanNumber(s.entry); entryEl.className = 'tc-v'; }
-      const slEl = document.getElementById('tc-sl');
-      if (slEl) { slEl.textContent = cleanNumber(s.stop_loss); slEl.className = 'tc-v r'; }
-      const tp1El = document.getElementById('tc-tp1');
-      if (tp1El) { tp1El.textContent = cleanNumber(s.tp1); tp1El.className = 'tc-v g'; }
-      const tp2El = document.getElementById('tc-tp2');
-      if (tp2El) { tp2El.textContent = cleanNumber(s.tp2); tp2El.className = 'tc-v g'; }
+      document.getElementById('tc-entry').textContent = cleanNumber(s.entry);
+      document.getElementById('tc-sl').textContent    = cleanNumber(s.stop_loss);
+      document.getElementById('tc-tp1').textContent   = cleanNumber(s.tp1);
+      document.getElementById('tc-tp2').textContent   = cleanNumber(s.tp2);
 
-      const items = document.querySelectorAll('.ticker-inner .ti');
-      if (items[0]) items[0].innerHTML = `NQ <span class="val">${cleanNumber(s.entry)}</span>`;
-      if (items[1]) items[1].innerHTML = `SIGNAL <span class="${isShort ? 'dn' : isLong ? 'up' : 'val'}">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>`;
+      // Status banner for closed trades
+      const banner = document.getElementById('tc-status-banner');
+      if (isClosed && s.outcome === 'WIN') {
+        banner.style.display = 'block';
+        banner.style.background = 'rgba(38,166,154,0.12)';
+        banner.style.color = '#26a69a';
+        banner.style.border = '1px solid rgba(38,166,154,0.25)';
+        banner.textContent = `✓ TRADE CLOSED — TP1 HIT · +${s.points || 0} PTS · ${new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
+      } else if (isClosed && s.outcome === 'LOSS') {
+        banner.style.display = 'block';
+        banner.style.background = 'rgba(239,83,80,0.1)';
+        banner.style.color = '#ef5350';
+        banner.style.border = '1px solid rgba(239,83,80,0.25)';
+        banner.textContent = '✗ TRADE CLOSED — STOPPED OUT';
+      } else {
+        banner.style.display = 'none';
+      }
 
+      // Ticker signal text
+      const tickerLabel = isClosed
+        ? (s.outcome === 'WIN' ? 'TP HIT ✓' : 'CLOSED')
+        : (isShort ? 'SHORT ACTIVE ▼' : isLong ? 'LONG ACTIVE ▲' : 'WAIT');
+      const tickerClass = isClosed
+        ? (s.outcome === 'WIN' ? 'up' : 'val')
+        : (isShort ? 'dn' : isLong ? 'up' : 'val');
+      ['ticker-signal-1','ticker-signal-2'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = tickerLabel; el.className = tickerClass; }
+      });
 
     } catch(e) {
       console.log('Signal fetch error:', e);
@@ -640,7 +672,7 @@
   async function fetchHistory() {
     try {
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/signals?order=created_at.desc&limit=100`,
+        `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=100`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       const data = await res.json();
@@ -657,33 +689,44 @@
   }
 
   function updateStats(data) {
-    const closed = data.filter(s => s.outcome && s.outcome !== 'RUNNING');
     const wins   = data.filter(s => s.outcome === 'WIN').length;
     const losses = data.filter(s => s.outcome === 'LOSS').length;
-    const rate   = closed.length > 0 ? Math.round((wins / closed.length) * 100) : 0;
+    const closed = wins + losses;
+    const rate   = closed > 0 ? Math.round((wins / closed) * 100) : 0;
+
+    // Use points column — clean and accurate
     let totalPts = 0;
     data.forEach(s => {
-      if (s.result) {
-        const n = parseFloat(String(s.result).replace(/[^0-9.-]/g, ''));
-        if (!isNaN(n)) totalPts += n;
-      }
+      if (s.points) totalPts += Number(s.points);
     });
-    document.getElementById('stat-wins').textContent    = wins;
-    document.getElementById('stat-losses').textContent  = losses;
-    document.getElementById('stat-winrate').textContent = closed.length > 0 ? rate + '%' : '—';
+
+    document.getElementById('stat-wins').textContent    = wins || '—';
+    document.getElementById('stat-losses').textContent  = losses || '—';
+    document.getElementById('stat-winrate').textContent = closed > 0 ? rate + '%' : '—';
     document.getElementById('stat-pts').textContent     = totalPts > 0 ? '+' + totalPts : '—';
-    const tickerPts = document.getElementById('ticker-pts');
-    if (tickerPts && totalPts > 0) tickerPts.textContent = '+' + totalPts + ' PTS ✓';
-    const tickerPts2 = document.getElementById('ticker-pts2');
-    if (tickerPts2 && totalPts > 0) tickerPts2.textContent = '+' + totalPts + ' PTS ✓';
-    const resultPts = document.getElementById('result-pts');
-    if (resultPts && totalPts > 0) resultPts.textContent = '+' + totalPts;
+    document.getElementById('result-pts').textContent   = totalPts > 0 ? '+' + totalPts : '—';
+
+    const ptsText = totalPts > 0 ? '+' + totalPts + ' PTS ✓' : '+0 PTS';
+    const wrText  = closed > 0 ? rate + '% WIN RATE' : 'TRACKING LIVE';
+    ['ticker-pts-1','ticker-pts-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = ptsText;
+    });
+    ['ticker-wr-1','ticker-wr-2'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = wrText;
+    });
   }
 
   function renderHistory() {
-    const filtered = activeFilter === 'ALL' ? allHistory : allHistory.filter(s => (s.outcome || 'RUNNING').toUpperCase() === activeFilter);
-    const visible  = filtered.slice(0, visibleCount);
-    const btn      = document.getElementById('load-more-btn');
+    const filtered = activeFilter === 'ALL'
+      ? allHistory
+      : allHistory.filter(s => {
+          const o = (s.outcome || 'RUNNING').toUpperCase();
+          return o === activeFilter;
+        });
+    const visible = filtered.slice(0, visibleCount);
+    const btn = document.getElementById('load-more-btn');
     btn.style.display = filtered.length > visibleCount ? 'inline-block' : 'none';
 
     if (visible.length === 0) {
@@ -692,23 +735,26 @@
     }
 
     document.getElementById('history-rows').innerHTML = visible.map(s => {
-      const outcome = (s.outcome || 'RUNNING').toUpperCase();
-      const sig     = (s.signal  || '—').toUpperCase();
-      const isShort = sig === 'SHORT';
-      const isLong  = sig === 'LONG';
-      const sigCol  = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
+      const outcome  = (s.outcome || 'RUNNING').toUpperCase();
+      const dir      = (s.direction || '—').toUpperCase();
+      const isShort  = dir === 'SHORT';
+      const isLong   = dir === 'LONG';
+      const sigCol   = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
       const outcomeCol = outcome === 'WIN' ? '#26a69a' : outcome === 'LOSS' ? '#ef5350' : '#f59e0b';
       const ts = new Date(s.created_at);
       const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
       const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+      const resultLabel = outcome === 'WIN'
+        ? `TP1 ✓ +${s.points || 0}pts`
+        : outcome === 'LOSS' ? 'SL ✗' : outcome;
       return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
         <span style="color:var(--muted);">${dateStr}<br><span style="font-size:10px;">${timeStr}</span></span>
-        <span style="color:${sigCol};font-weight:700;">${sig} ${isShort ? '▼' : isLong ? '▲' : ''}</span>
+        <span style="color:${sigCol};font-weight:700;">${dir} ${isShort ? '▼' : isLong ? '▲' : ''}</span>
         <span style="color:var(--text);">${s.entry ? Number(s.entry).toLocaleString() : '—'}</span>
         <span style="color:#ef5350;">${s.stop_loss ? Number(s.stop_loss).toLocaleString() : '—'}</span>
         <span style="color:#26a69a;">${s.tp1 ? Number(s.tp1).toLocaleString() : '—'}</span>
         <span style="color:#26a69a;">${s.tp2 ? Number(s.tp2).toLocaleString() : '—'}</span>
-        <span style="color:${outcomeCol};font-weight:700;">${s.result || outcome}</span>
+        <span style="color:${outcomeCol};font-weight:700;">${resultLabel}</span>
       </div>`;
     }).join('');
   }
@@ -718,7 +764,10 @@
     visibleCount = 10;
     ['ALL','WIN','LOSS','RUNNING'].forEach(k => {
       const btn = document.getElementById('filter-' + k);
-      if (btn) { btn.style.background = k === f ? 'var(--green)' : 'transparent'; btn.style.color = k === f ? 'var(--bg)' : 'var(--muted)'; }
+      if (btn) {
+        btn.style.background = k === f ? 'var(--green)' : 'transparent';
+        btn.style.color = k === f ? 'var(--bg)' : 'var(--muted)';
+      }
     });
     renderHistory();
   }
@@ -729,19 +778,6 @@
   }
 
   fetchHistory();
-
-  async function submitEmail() {
-    const email = document.getElementById('email-input').value;
-    const msg = document.getElementById('email-msg');
-    if (!email || !email.includes('@')) {
-      msg.style.color = '#ef5350';
-      msg.textContent = 'Please enter a valid email.';
-      return;
-    }
-    window.open('https://nqlevelhunter.beehiiv.com/subscribe?email=' + encodeURIComponent(email), '_blank');
-    msg.style.color = '#26a69a';
-    msg.textContent = '✓ Opening signup page — complete it there!';
-  }
 </script>
 </body>
 </html>
