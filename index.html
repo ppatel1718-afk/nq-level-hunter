@@ -168,7 +168,7 @@
     padding: 26px; flex: 1; min-width: 290px; max-width: 480px;
     font-family: var(--mono); position: relative; overflow: hidden;
   }
-  .tcard::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+  .tcard { border-top: 3px solid var(--red); }
   .tc-hd { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; }
   .tc-asset { font-size: 17px; font-weight: 700; color: var(--white); }
   .tc-tf { font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: 0.07em; }
@@ -318,33 +318,14 @@
   <p class="sbody">No ambiguous calls. Every signal comes with exact entry, stop loss, and two take-profit levels.</p>
 
   <div class="tcwrap">
-    <div class="tcard">
-      <div class="tc-hd">
-        <div>
-          <div class="tc-asset">NQ</div>
-          <div class="tc-tf" id="tc-timestamp">Loading latest signal...</div>
-        </div>
-        <div class="tc-sig" id="tc-signal">— —</div>
+    <!-- Today's cards injected here dynamically -->
+    <div id="today-cards" style="display:flex;gap:16px;flex-wrap:wrap;flex:1;min-width:0;">
+      <div class="tcard" style="min-width:290px;max-width:480px;">
+        <div class="tc-hd"><div><div class="tc-asset">NQ</div><div class="tc-tf">Loading...</div></div><div class="tc-sig">— —</div></div>
       </div>
-      <div class="tc-row"><span class="tc-lbl">EMA FILTER</span><span class="tc-v" id="tc-ema">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">4H BIAS</span><span class="tc-v" id="tc-bias">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">1H CONFIRM</span><span class="tc-v" id="tc-1h">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">SWEEP</span><span class="tc-v" id="tc-sweep">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">FVG</span><span class="tc-v" id="tc-fvg">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">5M ENTRY</span><span class="tc-v" id="tc-5m">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">KILLZONE</span><span class="tc-v" id="tc-killzone">—</span></div>
-      <div class="tc-row"><span class="tc-lbl">CONFLUENCE</span><span class="tc-v" id="tc-confluence" style="color:var(--yellow);">—/8</span></div>
-      <div class="tc-lvls">
-        <div class="tc-lr"><span class="tc-lbl">ENTRY (5M FVG)</span><span class="tc-v" id="tc-entry">—</span></div>
-        <div class="tc-lr"><span class="tc-lbl">STOP LOSS</span><span class="tc-v r" id="tc-sl">—</span></div>
-        <div class="tc-lr"><span class="tc-lbl">TP1 (2R)</span><span class="tc-v g" id="tc-tp1">—</span></div>
-        <div class="tc-lr"><span class="tc-lbl">TP2 (3R)</span><span class="tc-v g" id="tc-tp2">—</span></div>
-      </div>
-      <!-- STATUS BANNER -->
-      <div id="tc-status-banner" style="display:none;margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;"></div>
     </div>
 
-    <div style="flex:1;min-width:230px;max-width:340px;">
+    <div style="flex:0 0 auto;min-width:230px;max-width:300px;">
       <div style="font-family:var(--mono);margin-bottom:26px;">
         <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:10px;">TOTAL POINTS</div>
         <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">—</div>
@@ -537,103 +518,110 @@
     return '—';
   }
 
+  function buildCard(s) {
+    const status   = (s.status || 'OPEN').toUpperCase();
+    const isClosed = status === 'CLOSED';
+    const dir      = (s.direction || '').toUpperCase();
+    const isShort  = dir.includes('SHORT');
+    const isLong   = dir.includes('LONG');
+    const isWait   = !isShort && !isLong;
+
+    const topColor  = isClosed ? (s.outcome === 'WIN' ? '#26a69a' : '#6b7280') : (isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280');
+    const ts        = new Date(s.created_at);
+    const timeStr   = ts.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' });
+
+    let badgeText, badgeBg, badgeColor, badgeBorder;
+    if (isClosed) {
+      badgeText   = s.outcome === 'WIN' ? 'TP HIT ✓' : 'SL HIT ✗';
+      badgeBg     = s.outcome === 'WIN' ? 'rgba(38,166,154,0.1)' : 'rgba(239,83,80,0.1)';
+      badgeColor  = s.outcome === 'WIN' ? '#26a69a' : '#ef5350';
+      badgeBorder = s.outcome === 'WIN' ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(239,83,80,0.25)';
+    } else {
+      badgeText   = isShort ? 'SHORT ▼' : isLong ? 'LONG ▲' : 'WAIT —';
+      badgeBg     = isShort ? 'rgba(239,83,80,0.1)' : isLong ? 'rgba(38,166,154,0.1)' : 'rgba(107,114,128,0.1)';
+      badgeColor  = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
+      badgeBorder = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
+    }
+
+    const cf = (v) => {
+      if (!v) return '—';
+      if (typeof v === 'number') return v.toLocaleString();
+      if (typeof v === 'string') { v = v.replace(/```json|```/g,'').trim(); try { return cf(JSON.parse(v)); } catch(e){} if(v.length>60) return v.substring(0,60)+'...'; return v; }
+      if (typeof v === 'object') { const x = v.detail||v.direction||v.type||v.session||v.level||v.zone||Object.values(v)[0]; return cf(x); }
+      return String(v);
+    };
+    const cn = (v) => { if(!v) return '—'; if(typeof v==='number') return v.toLocaleString(); if(typeof v==='string'){const n=parseFloat(v.replace(/[^0-9.]/g,'')); return isNaN(n)?'—':n.toLocaleString();} return '—'; };
+
+    const vColor = (cls) => cls === 'r' ? '#ef5350' : cls === 'g' ? '#26a69a' : cls === 'y' ? '#f59e0b' : '#d1d4dc';
+    const row = (lbl, val, cls) => `<div class="tc-row"><span class="tc-lbl">${lbl}</span><span class="tc-v" style="color:${vColor(cls)}">${cf(val)}</span></div>`;
+
+    let banner = '';
+    if (isClosed && s.outcome === 'WIN') {
+      const rl = s.result === 'TP2' ? 'TP2 HIT' : 'TP1 HIT';
+      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(38,166,154,0.12);color:#26a69a;border:1px solid rgba(38,166,154,0.25);">✓ TRADE CLOSED — ${rl} · +${s.points || 0} PTS · ${ts.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>`;
+    } else if (isClosed && s.outcome === 'LOSS') {
+      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(239,83,80,0.1);color:#ef5350;border:1px solid rgba(239,83,80,0.25);">✗ TRADE CLOSED — STOPPED OUT · ${s.points ? s.points + ' PTS' : ''}</div>`;
+    }
+
+    return `<div class="tcard" style="min-width:260px;max-width:420px;flex:1;border-top:3px solid ${topColor};">
+      <div class="tc-hd">
+        <div><div class="tc-asset">NQ</div><div class="tc-tf">15M · ${timeStr}</div></div>
+        <div class="tc-sig" style="background:${badgeBg};color:${badgeColor};border:${badgeBorder};">${badgeText}</div>
+      </div>
+      ${row('EMA FILTER', s.ema_filter, isShort?'r':isLong?'g':'')}
+      ${row('4H BIAS',    s.htf_bias,   isShort?'r':isLong?'g':'')}
+      ${row('SWEEP',      s.sweep,      'y')}
+      ${row('FVG',        s.fvg,        isWait?'':'g')}
+      ${row('5M ENTRY',   s.entry_5m,   isWait?'':'g')}
+      ${row('KILLZONE',   s.killzone,   isWait?'':'g')}
+      <div class="tc-row"><span class="tc-lbl">CONFLUENCE</span><span class="tc-v" style="color:#f59e0b;">${s.confluence ? s.confluence+'/8' : '—/8'}</span></div>
+      <div class="tc-lvls">
+        <div class="tc-lr"><span class="tc-lbl">ENTRY (5M FVG)</span><span class="tc-v">${cn(s.entry)}</span></div>
+        <div class="tc-lr"><span class="tc-lbl">STOP LOSS</span><span class="tc-v r" style="color:#ef5350;">${cn(s.stop_loss)}</span></div>
+        <div class="tc-lr"><span class="tc-lbl">TP1 (2R)</span><span class="tc-v g" style="color:#26a69a;">${cn(s.tp1)}</span></div>
+        <div class="tc-lr"><span class="tc-lbl">TP2 (3R)</span><span class="tc-v g" style="color:#26a69a;">${cn(s.tp2)}</span></div>
+      </div>
+      ${banner}
+    </div>`;
+  }
+
   async function fetchSignal() {
     try {
+      // Fetch today's signals (last 24h to catch multi-session days)
+      const since = new Date();
+      since.setHours(0, 0, 0, 0);
+      const sinceISO = since.toISOString();
+
       const res = await fetch(
-        `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=1`,
+        `${SUPABASE_URL}/rest/v1/signals_nq?created_at=gte.${sinceISO}&order=created_at.asc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
-      const data = await res.json();
+      let data = await res.json();
+
+      // Fallback: if nothing today, show most recent signal
+      if (!data || data.length === 0) {
+        const res2 = await fetch(
+          `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=1`,
+          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
+        );
+        data = await res2.json();
+      }
       if (!data || data.length === 0) return;
-      const s = data[0];
 
-      const status = (s.status || 'OPEN').toUpperCase();
-      const isClosed = status === 'CLOSED';
+      // Render all today's cards side by side
+      document.getElementById('today-cards').innerHTML = data.map(s => buildCard(s)).join('');
 
-      let sig = 'WAIT';
-      if (typeof s.direction === 'string') {
-        const raw = s.direction.toUpperCase();
-        if (raw.includes('SHORT')) sig = 'SHORT';
-        else if (raw.includes('LONG')) sig = 'LONG';
-        else sig = 'WAIT';
-      }
-
-      const isShort = sig === 'SHORT';
-      const isLong  = sig === 'LONG';
-      const isWait  = sig === 'WAIT';
-
-      // Signal badge
-      const sigEl = document.getElementById('tc-signal');
-      if (isClosed) {
-        sigEl.textContent = s.outcome === 'WIN' ? 'TP HIT ✓' : s.outcome === 'LOSS' ? 'SL HIT ✗' : 'CLOSED';
-        sigEl.style.background = s.outcome === 'WIN' ? 'rgba(38,166,154,0.1)' : 'rgba(239,83,80,0.1)';
-        sigEl.style.color = s.outcome === 'WIN' ? '#26a69a' : '#ef5350';
-        sigEl.style.border = s.outcome === 'WIN' ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(239,83,80,0.25)';
-      } else {
-        sigEl.textContent = isShort ? 'SHORT ▼' : isLong ? 'LONG ▲' : 'WAIT —';
-        sigEl.style.background = isShort ? 'rgba(239,83,80,0.1)' : isLong ? 'rgba(38,166,154,0.1)' : 'rgba(107,114,128,0.1)';
-        sigEl.style.color = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
-        sigEl.style.border = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
-      }
-
-      // Top bar colour
-      const styleTag = document.createElement('style');
-      if (isClosed) {
-        styleTag.textContent = `.tcard::before { background: ${s.outcome === 'WIN' ? '#26a69a' : '#6b7280'} !important; }`;
-      } else {
-        styleTag.textContent = `.tcard::before { background: ${isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280'} !important; }`;
-      }
-      document.head.appendChild(styleTag);
-
-      // Timestamp
-      const ts = new Date(s.created_at);
-      const timeStr = ts.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
-      document.getElementById('tc-timestamp').textContent = `15M · ${timeStr}`;
-
-      const set = (id, val, cls) => {
-        const el = document.getElementById(id);
-        if (el) { el.textContent = cleanField(val); el.className = 'tc-v' + (cls ? ' ' + cls : ''); }
-      };
-
-      set('tc-ema',      s.ema_filter, isShort ? 'r' : isLong ? 'g' : '');
-      set('tc-bias',     s.htf_bias,   isShort ? 'r' : isLong ? 'g' : '');
-      set('tc-1h',       s.entry_5m,   isShort ? 'r' : isLong ? 'g' : '');
-      set('tc-sweep',    s.sweep,      'y');
-      set('tc-fvg',      s.fvg,        isWait ? '' : 'g');
-      set('tc-5m',       s.entry_5m,   isWait ? '' : 'g');
-      set('tc-killzone', s.killzone,   isWait ? '' : 'g');
-      set('tc-confluence', s.confluence ? s.confluence + '/8' : '—/8', 'y');
-
-      document.getElementById('tc-entry').textContent = cleanNumber(s.entry);
-      document.getElementById('tc-sl').textContent    = cleanNumber(s.stop_loss);
-      document.getElementById('tc-tp1').textContent   = cleanNumber(s.tp1);
-      document.getElementById('tc-tp2').textContent   = cleanNumber(s.tp2);
-
-      // Status banner
-      const banner = document.getElementById('tc-status-banner');
-      if (isClosed && s.outcome === 'WIN') {
-        const resultLabel = s.result === 'TP2' ? 'TP2 HIT' : 'TP1 HIT';
-        banner.style.display = 'block';
-        banner.style.background = 'rgba(38,166,154,0.12)';
-        banner.style.color = '#26a69a';
-        banner.style.border = '1px solid rgba(38,166,154,0.25)';
-        banner.textContent = `✓ TRADE CLOSED — ${resultLabel} · +${s.points || 0} PTS · ${new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'})}`;
-      } else if (isClosed && s.outcome === 'LOSS') {
-        banner.style.display = 'block';
-        banner.style.background = 'rgba(239,83,80,0.1)';
-        banner.style.color = '#ef5350';
-        banner.style.border = '1px solid rgba(239,83,80,0.25)';
-        banner.textContent = '✗ TRADE CLOSED — STOPPED OUT';
-      } else {
-        banner.style.display = 'none';
-      }
-
-      // Ticker signal text
+      // Ticker — use most recent signal for status
+      const latest   = data[data.length - 1];
+      const isClosed = (latest.status || '').toUpperCase() === 'CLOSED';
+      const dir       = (latest.direction || '').toUpperCase();
+      const isShort   = dir.includes('SHORT');
+      const isLong    = dir.includes('LONG');
       const tickerLabel = isClosed
-        ? (s.outcome === 'WIN' ? 'TP HIT ✓' : 'CLOSED')
+        ? (latest.outcome === 'WIN' ? 'TP HIT ✓' : 'SL HIT ✗')
         : (isShort ? 'SHORT ACTIVE ▼' : isLong ? 'LONG ACTIVE ▲' : 'WAIT');
       const tickerClass = isClosed
-        ? (s.outcome === 'WIN' ? 'up' : 'val')
+        ? (latest.outcome === 'WIN' ? 'up' : 'dn')
         : (isShort ? 'dn' : isLong ? 'up' : 'val');
       ['ticker-signal-1','ticker-signal-2'].forEach(id => {
         const el = document.getElementById(id);
