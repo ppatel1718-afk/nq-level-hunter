@@ -692,7 +692,7 @@
     const filtered = activeFilter === 'ALL'
       ? allHistory
       : allHistory.filter(s => {
-          const o = (s.outcome || 'RUNNING').toUpperCase();
+          const o = s.direction === "WAIT" ? "WAIT" : (s.outcome || "RUNNING").toUpperCase();
           return o === activeFilter;
         });
     const visible = filtered.slice(0, visibleCount);
@@ -705,16 +705,16 @@
     }
 
     document.getElementById('history-rows').innerHTML = visible.map(s => {
-      const outcome  = (s.outcome || 'RUNNING').toUpperCase();
-      const dir      = (s.direction || '—').toUpperCase();
-      const isShort  = dir === 'SHORT';
-      const isLong   = dir === 'LONG';
-      const sigCol   = isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
-      const outcomeCol = outcome === 'WIN' ? '#26a69a' : outcome === 'LOSS' ? '#ef5350' : '#f59e0b';
-      const ts = new Date(s.created_at);
+      const outcome  = (s.outcome || "").toUpperCase();
+      const dir      = (s.direction || "—").toUpperCase();
+      const isWaitDay = dir === "WAIT";
+      const isShort  = dir === "SHORT";
+      const isLong   = dir === "LONG";
+      const sigCol   = isShort ? "#ef5350" : isLong ? "#26a69a" : "#6b7280";
+      const outcomeCol = outcome === "WIN" ? "#26a69a" : outcome === "LOSS" ? "#ef5350" : isWaitDay ? "#6b7280" : "#f59e0b";
       const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
       const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
-      const resultLabel = outcome === 'WIN'
+      const resultLabel = isWaitDay ? "WAIT —" : outcome === "WIN" ? `${s.result || "TP1"} ✓ +${s.points || 0}pts` : outcome === "LOSS" ? `SL ✗ ${s.points ? s.points + "pts" : ""}` : "RUNNING";
         ? `${s.result || 'TP1'} ✓ +${s.points || 0}pts`
         : outcome === 'LOSS' ? `SL ✗ ${s.points ? s.points + 'pts' : '-40pts'}` : outcome;
       return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
