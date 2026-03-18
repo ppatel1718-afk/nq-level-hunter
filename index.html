@@ -712,11 +712,10 @@
       const isLong   = dir === "LONG";
       const sigCol   = isShort ? "#ef5350" : isLong ? "#26a69a" : "#6b7280";
       const outcomeCol = outcome === "WIN" ? "#26a69a" : outcome === "LOSS" ? "#ef5350" : isWaitDay ? "#6b7280" : "#f59e0b";
-      const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
+      const ts = new Date(s.created_at);
+      const dateStr = ts.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
       const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
       const resultLabel = isWaitDay ? "WAIT —" : outcome === "WIN" ? `${s.result || "TP1"} ✓ +${s.points || 0}pts` : outcome === "LOSS" ? `SL ✗ ${s.points ? s.points + "pts" : ""}` : "RUNNING";
-        ? `${s.result || 'TP1'} ✓ +${s.points || 0}pts`
-        : outcome === 'LOSS' ? `SL ✗ ${s.points ? s.points + 'pts' : '-40pts'}` : outcome;
       return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
         <span style="color:var(--muted);">${dateStr}<br><span style="font-size:10px;">${timeStr}</span></span>
         <span style="color:${sigCol};font-weight:700;">${dir} ${isShort ? '▼' : isLong ? '▲' : ''}</span>
