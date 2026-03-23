@@ -311,39 +311,20 @@
   <p class="hero-note"><strong>FREE</strong> · No credit card · Signal alerts via email</p>
 </section>
 
-<!-- TRADE CARD -->
+<!-- DAILY BIAS CARD -->
 <section class="section reveal" id="signal">
-  <div class="lbl">Live Signal Format</div>
-  <div class="stitle">Every update.<br>Same card.</div>
-  <p class="sbody">No ambiguous calls. Every signal comes with exact entry, stop loss, and two take-profit levels.</p>
+  <div class="lbl">Today's Bias</div>
+  <div class="stitle">Daily plan.<br>Clear levels.</div>
+  <p class="sbody">Every morning we analyse HTF charts and post short and long zones with confidence levels. Updated before NY Open.</p>
 
-  <div class="tcwrap">
-    <!-- Today's cards injected here dynamically -->
-    <div id="today-cards" style="display:flex;gap:16px;flex-wrap:wrap;flex:1;min-width:0;">
-      <div class="tcard" style="min-width:290px;max-width:480px;">
-        <div class="tc-hd"><div><div class="tc-asset">NQ</div><div class="tc-tf">Loading...</div></div><div class="tc-sig">— —</div></div>
-      </div>
-    </div>
-
-    <div style="flex:0 0 auto;min-width:230px;max-width:300px;">
-      <div style="font-family:var(--mono);margin-bottom:26px;">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:10px;">TOTAL POINTS</div>
-        <div style="font-size:54px;font-weight:700;color:var(--green);line-height:1;" id="result-pts">—</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:4px;">across all closed trades</div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);padding:18px;font-family:var(--mono);">
-        <div style="font-size:10px;color:var(--muted);letter-spacing:0.12em;margin-bottom:13px;">WHAT YOU GET — FREE</div>
-        <div style="font-size:12px;color:var(--text);line-height:2.3;">
-          ✓ &nbsp;Pre-session bias note<br>
-          ✓ &nbsp;London + NY killzone alert<br>
-          ✓ &nbsp;Live trade card on signal<br>
-          ✓ &nbsp;Entry, SL, TP1 + TP2<br>
-          ✓ &nbsp;Hourly update if in trade<br>
-          ✓ &nbsp;Follow on X for live updates
-        </div>
-      </div>
-    </div>
+  <!-- Bias card injected here -->
+  <div id="bias-card-container">
+    <div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);">Loading today's bias...</div>
   </div>
+
+  <div id="result-pts" style="display:none;"></div>
+  <!-- Live trade card shown only when card_type = LIVE -->
+  <div id="live-card-container" style="margin-top:16px;"></div>
 </section>
 
 <!-- PROCESS -->
@@ -410,17 +391,18 @@
     <button onclick="filterHistory('WIN')" id="filter-WIN" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">WINS</button>
     <button onclick="filterHistory('LOSS')" id="filter-LOSS" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">LOSSES</button>
     <button onclick="filterHistory('RUNNING')" id="filter-RUNNING" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">RUNNING</button>
+    <button onclick="filterHistory('BIAS')" id="filter-BIAS" style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;">BIAS</button>
   </div>
 
   <!-- History table -->
   <div style="background:var(--card);border:1px solid var(--border);font-family:var(--mono);">
-    <div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
+    <div style="display:grid;grid-template-columns:130px 70px 90px 90px 110px 110px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
       <span>DATE</span>
-      <span>SIGNAL</span>
-      <span>ENTRY</span>
+      <span>TYPE</span>
+      <span>ENTRY/BIAS</span>
       <span>SL</span>
-      <span>TP1</span>
-      <span>TP2</span>
+      <span>SHORT / TP1</span>
+      <span>LONG / TP2</span>
       <span>RESULT</span>
     </div>
     <div id="history-rows">
@@ -496,13 +478,12 @@
     if (!val) return '—';
     if (typeof val === 'number') return val.toLocaleString();
     if (typeof val === 'object') {
-      const v = val.detail || val.direction || val.type || val.session || val.level || val.zone || Object.values(val)[0];
+      const v = val.detail || val.direction || val.type || Object.values(val)[0];
       return cleanField(v);
     }
     if (typeof val === 'string') {
       val = val.replace(/```json|```/g, '').trim();
       try { const parsed = JSON.parse(val); return cleanField(parsed); } catch(e) {}
-      if (val.length > 60) val = val.substring(0, 60) + '...';
       return val;
     }
     return String(val);
@@ -518,17 +499,109 @@
     return '—';
   }
 
-  function buildCard(s) {
-    const status   = (s.status || 'OPEN').toUpperCase();
-    const isClosed = status === 'CLOSED';
-    const dir      = (s.direction || '').toUpperCase();
-    const isShort  = dir.includes('SHORT');
-    const isLong   = dir.includes('LONG');
-    const isWait   = !isShort && !isLong;
+  // ── CONFIDENCE BAR ──────────────────────────────────────
+  function confidenceBar(level) {
+    const l = (level || '').toUpperCase();
+    if (l === 'HIGH')   return { color: '#26a69a', bg: 'rgba(38,166,154,0.12)', border: 'rgba(38,166,154,0.3)',  bars: 3, label: 'HIGH' };
+    if (l === 'MEDIUM') return { color: '#f59e0b', bg: 'rgba(245,158,11,0.10)', border: 'rgba(245,158,11,0.3)',  bars: 2, label: 'MEDIUM' };
+    return                { color: '#6b7280',  bg: 'rgba(107,114,128,0.10)', border: 'rgba(107,114,128,0.3)', bars: 1, label: 'LOW' };
+  }
 
-    const topColor  = isClosed ? (s.outcome === 'WIN' ? '#26a69a' : '#6b7280') : (isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280');
-    const ts        = new Date(s.created_at);
-    const timeStr   = ts.toLocaleString('en-US', { month:'short', day:'numeric', year:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' });
+  function renderConfidence(level) {
+    const c = confidenceBar(level);
+    const filled = (n) => n <= c.bars
+      ? `<span style="display:inline-block;width:18px;height:10px;background:${c.color};border-radius:2px;"></span>`
+      : `<span style="display:inline-block;width:18px;height:10px;background:var(--border);border-radius:2px;"></span>`;
+    return `<div style="display:flex;align-items:center;gap:4px;">
+      ${filled(1)}${filled(2)}${filled(3)}
+      <span style="margin-left:6px;font-size:10px;letter-spacing:0.1em;color:${c.color};">${c.label}</span>
+    </div>`;
+  }
+
+  // ── BUILD BIAS CARD ──────────────────────────────────────
+  function buildBiasCard(s) {
+    const ts = new Date(s.created_at);
+    const dateStr = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric' });
+
+    const bias = (s.overall_bias || 'NEUTRAL').toUpperCase();
+    const biasColor = bias.includes('BULL') ? '#26a69a' : bias.includes('BEAR') ? '#ef5350' : '#f59e0b';
+
+    const biasResult = s.bias_result ? s.bias_result.toUpperCase() : null;
+    let resultBanner = '';
+    if (biasResult === 'HIT') {
+      resultBanner = `<div style="margin-top:16px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(38,166,154,0.12);color:#26a69a;border:1px solid rgba(38,166,154,0.25);">✓ BIAS CONFIRMED — ZONES HIT</div>`;
+    } else if (biasResult === 'MISSED') {
+      resultBanner = `<div style="margin-top:16px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(239,83,80,0.1);color:#ef5350;border:1px solid rgba(239,83,80,0.25);">✗ ZONES MISSED — PRICE ELSEWHERE</div>`;
+    } else if (biasResult === 'PARTIAL') {
+      resultBanner = `<div style="margin-top:16px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(245,158,11,0.1);color:#f59e0b;border:1px solid rgba(245,158,11,0.25);">◐ PARTIAL — ONE ZONE HIT</div>`;
+    }
+
+    return `
+    <div style="font-family:var(--mono);">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div style="font-size:10px;color:var(--muted);letter-spacing:0.18em;margin-bottom:6px;">NQ · DAILY BIAS · ${dateStr}</div>
+          <div style="font-size:22px;font-weight:700;color:${biasColor};">${bias}</div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);letter-spacing:0.1em;text-align:right;">
+          UPDATED ${ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'})}
+        </div>
+      </div>
+
+      <!-- Long / Short split panels -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;">
+
+        <!-- SHORT PANEL -->
+        <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid #ef5350;padding:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#ef5350;">SHORT ▼</div>
+            ${renderConfidence(s.short_confidence)}
+          </div>
+          <div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;">${s.short_zone || '—'}</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;">${s.short_reasoning || '—'}</div>
+        </div>
+
+        <!-- LONG PANEL -->
+        <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid #26a69a;padding:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;color:#26a69a;">LONG ▲</div>
+            ${renderConfidence(s.long_confidence)}
+          </div>
+          <div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;">${s.long_zone || '—'}</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;">${s.long_reasoning || '—'}</div>
+        </div>
+      </div>
+
+      <!-- Key levels row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px;">
+        <div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;margin-bottom:6px;">RESISTANCE</div>
+          <div style="font-size:11px;color:#ef5350;">${s.resistance_levels || '—'}</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;margin-bottom:6px;">SUPPORT</div>
+          <div style="font-size:11px;color:#26a69a;">${s.support_levels || '—'}</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;">
+          <div style="font-size:9px;color:var(--muted);letter-spacing:0.14em;margin-bottom:6px;">INVALIDATION</div>
+          <div style="font-size:11px;color:#f59e0b;">${s.invalidation || '—'}</div>
+        </div>
+      </div>
+
+      ${resultBanner}
+    </div>`;
+  }
+
+  // ── BUILD LIVE TRADE CARD ────────────────────────────────
+  function buildLiveCard(s) {
+    const isClosed = (s.status || '').toUpperCase() === 'CLOSED';
+    const dir = (s.direction || '').toUpperCase();
+    const isShort = dir.includes('SHORT');
+    const isLong  = dir.includes('LONG');
+    const topColor = isClosed ? (s.outcome === 'WIN' ? '#26a69a' : '#6b7280') : (isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280');
+    const ts = new Date(s.created_at);
+    const timeStr = ts.toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short' });
 
     let badgeText, badgeBg, badgeColor, badgeBorder;
     if (isClosed) {
@@ -543,86 +616,99 @@
       badgeBorder = isShort ? '1px solid rgba(239,83,80,0.25)' : isLong ? '1px solid rgba(38,166,154,0.25)' : '1px solid rgba(107,114,128,0.25)';
     }
 
-    const cf = (v) => {
-      if (!v) return '—';
-      if (typeof v === 'number') return v.toLocaleString();
-      if (typeof v === 'string') { v = v.replace(/```json|```/g,'').trim(); try { return cf(JSON.parse(v)); } catch(e){} if(v.length>60) return v.substring(0,60)+'...'; return v; }
-      if (typeof v === 'object') { const x = v.detail||v.direction||v.type||v.session||v.level||v.zone||Object.values(v)[0]; return cf(x); }
-      return String(v);
-    };
+    const cf = (v) => { if(!v) return '—'; if(typeof v==='string'){if(v.length>60)return v.substring(0,60)+'...';return v;} return String(v); };
     const cn = (v) => { if(!v) return '—'; if(typeof v==='number') return v.toLocaleString(); if(typeof v==='string'){const n=parseFloat(v.replace(/[^0-9.]/g,'')); return isNaN(n)?'—':n.toLocaleString();} return '—'; };
-
-    const vColor = (cls) => cls === 'r' ? '#ef5350' : cls === 'g' ? '#26a69a' : cls === 'y' ? '#f59e0b' : '#d1d4dc';
-    const row = (lbl, val, cls) => `<div class="tc-row"><span class="tc-lbl">${lbl}</span><span class="tc-v" style="color:${vColor(cls)}">${cf(val)}</span></div>`;
 
     let banner = '';
     if (isClosed && s.outcome === 'WIN') {
       const rl = s.result === 'TP2' ? 'TP2 HIT' : 'TP1 HIT';
-      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(38,166,154,0.12);color:#26a69a;border:1px solid rgba(38,166,154,0.25);">✓ TRADE CLOSED — ${rl} · +${s.points || 0} PTS · ${ts.toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>`;
+      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(38,166,154,0.12);color:#26a69a;border:1px solid rgba(38,166,154,0.25);">✓ TRADE CLOSED — ${rl} · +${s.points || 0} PTS</div>`;
     } else if (isClosed && s.outcome === 'LOSS') {
-      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(239,83,80,0.1);color:#ef5350;border:1px solid rgba(239,83,80,0.25);">✗ TRADE CLOSED — STOPPED OUT · ${s.points ? s.points + ' PTS' : ''}</div>`;
+      banner = `<div style="margin-top:14px;padding:10px 14px;font-size:11px;letter-spacing:0.1em;font-weight:700;text-align:center;background:rgba(239,83,80,0.1);color:#ef5350;border:1px solid rgba(239,83,80,0.25);">✗ TRADE CLOSED — STOPPED OUT ${s.points ? '· ' + s.points + ' PTS' : ''}</div>`;
     }
 
-    return `<div class="tcard" style="min-width:260px;max-width:420px;flex:1;border-top:3px solid ${topColor};">
-      <div class="tc-hd">
-        <div><div class="tc-asset">NQ</div><div class="tc-tf">15M · ${timeStr}</div></div>
-        <div class="tc-sig" style="background:${badgeBg};color:${badgeColor};border:${badgeBorder};">${badgeText}</div>
+    return `<div style="font-family:var(--mono);">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:0.18em;margin-bottom:10px;">LIVE TRADE CARD</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid ${topColor};padding:22px;max-width:520px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+          <div><div style="font-size:17px;font-weight:700;color:var(--white);">NQ</div><div style="font-size:10px;color:var(--muted);margin-top:3px;">${timeStr}</div></div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.14em;padding:5px 13px;background:${badgeBg};color:${badgeColor};border:${badgeBorder};">${badgeText}</div>
+        </div>
+        <div style="font-size:10px;display:flex;flex-direction:column;gap:0;">
+          ${[['EMA FILTER',cf(s.ema_filter),''],['4H BIAS',cf(s.htf_bias),''],['SWEEP',cf(s.sweep),'#f59e0b'],['FVG',cf(s.fvg),'#26a69a'],['KILLZONE',cf(s.killzone),'#26a69a'],['CONFLUENCE',s.confluence ? s.confluence+'/8' : '—/8','#f59e0b']].map(([l,v,c])=>`
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(42,46,57,0.65);">
+            <span style="color:var(--muted);letter-spacing:0.07em;">${l}</span>
+            <span style="color:${c||'var(--text)'};">${v}</span>
+          </div>`).join('')}
+        </div>
+        <div style="background:var(--card2);padding:12px 14px;margin-top:14px;">
+          ${[['ENTRY',cn(s.entry),'var(--text)'],['STOP LOSS',cn(s.stop_loss),'#ef5350'],['TP1 (2R)',cn(s.tp1),'#26a69a'],['TP2 (3R)',cn(s.tp2),'#26a69a']].map(([l,v,c])=>`
+          <div style="display:flex;justify-content:space-between;font-size:10px;padding:4px 0;">
+            <span style="color:var(--muted);">${l}</span><span style="color:${c};">${v}</span>
+          </div>`).join('')}
+        </div>
+        ${banner}
       </div>
-      ${row('EMA FILTER', s.ema_filter, isShort?'r':isLong?'g':'')}
-      ${row('4H BIAS',    s.htf_bias,   isShort?'r':isLong?'g':'')}
-      ${row('SWEEP',      s.sweep,      'y')}
-      ${row('FVG',        s.fvg,        isWait?'':'g')}
-      ${row('5M ENTRY',   s.entry_5m,   isWait?'':'g')}
-      ${row('KILLZONE',   s.killzone,   isWait?'':'g')}
-      <div class="tc-row"><span class="tc-lbl">CONFLUENCE</span><span class="tc-v" style="color:#f59e0b;">${s.confluence ? s.confluence+'/8' : '—/8'}</span></div>
-      <div class="tc-lvls">
-        <div class="tc-lr"><span class="tc-lbl">ENTRY (5M FVG)</span><span class="tc-v">${cn(s.entry)}</span></div>
-        <div class="tc-lr"><span class="tc-lbl">STOP LOSS</span><span class="tc-v r" style="color:#ef5350;">${cn(s.stop_loss)}</span></div>
-        <div class="tc-lr"><span class="tc-lbl">TP1 (2R)</span><span class="tc-v g" style="color:#26a69a;">${cn(s.tp1)}</span></div>
-        <div class="tc-lr"><span class="tc-lbl">TP2 (3R)</span><span class="tc-v g" style="color:#26a69a;">${cn(s.tp2)}</span></div>
-      </div>
-      ${banner}
     </div>`;
   }
 
+  // ── FETCH & RENDER ───────────────────────────────────────
   async function fetchSignal() {
     try {
-      // Fetch today's signals (last 24h to catch multi-session days)
       const since = new Date();
       since.setHours(0, 0, 0, 0);
       const sinceISO = since.toISOString();
 
-      const res = await fetch(
+      let res = await fetch(
         `${SUPABASE_URL}/rest/v1/signals_nq?created_at=gte.${sinceISO}&order=created_at.asc`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
       let data = await res.json();
 
-      // Fallback: if nothing today, show most recent signal
       if (!data || data.length === 0) {
         const res2 = await fetch(
-          `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=1`,
+          `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=3`,
           { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
         );
         data = await res2.json();
       }
       if (!data || data.length === 0) return;
 
-      // Render all today's cards side by side
-      document.getElementById('today-cards').innerHTML = data.map(s => buildCard(s)).join('');
+      // Separate BIAS and LIVE cards
+      const biasCards = data.filter(s => (s.card_type || 'LIVE') === 'BIAS');
+      const liveCards = data.filter(s => (s.card_type || 'LIVE') === 'LIVE');
 
-      // Ticker — use most recent signal for status
-      const latest   = data[data.length - 1];
+      // Render bias card (most recent)
+      const biasContainer = document.getElementById('bias-card-container');
+      if (biasCards.length > 0) {
+        biasContainer.innerHTML = buildBiasCard(biasCards[biasCards.length - 1]);
+      } else {
+        biasContainer.innerHTML = '<div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);">No bias card today yet. Check back before NY Open.</div>';
+      }
+
+      // Render live trade cards if any
+      const liveContainer = document.getElementById('live-card-container');
+      if (liveCards.length > 0) {
+        liveContainer.innerHTML = liveCards.map(s => buildLiveCard(s)).join('<div style="height:12px;"></div>');
+      } else {
+        liveContainer.innerHTML = '';
+      }
+
+      // Ticker update
+      const latest = data[data.length - 1];
       const isClosed = (latest.status || '').toUpperCase() === 'CLOSED';
-      const dir       = (latest.direction || '').toUpperCase();
-      const isShort   = dir.includes('SHORT');
-      const isLong    = dir.includes('LONG');
-      const tickerLabel = isClosed
-        ? (latest.outcome === 'WIN' ? 'TP HIT ✓' : 'SL HIT ✗')
-        : (isShort ? 'SHORT ACTIVE ▼' : isLong ? 'LONG ACTIVE ▲' : 'WAIT');
-      const tickerClass = isClosed
-        ? (latest.outcome === 'WIN' ? 'up' : 'dn')
-        : (isShort ? 'dn' : isLong ? 'up' : 'val');
+      const dir = (latest.direction || '').toUpperCase();
+      const isShort = dir.includes('SHORT');
+      const isLong  = dir.includes('LONG');
+      const isBias  = (latest.card_type || 'LIVE') === 'BIAS';
+      const tickerLabel = isBias
+        ? ((latest.overall_bias || 'BIAS').toUpperCase())
+        : isClosed
+          ? (latest.outcome === 'WIN' ? 'TP HIT ✓' : 'SL HIT ✗')
+          : (isShort ? 'SHORT ACTIVE ▼' : isLong ? 'LONG ACTIVE ▲' : 'WAIT');
+      const tickerClass = isBias
+        ? (latest.overall_bias && latest.overall_bias.toUpperCase().includes('BULL') ? 'up' : latest.overall_bias && latest.overall_bias.toUpperCase().includes('BEAR') ? 'dn' : 'yl')
+        : isClosed ? (latest.outcome === 'WIN' ? 'up' : 'dn') : (isShort ? 'dn' : isLong ? 'up' : 'val');
       ['ticker-signal-1','ticker-signal-2'].forEach(id => {
         const el = document.getElementById(id);
         if (el) { el.textContent = tickerLabel; el.className = tickerClass; }
@@ -648,7 +734,7 @@
       );
       const data = await res.json();
       if (!data || data.length === 0) {
-        document.getElementById('history-rows').innerHTML = '<div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);">No signals yet. First one coming soon.</div>';
+        document.getElementById('history-rows').innerHTML = '<div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);">No signals yet.</div>';
         return;
       }
       allHistory = data;
@@ -660,44 +746,37 @@
   }
 
   function updateStats(data) {
-    const wins   = data.filter(s => s.outcome === 'WIN').length;
-    const losses = data.filter(s => s.outcome === 'LOSS').length;
+    const liveOnly = data.filter(s => (s.card_type || 'LIVE') === 'LIVE');
+    const wins   = liveOnly.filter(s => s.outcome === 'WIN').length;
+    const losses = liveOnly.filter(s => s.outcome === 'LOSS').length;
     const closed = wins + losses;
     const rate   = closed > 0 ? Math.round((wins / closed) * 100) : 0;
 
     let totalPts = 0;
-    data.forEach(s => {
-      if (s.points != null && s.points !== '') totalPts += Number(s.points);
-    });
+    liveOnly.forEach(s => { if (s.points != null && s.points !== '') totalPts += Number(s.points); });
 
     document.getElementById('stat-wins').textContent    = wins || '—';
     document.getElementById('stat-losses').textContent  = losses || '—';
     document.getElementById('stat-winrate').textContent = closed > 0 ? rate + '%' : '—';
-    document.getElementById('stat-pts').textContent     = closed > 0 ? (totalPts >= 0 ? '+' + totalPts : totalPts) : '—';
+    document.getElementById('stat-pts').textContent     = closed > 0 ? (totalPts >= 0 ? '+' + totalPts : String(totalPts)) : '—';
     document.getElementById('result-pts').textContent   = closed > 0 ? (totalPts >= 0 ? '+' + totalPts : String(totalPts)) : '—';
 
     const ptsText = closed > 0 ? (totalPts >= 0 ? '+' + totalPts + ' PTS' : totalPts + ' PTS') : 'LOADING...';
     const wrText  = closed > 0 ? rate + '% · ' + wins + 'W / ' + losses + 'L' : 'TRACKING LIVE';
-    ['ticker-pts-1','ticker-pts-2'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = ptsText;
-    });
-    ['ticker-wr-1','ticker-wr-2'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = wrText;
-    });
+    ['ticker-pts-1','ticker-pts-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ptsText; });
+    ['ticker-wr-1','ticker-wr-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = wrText; });
   }
 
   function renderHistory() {
     const filtered = activeFilter === 'ALL'
       ? allHistory
       : allHistory.filter(s => {
-          const o = s.direction === "WAIT" ? "WAIT" : (s.outcome || "RUNNING").toUpperCase();
+          if ((s.card_type || 'LIVE') === 'BIAS') return activeFilter === 'BIAS';
+          const o = (s.outcome || 'RUNNING').toUpperCase();
           return o === activeFilter;
         });
     const visible = filtered.slice(0, visibleCount);
-    const btn = document.getElementById('load-more-btn');
-    btn.style.display = filtered.length > visibleCount ? 'inline-block' : 'none';
+    document.getElementById('load-more-btn').style.display = filtered.length > visibleCount ? 'inline-block' : 'none';
 
     if (visible.length === 0) {
       document.getElementById('history-rows').innerHTML = '<div style="padding:24px;text-align:center;font-size:12px;color:var(--muted);">No signals match this filter.</div>';
@@ -705,25 +784,45 @@
     }
 
     document.getElementById('history-rows').innerHTML = visible.map(s => {
-      const outcome  = (s.outcome || "").toUpperCase();
-      const dir      = (s.direction || "—").toUpperCase();
-      const isWaitDay = dir === "WAIT";
-      const isShort  = dir === "SHORT";
-      const isLong   = dir === "LONG";
-      const sigCol   = isShort ? "#ef5350" : isLong ? "#26a69a" : "#6b7280";
-      const outcomeCol = outcome === "WIN" ? "#26a69a" : outcome === "LOSS" ? "#ef5350" : isWaitDay ? "#6b7280" : "#f59e0b";
+      const isBias = (s.card_type || 'LIVE') === 'BIAS';
+      const outcome = (s.outcome || '').toUpperCase();
+      const dir = (s.direction || '').toUpperCase();
+      const isShort = dir === 'SHORT';
+      const isLong  = dir === 'LONG';
+      const sigCol = isBias ? '#26a69a' : isShort ? '#ef5350' : isLong ? '#26a69a' : '#6b7280';
+      const outcomeCol = outcome === 'WIN' ? '#26a69a' : outcome === 'LOSS' ? '#ef5350' : isBias ? '#26a69a' : '#f59e0b';
       const ts = new Date(s.created_at);
-      const dateStr = ts.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+      const dateStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
       const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
-      const resultLabel = isWaitDay ? "WAIT —" : outcome === "WIN" ? `${s.result || "TP1"} ✓ +${s.points || 0}pts` : outcome === "LOSS" ? `SL ✗ ${s.points ? s.points + "pts" : ""}` : "RUNNING";
-      return `<div style="display:grid;grid-template-columns:140px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">
+
+      let signalLabel, entryLabel, slLabel, tp1Label, tp2Label, resultLabel;
+      if (isBias) {
+        signalLabel = `<span style="color:${sigCol};font-weight:700;">BIAS</span>`;
+        entryLabel  = `<span style="color:var(--muted);font-size:10px;">${(s.overall_bias||'').substring(0,8)}</span>`;
+        slLabel     = `<span style="color:var(--muted);">—</span>`;
+        tp1Label    = `<span style="color:#ef5350;font-size:10px;">${s.short_zone||'—'}</span>`;
+        tp2Label    = `<span style="color:#26a69a;font-size:10px;">${s.long_zone||'—'}</span>`;
+        const br = (s.bias_result||'OPEN').toUpperCase();
+        const brCol = br==='HIT'?'#26a69a':br==='MISSED'?'#ef5350':br==='PARTIAL'?'#f59e0b':'#6b7280';
+        resultLabel = `<span style="color:${brCol};font-weight:700;">${br}</span>`;
+      } else {
+        signalLabel = `<span style="color:${sigCol};font-weight:700;">${dir} ${isShort?'▼':isLong?'▲':''}</span>`;
+        entryLabel  = `<span style="color:var(--text);">${s.entry ? Number(s.entry).toLocaleString() : '—'}</span>`;
+        slLabel     = `<span style="color:#ef5350;">${s.stop_loss ? Number(s.stop_loss).toLocaleString() : '—'}</span>`;
+        tp1Label    = `<span style="color:#26a69a;">${s.tp1 ? Number(s.tp1).toLocaleString() : '—'}</span>`;
+        tp2Label    = `<span style="color:#26a69a;">${s.tp2 ? Number(s.tp2).toLocaleString() : '—'}</span>`;
+        const resLabel = outcome==='WIN' ? `${s.result||'TP1'} ✓ +${s.points||0}pts` : outcome==='LOSS' ? `SL ✗ ${s.points?s.points+'pts':''}` : 'RUNNING';
+        resultLabel = `<span style="color:${outcomeCol};font-weight:700;">${resLabel}</span>`;
+      }
+
+      return `<div style="display:grid;grid-template-columns:130px 70px 90px 90px 110px 110px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;font-family:var(--mono);">
         <span style="color:var(--muted);">${dateStr}<br><span style="font-size:10px;">${timeStr}</span></span>
-        <span style="color:${sigCol};font-weight:700;">${dir} ${isShort ? '▼' : isLong ? '▲' : ''}</span>
-        <span style="color:var(--text);">${s.entry ? Number(s.entry).toLocaleString() : '—'}</span>
-        <span style="color:#ef5350;">${s.stop_loss ? Number(s.stop_loss).toLocaleString() : '—'}</span>
-        <span style="color:#26a69a;">${s.tp1 ? Number(s.tp1).toLocaleString() : '—'}</span>
-        <span style="color:#26a69a;">${s.tp2 ? Number(s.tp2).toLocaleString() : '—'}</span>
-        <span style="color:${outcomeCol};font-weight:700;">${resultLabel}</span>
+        ${signalLabel}
+        ${entryLabel}
+        ${slLabel}
+        ${tp1Label}
+        ${tp2Label}
+        ${resultLabel}
       </div>`;
     }).join('');
   }
@@ -731,7 +830,7 @@
   function filterHistory(f) {
     activeFilter = f;
     visibleCount = 10;
-    ['ALL','WIN','LOSS','RUNNING'].forEach(k => {
+    ['ALL','WIN','LOSS','RUNNING','BIAS'].forEach(k => {
       const btn = document.getElementById('filter-' + k);
       if (btn) {
         btn.style.background = k === f ? 'var(--green)' : 'transparent';
@@ -741,10 +840,7 @@
     renderHistory();
   }
 
-  function loadMore() {
-    visibleCount += 10;
-    renderHistory();
-  }
+  function loadMore() { visibleCount += 10; renderHistory(); }
 
   fetchHistory();
 </script>
