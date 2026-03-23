@@ -550,11 +550,19 @@
           '<div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;">' + cf(s.long_reasoning) + '</div>' +
         '</div>' +
       '</div>' +
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;">' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px;">' +
         '<div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">RESISTANCE</div><div style="font-size:11px;color:#ef5350;">' + cf(s.resistance_levels) + '</div></div>' +
         '<div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">SUPPORT</div><div style="font-size:11px;color:#26a69a;">' + cf(s.support_levels) + '</div></div>' +
         '<div style="background:var(--card);border:1px solid var(--border);padding:14px 16px;"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">INVALIDATION</div><div style="font-size:11px;color:#f59e0b;">' + cf(s.invalidation) + '</div></div>' +
       '</div>' +
+      (s.entry || s.stop_loss || s.tp1 || s.tp2 ?
+        '<div style="background:var(--card2);border:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;margin-bottom:2px;">' +
+          '<div style="padding:14px 16px;border-right:1px solid var(--border);"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">ENTRY</div><div style="font-size:13px;font-weight:700;color:var(--white);font-family:var(--mono);">' + cn(s.entry) + '</div></div>' +
+          '<div style="padding:14px 16px;border-right:1px solid var(--border);"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">STOP LOSS</div><div style="font-size:13px;font-weight:700;color:#ef5350;font-family:var(--mono);">' + cn(s.stop_loss) + '</div></div>' +
+          '<div style="padding:14px 16px;border-right:1px solid var(--border);"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">TP1</div><div style="font-size:13px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.tp1) + '</div></div>' +
+          '<div style="padding:14px 16px;"><div style="font-size:9px;color:var(--muted);letter-spacing:0.12em;margin-bottom:5px;">TP2</div><div style="font-size:13px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.tp2) + '</div></div>' +
+        '</div>'
+      : '') +
       banner +
     '</div>';
   }
