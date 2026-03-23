@@ -396,13 +396,13 @@
 
   <!-- History table -->
   <div style="background:var(--card);border:1px solid var(--border);font-family:var(--mono);">
-    <div style="display:grid;grid-template-columns:130px 70px 90px 90px 110px 110px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
+    <div style="display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:0.1em;">
       <span>DATE</span>
-      <span>TYPE</span>
-      <span>ENTRY/BIAS</span>
+      <span>SIGNAL</span>
+      <span>ENTRY</span>
       <span>SL</span>
-      <span>SHORT / TP1</span>
-      <span>LONG / TP2</span>
+      <span>TP1</span>
+      <span>TP2</span>
       <span>RESULT</span>
     </div>
     <div id="history-rows">
@@ -725,10 +725,10 @@
       const dStr    = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' });
       const tStr    = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
 
-      let typeCol, typeLabel, col2, col3, col4, col5, col6;
+      let typeLabel, col2, col3, col4, col5, col6;
       if (isBias) {
         const biasCol = (s.overall_bias||'').toUpperCase().includes('BULL') ? '#26a69a' : (s.overall_bias||'').toUpperCase().includes('BEAR') ? '#ef5350' : '#f59e0b';
-        typeLabel = '<span style="color:' + biasCol + ';font-weight:700;">BIAS</span>';
+        typeLabel = '<span style="color:' + biasCol + ';font-weight:700;font-size:11px;">BIAS</span>';
         col2 = '<span style="color:' + biasCol + ';font-size:10px;">' + (s.overall_bias || '—') + '</span>';
         col3 = '<span style="color:var(--muted);">—</span>';
         col4 = '<span style="color:#ef5350;font-size:10px;">' + (s.short_zone || '—') + '</span>';
@@ -743,14 +743,16 @@
         col3 = '<span style="color:#ef5350;">' + cn(s.stop_loss) + '</span>';
         col4 = '<span style="color:#26a69a;">' + cn(s.tp1) + '</span>';
         col5 = '<span style="color:#26a69a;">' + cn(s.tp2) + '</span>';
-        const outC = outcome==='WIN'?'#26a69a':outcome==='LOSS'?'#ef5350':'#f59e0b';
-        const resL = outcome==='WIN' ? (s.result||'TP1') + ' ✓ +' + (s.points||0) + 'pts'
-                   : outcome==='LOSS' ? 'SL ✗ ' + (s.points ? s.points + 'pts' : '')
-                   : dir === 'WAIT' ? 'WAIT —' : 'RUNNING';
+        const outC = outcome==='WIN'?'#26a69a':outcome==='LOSS'?'#ef5350':dir==='WAIT'?'#6b7280':'#f59e0b';
+        const resL = outcome==='WIN'
+          ? (s.result||'TP1') + ' ✓ +' + (s.points||0) + 'pts'
+          : outcome==='LOSS'
+          ? 'SL ✗ ' + (s.points ? s.points + 'pts' : '-40pts')
+          : dir === 'WAIT' ? 'WAIT —' : 'RUNNING';
         col6 = '<span style="color:' + outC + ';font-weight:700;">' + resL + '</span>';
       }
 
-      return '<div style="display:grid;grid-template-columns:130px 70px 90px 90px 110px 110px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">' +
+      return '<div style="display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:11px 16px;border-bottom:1px solid rgba(42,46,57,0.6);font-size:11px;align-items:center;">' +
         '<span style="color:var(--muted);">' + dStr + '<br><span style="font-size:10px;">' + tStr + '</span></span>' +
         typeLabel + col2 + col3 + col4 + col5 + col6 +
       '</div>';
