@@ -701,13 +701,15 @@
   }
 
   function renderHistory() {
-    const filtered = activeFilter === 'ALL' ? allHistory : allHistory.filter(s => {
-      if (activeFilter === 'BIAS')    return s.card_type === 'BIAS';
-      if (activeFilter === 'WIN')     return s.card_type === 'LIVE' && s.outcome === 'WIN';
-      if (activeFilter === 'LOSS')    return s.card_type === 'LIVE' && s.outcome === 'LOSS';
-      if (activeFilter === 'RUNNING') return s.card_type === 'LIVE' && !s.outcome && s.status === 'OPEN';
-      return false;
-    });
+    const filtered = activeFilter === 'ALL'
+      ? allHistory.filter(s => s.card_type !== 'BIAS')
+      : allHistory.filter(s => {
+          if (activeFilter === 'BIAS')    return s.card_type === 'BIAS';
+          if (activeFilter === 'WIN')     return s.card_type === 'LIVE' && s.outcome === 'WIN';
+          if (activeFilter === 'LOSS')    return s.card_type === 'LIVE' && s.outcome === 'LOSS';
+          if (activeFilter === 'RUNNING') return s.card_type === 'LIVE' && !s.outcome && s.status === 'OPEN';
+          return false;
+        });
     const visible = filtered.slice(0, visibleCount);
     document.getElementById('load-more-btn').style.display = filtered.length > visibleCount ? 'inline-block' : 'none';
 
