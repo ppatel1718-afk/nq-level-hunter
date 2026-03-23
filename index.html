@@ -655,37 +655,29 @@
   // ── FETCH & RENDER ───────────────────────────────────────
   async function fetchSignal() {
     try {
-      // Use UTC date to avoid timezone issues
-      const now = new Date();
-      const yyyy = now.getUTCFullYear();
-      const mm = String(now.getUTCMonth()+1).padStart(2,'0');
-      const dd = String(now.getUTCDate()).padStart(2,'0');
-      const todayUTC = `${yyyy}-${mm}-${dd}`;
-      const sinceISO = `${todayUTC}T00:00:00.000Z`;
-
-      let res = await fetch(
-        `${SUPABASE_URL}/rest/v1/signals_nq?created_at=gte.${sinceISO}&order=created_at.asc`,
+      // Fetch latest 20 rows — find most recent BIAS and today's LIVE cards
+      const allRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=20`,
         { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
       );
-      let data = await res.json();
+      const allData = await allRes.json();
+      if (!allData || allData.length === 0) return;
 
-      if (!data || data.length === 0) {
-        const res2 = await fetch(
-          `${SUPABASE_URL}/rest/v1/signals_nq?order=created_at.desc&limit=10`,
-          { headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` } }
-        );
-        data = await res2.json();
-      }
-      if (!data || data.length === 0) return;
-
-      // Separate BIAS and LIVE cards
-      const biasCards = data.filter(s => (s.card_type || 'LIVE') === 'BIAS');
-      const liveCards = data.filter(s => (s.card_type || 'LIVE') === 'LIVE');
+      // Most recent BIAS card
+      const biasCards = allData.filter(s => s.card_type === 'BIAS');
+      // Today's LIVE cards (open only)
+      const now = new Date();
+      const todayStr = now.toISOString().split('T')[0];
+      const liveCards = allData.filter(s => {
+        if (s.card_type !== 'LIVE') return false;
+        const d = new Date(s.created_at).toISOString().split('T')[0];
+        return d === todayStr && (s.status || 'OPEN').toUpperCase() === 'OPEN';
+      });
 
       // Render bias card (most recent)
       const biasContainer = document.getElementById('bias-card-container');
       if (biasCards.length > 0) {
-        biasContainer.innerHTML = buildBiasCard(biasCards[biasCards.length - 1]);
+        biasContainer.innerHTML = buildBiasCard(biasCards[0]);
       } else {
         biasContainer.innerHTML = '<div style="padding:32px;text-align:center;font-size:12px;color:var(--muted);font-family:var(--mono);">No bias card today yet. Check back before NY Open.</div>';
       }
@@ -719,7 +711,8 @@
       });
 
     } catch(e) {
-      console.log('Signal fetch error:', e);
+      console.error('Signal fetch error:', e);
+      document.getElementById('bias-card-container').innerHTML = '<div style="padding:24px;text-align:center;font-size:12px;color:#ef5350;font-family:var(--mono);">Error: ' + e.message + '</div>';
     }
   }
 
@@ -745,7 +738,8 @@
       updateStats(data);
       renderHistory();
     } catch(e) {
-      console.log('History fetch error:', e);
+      console.error('History fetch error:', e);
+      document.getElementById('history-rows').innerHTML = '<div style="padding:24px;text-align:center;font-size:12px;color:#ef5350;font-family:var(--mono);">Error loading data: ' + e.message + '</div>';
     }
   }
 
