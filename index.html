@@ -539,7 +539,17 @@
             confBar(s.short_confidence) +
           '</div>' +
           '<div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;">' + cf(s.short_zone) + '</div>' +
-          '<div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;">' + cf(s.short_reasoning) + '</div>' +
+          '<div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;margin-bottom:12px;">' + cf(s.short_reasoning) + '</div>' +
+          (s.short_entry || s.short_sl || s.short_tp1 || s.short_tp2 ?
+            '<div style="background:var(--card2);padding:10px 12px;border-top:1px solid var(--border);">' +
+              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">ENTRY</div><div style="font-size:12px;font-weight:700;color:var(--white);font-family:var(--mono);">' + cn(s.short_entry) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">STOP LOSS</div><div style="font-size:12px;font-weight:700;color:#ef5350;font-family:var(--mono);">' + cn(s.short_sl) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">TP1</div><div style="font-size:12px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.short_tp1) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">TP2</div><div style="font-size:12px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.short_tp2) + '</div></div>' +
+              '</div>' +
+            '</div>'
+          : '') +
         '</div>' +
         '<div style="background:var(--card);border:1px solid var(--border);border-top:3px solid #26a69a;padding:20px;">' +
           '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">' +
@@ -547,7 +557,17 @@
             confBar(s.long_confidence) +
           '</div>' +
           '<div style="font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;">' + cf(s.long_zone) + '</div>' +
-          '<div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;">' + cf(s.long_reasoning) + '</div>' +
+          '<div style="font-size:10px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;margin-bottom:12px;">' + cf(s.long_reasoning) + '</div>' +
+          (s.long_entry || s.long_sl || s.long_tp1 || s.long_tp2 ?
+            '<div style="background:var(--card2);padding:10px 12px;border-top:1px solid var(--border);">' +
+              '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">ENTRY</div><div style="font-size:12px;font-weight:700;color:var(--white);font-family:var(--mono);">' + cn(s.long_entry) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">STOP LOSS</div><div style="font-size:12px;font-weight:700;color:#ef5350;font-family:var(--mono);">' + cn(s.long_sl) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">TP1</div><div style="font-size:12px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.long_tp1) + '</div></div>' +
+                '<div><div style="font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;">TP2</div><div style="font-size:12px;font-weight:700;color:#26a69a;font-family:var(--mono);">' + cn(s.long_tp2) + '</div></div>' +
+              '</div>' +
+            '</div>'
+          : '') +
         '</div>' +
       '</div>' +
       '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-bottom:2px;">' +
