@@ -485,7 +485,7 @@
   function cf(v) {
     if (v == null || v === '') return '—';
     if (typeof v === 'number') return v.toLocaleString();
-    if (typeof v === 'string') { if (v.length > 80) return v.substring(0, 80) + '...'; return v; }
+    if (typeof v === 'string') { if (v.length > 200) return v.substring(0, 200) + '...'; return v; }
     return String(v);
   }
   function cn(v) {
