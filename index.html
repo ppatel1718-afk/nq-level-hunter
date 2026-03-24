@@ -415,6 +415,57 @@
   </div>
 </section>
 
+<!-- BLUSKY PARTNER -->
+<section class="section reveal" id="broker" style="text-align:center;">
+  <div class="lbl">Trading With</div>
+  <div class="stitle">The broker behind<br>every trade.</div>
+  <p class="sbody" style="margin:0 auto 52px;">Every signal on this site is traded live with Blusky. Fast execution, low commissions, built for futures.</p>
+
+  <div style="max-width:480px;margin:0 auto;">
+
+    <!-- Blusky card -->
+    <div style="background:var(--card);border:1px solid var(--border);padding:36px;font-family:var(--mono);text-align:left;position:relative;">
+      <div style="border-top:3px solid var(--green);position:absolute;top:0;left:0;right:0;"></div>
+
+      <!-- Logo / Name -->
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+        <div style="width:44px;height:44px;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--bg);">B</div>
+        <div>
+          <div style="font-size:16px;font-weight:700;color:var(--white);letter-spacing:0.05em;">BLUSKY</div>
+          <div style="font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-top:2px;">FUTURES BROKER</div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div style="font-size:12px;color:var(--text);line-height:2.2;margin-bottom:22px;font-family:var(--sans);">
+        The broker I personally use for every NQ trade on this site.<br>
+        Fast execution · Low commissions · NQ, ES and Gold futures.
+      </div>
+
+      <!-- Features -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px;">
+        <div style="background:var(--card2);padding:10px 14px;font-size:10px;color:var(--text);letter-spacing:0.06em;">✓ &nbsp;Micro futures</div>
+        <div style="background:var(--card2);padding:10px 14px;font-size:10px;color:var(--text);letter-spacing:0.06em;">✓ &nbsp;Low commissions</div>
+        <div style="background:var(--card2);padding:10px 14px;font-size:10px;color:var(--text);letter-spacing:0.06em;">✓ &nbsp;Fast execution</div>
+        <div style="background:var(--card2);padding:10px 14px;font-size:10px;color:var(--text);letter-spacing:0.06em;">✓ &nbsp;NQ · ES · Gold</div>
+      </div>
+
+      <!-- Promo box — injected from Supabase -->
+      <div id="blusky-promo" style="display:none;margin-bottom:22px;"></div>
+
+      <!-- CTA Button -->
+      <a href="https://fas.st/t/pqmnB5KZ" target="_blank" rel="noopener"
+        style="display:block;text-align:center;background:var(--green);color:var(--bg);font-family:var(--mono);font-size:12px;letter-spacing:0.12em;padding:18px;text-decoration:none;transition:opacity 0.2s;"
+        onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+        SIGN UP WITH MY LINK →
+      </a>
+
+      <p style="margin-top:12px;font-size:10px;color:var(--muted);text-align:center;letter-spacing:0.06em;">Affiliate link — I earn a commission at no cost to you</p>
+    </div>
+
+  </div>
+</section>
+
 <!-- JOIN -->
 <section class="section reveal" id="join" style="text-align:center;">
   <div class="lbl">Membership</div>
@@ -434,6 +485,7 @@
         <li>Full trade history + win rate</li>
         <li>ES trade cards — coming soon</li>
         <li>NQ focused — zero noise</li>
+        <li>Trading with Blusky — sign up via my link</li>
       </ul>
       <a href="https://nqlevelhunter.beehiiv.com/subscribe" class="btn-p" style="display:block;text-align:center;padding:20px;font-size:13px;letter-spacing:0.12em;margin-top:8px;">JOIN FREE — GET SIGNALS</a>
       <p style="margin-top:13px;font-size:10px;color:var(--muted);">SIGNALS DELIVERED VIA EMAIL · NO SPAM EVER</p>
@@ -680,6 +732,38 @@
 
   fetchSignal();
   setInterval(fetchSignal, 60000);
+
+  // ── BLUSKY PROMO ──────────────────────────────────────────────
+  async function fetchPromo() {
+    try {
+      const data = await sbFetch('promotions?promo_active=eq.true&limit=1');
+      if (!data || !data.length) return;
+      const p = data[0];
+      const box = document.getElementById('blusky-promo');
+      if (!box) return;
+      if (p.promo_code) {
+        box.style.display = 'block';
+        box.innerHTML =
+          '<div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.3);padding:16px 18px;">' +
+            '<div style="font-size:9px;color:var(--yellow);letter-spacing:0.18em;margin-bottom:8px;">🎁 CURRENT PROMOTION</div>' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">' +
+              '<div>' +
+                '<div style="font-size:18px;font-weight:700;color:var(--white);letter-spacing:0.08em;">' + p.promo_code + '</div>' +
+                (p.promo_label ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">' + p.promo_label + '</div>' : '') +
+              '</div>' +
+              '<button onclick="navigator.clipboard.writeText('' + p.promo_code + '');this.textContent='COPIED ✓';setTimeout(()=>this.textContent='COPY CODE',2000)" ' +
+                'style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:8px 16px;background:var(--yellow);color:var(--bg);border:none;cursor:pointer;">COPY CODE</button>' +
+            '</div>' +
+          '</div>';
+      } else {
+        box.style.display = 'none';
+      }
+    } catch(e) {
+      console.log('Promo fetch error:', e);
+    }
+  }
+
+  fetchPromo();
 
   // ── HISTORY ────────────────────────────────────────────────
   let allHistory = [], visibleCount = 10, activeFilter = 'ALL';
