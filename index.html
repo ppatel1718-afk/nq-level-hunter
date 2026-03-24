@@ -733,7 +733,8 @@
   fetchSignal();
   setInterval(fetchSignal, 60000);
 
-  function copyPromo(btn, code) {
+  function copyPromo(btn) {
+    var code = btn.getAttribute('data-code');
     navigator.clipboard.writeText(code);
     btn.textContent = 'COPIED ✓';
     setTimeout(function() { btn.textContent = 'COPY CODE'; }, 2000);
@@ -757,7 +758,7 @@
                 '<div style="font-size:18px;font-weight:700;color:var(--white);letter-spacing:0.08em;">' + p.promo_code + '</div>' +
                 (p.promo_label ? '<div style="font-size:10px;color:var(--muted);margin-top:4px;">' + p.promo_label + '</div>' : '') +
               '</div>' +
-              '<button id="copy-promo-btn" onclick="copyPromo(this,'' + p.promo_code + '')" ' +
+              '<button data-code="' + p.promo_code + '" onclick="copyPromo(this)" ' +
                 'style="font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:8px 16px;background:var(--yellow);color:var(--bg);border:none;cursor:pointer;">COPY CODE</button>' +
             '</div>' +
           '</div>';
