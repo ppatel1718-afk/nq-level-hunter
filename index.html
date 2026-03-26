@@ -1090,8 +1090,8 @@ function confBars(level) {
 // ── BUILD BIAS CARD ────────────────────────────────────────
 function buildBiasCard(s) {
   const ts = new Date(s.created_at);
-  const dateStr = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
-  const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+  const dateStr = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone: America/New_York});
+  const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone: America/New_York });
   const bias = (s.overall_bias || 'NEUTRAL').toUpperCase();
   const biasClass = bias.includes('BULL') ? 'bullish' : bias.includes('BEAR') ? 'bearish' : 'neutral';
   const br = s.bias_result ? s.bias_result.toUpperCase() : null;
@@ -1147,7 +1147,7 @@ function buildLiveCard(s) {
   const dir = (s.direction || '').toUpperCase();
   const isShort = dir === 'SHORT', isLong = dir === 'LONG';
   const ts = new Date(s.created_at);
-  const timeStr = ts.toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+  const timeStr = ts.toLocaleString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone: America/New_York });
 
   let badgeClass, badgeText;
   if (isClosed) { badgeClass = s.outcome === 'WIN' ? 'win' : 'loss'; badgeText = s.outcome === 'WIN' ? 'TP HIT ✓' : 'SL HIT ✗'; }
