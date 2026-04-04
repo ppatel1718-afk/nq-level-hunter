@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Smart Money ES Futures Signals. Daily ES bias + exact entry, SL, TP levels. London & NY killzones only. No credit card.">
+<meta name="description" content="Smart Money ES Futures Signals. Daily ES bias + exact entry, SL, TP levels. London & NY killzones only. $5/month.">
 <title>ES Level Hunter — Smart Money ES Futures Signals</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -99,10 +99,6 @@ nav {
   padding: 6px 12px;
 }
 .nav-links a:hover { color: var(--white); }
-.nav-links a.active {
-  color: var(--blue);
-  border-bottom: 2px solid var(--blue);
-}
 .nav-tab {
   font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 11px; font-weight: 700;
   letter-spacing: 0.1em; text-transform: uppercase;
@@ -114,6 +110,7 @@ nav {
 }
 .nav-tab:hover { border-color: var(--blue); color: var(--blue); }
 .nav-tab.active { background: var(--blue); color: #080b0f !important; border-color: var(--blue); font-weight: 700; }
+/* ── STRIPE CTA in nav ── */
 .nav-cta {
   font-family: var(--mono); font-size: 11px; font-weight: 700;
   letter-spacing: 0.12em; text-transform: uppercase;
@@ -279,17 +276,26 @@ nav {
   margin: 0;
 }
 
-/* ── PAYWALL OVERLAY (hidden until activated) ── */
+/* ── PAYWALL ── */
 .paywall-wrap { position: relative; }
+
+/* Blur the content behind the paywall */
+.paywall-content-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.5;
+}
+
+/* PAYWALL OVERLAY — ACTIVE */
 .paywall-overlay {
-  display: none; /* ← change to flex to activate paywall */
+  display: flex; /* ← ACTIVATED */
   position: absolute; inset: 0; z-index: 10;
   flex-direction: column; align-items: center; justify-content: center;
   text-align: center;
-  background: linear-gradient(to bottom, transparent 0%, rgba(8,11,15,0.7) 30%, rgba(8,11,15,0.97) 60%);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  background: linear-gradient(to bottom, transparent 0%, rgba(8,11,15,0.75) 25%, rgba(8,11,15,0.97) 55%);
   padding: 48px 32px;
+  min-height: 400px;
 }
 .paywall-badge {
   font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em;
@@ -321,6 +327,13 @@ nav {
   font-family: var(--mono); font-size: 11px; color: var(--muted);
   margin-top: 12px; letter-spacing: 0.08em;
 }
+.paywall-nq-note {
+  margin-top: 20px;
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  letter-spacing: 0.06em;
+}
+.paywall-nq-note a { color: var(--green); text-decoration: none; }
+.paywall-nq-note a:hover { text-decoration: underline; }
 
 /* ── BIAS CARD ── */
 .bias-wrapper { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
@@ -458,16 +471,16 @@ nav {
 }
 .nq-cta-btn:hover { background: var(--green2); }
 
-/* ── JOIN ── */
+/* ── JOIN / PRICING ── */
 .join-wrap { max-width: 480px; margin: 0 auto; text-align: center; }
-.price-card { background: var(--card); border: 1px solid var(--blue); padding: 48px 40px; position: relative; margin-bottom: 32px; }
-.price-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--blue); color: var(--bg); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; padding: 5px 20px; white-space: nowrap; }
+.price-card { background: var(--card); border: 1px solid var(--green); padding: 48px 40px; position: relative; margin-bottom: 32px; }
+.price-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--bg); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; padding: 5px 20px; white-space: nowrap; }
 .price-val { font-family: var(--display); font-size: 64px; font-weight: 800; color: var(--white); line-height: 1; margin: 28px 0 4px; }
 .price-sub { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; margin-bottom: 28px; }
 .price-features { list-style: none; text-align: left; margin-bottom: 32px; }
 .price-features li { font-family: var(--mono); font-size: 12px; color: var(--text); padding: 8px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
 .price-features li:last-child { border-bottom: none; }
-.price-features li::before { content: '✓'; color: var(--blue); font-size: 11px; flex-shrink: 0; }
+.price-features li::before { content: '✓'; color: var(--green); font-size: 11px; flex-shrink: 0; }
 .price-note { font-family: var(--mono); font-size: 10px; color: var(--muted); margin-top: 12px; }
 
 /* ── X FOLLOW ── */
@@ -527,6 +540,20 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════
+     STRIPE LINK — UPDATE THIS ONE VARIABLE
+     Replace '#' with your Stripe payment link
+     e.g. 'https://buy.stripe.com/xxxxxxxxx'
+     ══════════════════════════════════════════ -->
+<script>
+  var STRIPE_LINK = '#'; /* ← PASTE YOUR STRIPE LINK HERE */
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[data-stripe]').forEach(function(el) {
+      el.href = STRIPE_LINK;
+    });
+  });
+</script>
+
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
@@ -538,23 +565,26 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <li><a href="/" class="nav-tab" style="font-family:'JetBrains Mono','Courier New',monospace;">NQ</a></li>
       <li><a href="/es" class="nav-tab active" style="font-family:'JetBrains Mono','Courier New',monospace;color:#080b0f;background:#4fc3f7;">ES</a></li>
     </ul>
-    <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="nav-cta">Join Free</a>
+    <!-- data-stripe → auto-filled by script above -->
+    <a href="#" data-stripe class="nav-cta">GET ES ACCESS — $5/MO</a>
   </div>
   <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker-track">
-      <span class="tick"><span class="tick-label">ES SIGNAL</span><span id="t-signal-1" class="tick-blue">LOADING</span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-yellow">🔒 MEMBERS ONLY</span></span>
       <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">SMT</span><span class="tick-yellow">ES vs NQ DIVERGENCE ACTIVE</span></span>
-      <span class="tick"><span class="tick-label">NQ SIGNALS</span><span class="tick-green"><a href="/" style="color:inherit;text-decoration:none;">VIEW NQ LEVELS →</a></span></span>
+      <span class="tick"><span class="tick-label">NQ SIGNALS</span><span class="tick-green"><a href="/" style="color:inherit;text-decoration:none;">FREE FOREVER — VIEW NQ →</a></span></span>
+      <span class="tick"><span class="tick-label">ES ACCESS</span><span class="tick-green">$5/MONTH · CANCEL ANYTIME</span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
       <!-- duplicate for seamless loop -->
-      <span class="tick"><span class="tick-label">ES SIGNAL</span><span id="t-signal-2" class="tick-blue">LOADING</span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-yellow">🔒 MEMBERS ONLY</span></span>
       <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">SMT</span><span class="tick-yellow">ES vs NQ DIVERGENCE ACTIVE</span></span>
-      <span class="tick"><span class="tick-label">NQ SIGNALS</span><span class="tick-green"><a href="/" style="color:inherit;text-decoration:none;">VIEW NQ LEVELS →</a></span></span>
+      <span class="tick"><span class="tick-label">NQ SIGNALS</span><span class="tick-green"><a href="/" style="color:inherit;text-decoration:none;">FREE FOREVER — VIEW NQ →</a></span></span>
+      <span class="tick"><span class="tick-label">ES ACCESS</span><span class="tick-green">$5/MONTH · CANCEL ANYTIME</span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
     </div>
   </div>
@@ -577,12 +607,13 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
     <div class="hero-stat"><span class="hero-stat-val" id="hero-pts">—</span><span class="hero-stat-lbl">TOTAL PTS</span></div>
   </div>
 
-  <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="btn-primary">
+  <!-- Hero CTA → Stripe -->
+  <a href="#" data-stripe class="btn-primary">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    JOIN WAITLIST — $5/MONTH
+    GET ES ACCESS — $5/MONTH
   </a>
   <div class="trust-bar">
-    <span>Founding member pricing</span>
+    <span>Founding member rate</span>
     <span>Cancel anytime</span>
     <span>Same framework as NQ</span>
     <span>Traded live on Blusky</span>
@@ -591,105 +622,114 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
 
 <div class="divider"></div>
 
-<!-- TODAY'S ES BIAS -->
+<!-- TODAY'S ES BIAS — PAYWALLED -->
 <section class="section reveal" id="signal">
   <div class="section-label">Today's ES Bias</div>
   <div class="section-title">ES Futures · Daily Plan.<br>Clear levels.</div>
   <p class="section-sub">Every morning we analyse ES charts using the same Smart Money framework as NQ. Posted before NY Open. Includes SMT divergence vs NQ.</p>
 
-  <!-- PAYWALL WRAP — add class 'paywall-active' to activate blur -->
   <div class="paywall-wrap">
 
-    <!-- PAYWALL OVERLAY — change display:none to display:flex to activate -->
+    <!-- ══ PAYWALL OVERLAY — ACTIVE ══ -->
     <div class="paywall-overlay">
       <div class="paywall-badge">🔒 Members Only</div>
       <div class="paywall-title">Unlock ES Signals</div>
-      <div class="paywall-sub">Join free to access daily ES bias cards, exact entry levels, and live trade alerts.</div>
-      <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="paywall-btn">
+      <div class="paywall-sub">Get the daily ES bias card, exact entry levels, SMT divergence vs NQ, and live trade alerts — every morning before NY Open.</div>
+      <a href="#" data-stripe class="paywall-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        JOIN FREE — UNLOCK ACCESS
+        GET ACCESS — $5/MONTH
       </a>
-      <div class="paywall-price">Free forever · No credit card · Unsubscribe anytime</div>
+      <div class="paywall-price">Secure payment via Stripe · Cancel anytime · No contracts</div>
+      <div class="paywall-nq-note">NQ signals are always <a href="/">free at nq-level-hunter.vercel.app</a></div>
     </div>
 
-    <div class="bias-wrapper">
-      <div class="bias-main">
-        <div id="bias-card-container">
-          <div class="bias-no-card">
-            <div class="bias-no-card-title">LOADING TODAY'S ES BIAS...</div>
-            <div class="bias-no-card-sub">Check back before NY Open (08:00 EST)</div>
+    <!-- Blurred content underneath the overlay -->
+    <div class="paywall-content-blur">
+      <div class="bias-wrapper">
+        <div class="bias-main">
+          <div id="bias-card-container">
+            <div class="bias-no-card">
+              <div class="bias-no-card-title">LOADING TODAY'S ES BIAS...</div>
+              <div class="bias-no-card-sub">Check back before NY Open (08:00 EST)</div>
+            </div>
+          </div>
+          <div class="smt-card" id="smt-callout" style="display:none;">
+            <div class="smt-label">⚡ SMT DIVERGENCE WATCH</div>
+            <div class="smt-text" id="smt-text">Compare ES vs NQ at key sweep levels. When ES sweeps a low but NQ does not — bullish ES signal. When ES sweeps a high but NQ does not — bearish ES signal. <strong>Always check NQ before entering ES.</strong></div>
           </div>
         </div>
-
-        <!-- SMT CALLOUT -->
-        <div class="smt-card" id="smt-callout" style="display:none;">
-          <div class="smt-label">⚡ SMT DIVERGENCE WATCH</div>
-          <div class="smt-text" id="smt-text">Compare ES vs NQ at key sweep levels. When ES sweeps a low but NQ does not — bullish ES signal. When ES sweeps a high but NQ does not — bearish ES signal. <strong>Always check NQ before entering ES.</strong></div>
-        </div>
-      </div>
-
-      <div class="bias-sidebar">
-        <div class="sidebar-card">
-          <div class="sidebar-title">TOTAL ES POINTS</div>
-          <div class="sidebar-pts" id="result-pts">—</div>
-          <div class="sidebar-pts-sub">across all closed ES trades</div>
-          <ul class="sidebar-list">
-            <li>Pre-session ES bias note</li>
-            <li>London + NY killzone alerts</li>
-            <li>SMT divergence vs NQ</li>
-            <li>Entry, SL, TP1 + TP2</li>
-            <li>Live ES trade cards</li>
-            <li>Full ES trade history</li>
-            <li>$5/month — founding price</li>
-          </ul>
-        </div>
-
-        <!-- NQ CTA -->
-        <div class="nq-cta-card">
-          <div class="nq-cta-text">
-            <h3>Also trading NQ?</h3>
-            <p>Free NQ signals — same framework.<br>10W / 1L · +1,557 pts tracked.</p>
+        <div class="bias-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-title">TOTAL ES POINTS</div>
+            <div class="sidebar-pts" id="result-pts">—</div>
+            <div class="sidebar-pts-sub">across all closed ES trades</div>
+            <ul class="sidebar-list">
+              <li>Pre-session ES bias note</li>
+              <li>London + NY killzone alerts</li>
+              <li>SMT divergence vs NQ</li>
+              <li>Entry, SL, TP1 + TP2</li>
+              <li>Live ES trade cards</li>
+              <li>Full ES trade history</li>
+              <li>$5/month — founding price</li>
+            </ul>
           </div>
-          <a href="/" class="nq-cta-btn">VIEW NQ →</a>
+          <div class="nq-cta-card">
+            <div class="nq-cta-text">
+              <h3>Also trading NQ?</h3>
+              <p>Free NQ signals — same framework.<br>86% win rate · +1,235 pts tracked.</p>
+            </div>
+            <a href="/" class="nq-cta-btn">VIEW NQ →</a>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ES HISTORY -->
+<!-- ES HISTORY — PAYWALLED -->
 <section class="section reveal" id="history">
   <div class="section-label">Verified ES Calls</div>
   <div class="section-title">Public calls.<br>Real levels.</div>
   <p class="section-sub">Every ES signal posted before entry. Every result logged automatically.</p>
 
-  <div class="stats-bar">
-    <div class="stat-box"><div class="stat-box-val g" id="stat-wins">—</div><div class="stat-box-lbl">WINS</div></div>
-    <div class="stat-box"><div class="stat-box-val r" id="stat-losses">—</div><div class="stat-box-lbl">LOSSES</div></div>
-    <div class="stat-box"><div class="stat-box-val g" id="stat-wr">—</div><div class="stat-box-lbl">WIN RATE</div></div>
-    <div class="stat-box"><div class="stat-box-val g" id="stat-pts">—</div><div class="stat-box-lbl">TOTAL PTS</div></div>
-  </div>
-
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterHistory('ALL')" id="filter-ALL">All</button>
-    <button class="filter-btn" onclick="filterHistory('WIN')" id="filter-WIN">Wins</button>
-    <button class="filter-btn" onclick="filterHistory('LOSS')" id="filter-LOSS">Losses</button>
-    <button class="filter-btn" onclick="filterHistory('RUNNING')" id="filter-RUNNING">Running</button>
-    <button class="filter-btn" onclick="filterHistory('BIAS')" id="filter-BIAS">Bias Cards</button>
-  </div>
-
-  <div class="history-wrap">
-    <div class="history-header">
-      <span>DATE</span><span>SIGNAL</span><span>ENTRY</span><span>SL</span><span>TP1</span><span>TP2</span><span>RESULT</span>
+  <div class="paywall-wrap">
+    <div class="paywall-overlay">
+      <div class="paywall-badge">🔒 Members Only</div>
+      <div class="paywall-title">Full History Unlocked</div>
+      <div class="paywall-sub">See every ES trade — entry, result, points. Full transparency. Same accountability as NQ.</div>
+      <a href="#" data-stripe class="paywall-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        GET ACCESS — $5/MONTH
+      </a>
+      <div class="paywall-price">Secure payment via Stripe · Cancel anytime</div>
     </div>
-    <div id="history-rows">
-      <div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">ES signals launching Monday. Check back then.</div>
+
+    <div class="paywall-content-blur">
+      <div class="stats-bar">
+        <div class="stat-box"><div class="stat-box-val g" id="stat-wins">—</div><div class="stat-box-lbl">WINS</div></div>
+        <div class="stat-box"><div class="stat-box-val r" id="stat-losses">—</div><div class="stat-box-lbl">LOSSES</div></div>
+        <div class="stat-box"><div class="stat-box-val g" id="stat-wr">—</div><div class="stat-box-lbl">WIN RATE</div></div>
+        <div class="stat-box"><div class="stat-box-val g" id="stat-pts">—</div><div class="stat-box-lbl">TOTAL PTS</div></div>
+      </div>
+      <div class="filter-bar">
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Wins</button>
+        <button class="filter-btn">Losses</button>
+        <button class="filter-btn">Running</button>
+        <button class="filter-btn">Bias Cards</button>
+      </div>
+      <div class="history-wrap">
+        <div class="history-header">
+          <span>DATE</span><span>SIGNAL</span><span>ENTRY</span><span>SL</span><span>TP1</span><span>TP2</span><span>RESULT</span>
+        </div>
+        <div id="history-rows">
+          <div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">ES trade history — members only.</div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div style="text-align:center;">
-    <button id="load-more-btn" onclick="loadMore()">LOAD MORE</button>
   </div>
 </section>
 
@@ -698,16 +738,16 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
 <!-- JOIN / PRICING -->
 <section class="section reveal" id="join" style="text-align:center;">
   <div class="section-label">ES Membership</div>
-  <div class="section-title">ES Futures signals —<br>Professional grade.</div>
-  <p class="section-sub" style="margin:0 auto 48px;">Same Smart Money framework as NQ. Daily ES bias + exact levels. Launching soon.</p>
+  <div class="section-title">ES Futures signals —<br>$5 a month.</div>
+  <p class="section-sub" style="margin:0 auto 48px;">Same Smart Money framework as NQ. Daily ES bias + exact levels. Founding member rate — lock it in before it rises.</p>
 
   <div class="join-wrap">
     <div class="price-card">
-      <div class="price-badge">FOUNDING MEMBER OFFER</div>
+      <div class="price-badge">FOUNDING MEMBER — $5/MO</div>
       <div class="price-val" style="font-size:48px;margin-top:28px;">$5<span style="font-size:20px;color:var(--muted);font-family:var(--mono);font-weight:400;">/mo</span></div>
-      <div class="price-sub">ES SIGNALS · CANCEL ANYTIME</div>
+      <div class="price-sub">ES SIGNALS · CANCEL ANYTIME · SECURE STRIPE PAYMENT</div>
       <ul class="price-features">
-        <li>Daily ES pre-session bias note</li>
+        <li>Daily ES pre-session bias card (7:30 AM EST)</li>
         <li>London + NY killzone alerts</li>
         <li>Live ES trade cards with exact levels</li>
         <li>SMT divergence analysis (ES vs NQ)</li>
@@ -716,7 +756,8 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
         <li>Trade with Blusky — use my affiliate link</li>
         <li>Lock in founding member price forever</li>
       </ul>
-      <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;">JOIN WAITLIST — LAUNCHING SOON</a>
+      <!-- Stripe CTA -->
+      <a href="#" data-stripe class="btn-primary" style="display:block;clip-path:none;text-align:center;">GET ES ACCESS — $5/MONTH →</a>
       <p class="price-note">NQ SIGNALS ARE FREE FOREVER · <a href="/" style="color:var(--green);">VIEW NQ →</a></p>
     </div>
 
@@ -747,10 +788,9 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
         <div class="footer-tagline">NQ + ES signals. Built for traders who want clarity, not hype.</div>
       </div>
       <div class="footer-links">
-        <a href="/">NQ Signals</a>
-        <a href="/es">ES Signals</a>
+        <a href="/">NQ Signals (Free)</a>
+        <a href="/es">ES Signals ($5/mo)</a>
         <a href="https://x.com/PratikP03691040" target="_blank">Follow on X</a>
-        <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank">Join Free</a>
         <a href="https://fas.st/t/pqmnB5KZ" target="_blank">Trade on Blusky</a>
       </div>
     </div>
@@ -772,6 +812,7 @@ const revealObs = new IntersectionObserver(entries => {
 }, { threshold: 0.07 });
 document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
+/* Supabase — read ES stats for hero stats bar (still shows even behind paywall) */
 const SB_URL = 'https://xnejaababytfevuhlfru.supabase.co';
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhuZWphYWJhYnl0ZmV2dWhsZnJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1MjQwNTMsImV4cCI6MjA4OTEwMDA1M30.GSsRgvip5zZ7id9HEQZmoLjFSOAddJHiD9EyIa9mUgs';
 const SB_H = { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY };
@@ -782,181 +823,38 @@ async function sbFetch(q) {
   return r.json();
 }
 
-function cf(v) {
-  if (v == null || v === '') return '—';
-  if (typeof v === 'string' && v.length > 200) return v.substring(0, 200) + '...';
-  return String(v);
-}
 function cn(v) {
   if (v == null || v === '') return '—';
   const n = parseFloat(String(v).replace(/[^0-9.-]/g, ''));
   return isNaN(n) ? '—' : n.toLocaleString();
 }
 
-function confBars(level) {
-  const l = (level || 'LOW').toUpperCase();
-  const cfg = { HIGH: { color: 'var(--green)', bars: 3 }, MEDIUM: { color: 'var(--yellow)', bars: 2 }, LOW: { color: 'var(--muted)', bars: 1 } };
-  const c = cfg[l] || cfg.LOW;
-  let html = '<div class="conf-bar">';
-  for (let i = 1; i <= 3; i++) html += '<div class="conf-pip" style="background:' + (i <= c.bars ? c.color : 'var(--border)') + ';"></div>';
-  html += '<span class="conf-label" style="color:' + c.color + ';">' + l + '</span></div>';
-  return html;
-}
-
-function buildBiasCard(s) {
-  const ts = new Date(s.created_at);
-  const dateStr = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone:'America/New_York' });
-  const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone:'America/New_York' });
-  const bias = (s.overall_bias || 'NEUTRAL').toUpperCase();
-  const biasClass = bias.includes('BULL') ? 'bullish' : bias.includes('BEAR') ? 'bearish' : 'neutral';
-  const br = s.bias_result ? s.bias_result.toUpperCase() : null;
-
-  let banner = '';
-  if (br === 'HIT')     banner = '<div class="bias-result-banner hit">✓ BIAS CONFIRMED — ZONES HIT</div>';
-  else if (br === 'MISSED')  banner = '<div class="bias-result-banner missed">✗ ZONES MISSED</div>';
-  else if (br === 'PARTIAL') banner = '<div class="bias-result-banner partial">◐ PARTIAL — ONE ZONE HIT</div>';
-  else if (s.status === 'OPEN') banner = '<div class="bias-result-banner open">⏳ SESSION IN PROGRESS</div>';
-
-  function panelLevels(entry, sl, tp1, tp2) {
-    if (!entry && !sl && !tp1 && !tp2) return '';
-    return '<div class="panel-levels">' +
-      '<div class="panel-level-item"><div class="lvl-lbl">ENTRY</div><div class="lvl-val lvl-entry">' + cn(entry) + '</div></div>' +
-      '<div class="panel-level-item"><div class="lvl-lbl">STOP LOSS</div><div class="lvl-val lvl-sl">' + cn(sl) + '</div></div>' +
-      '<div class="panel-level-item"><div class="lvl-lbl">TP1</div><div class="lvl-val lvl-tp">' + cn(tp1) + '</div></div>' +
-      '<div class="panel-level-item"><div class="lvl-lbl">TP2</div><div class="lvl-val lvl-tp">' + cn(tp2) + '</div></div>' +
-    '</div>';
-  }
-
-  return '<div>' +
-    '<div class="bias-card-header"><div class="bias-date">ES · DAILY BIAS · ' + dateStr + '</div><div class="bias-time">UPDATED ' + timeStr + '</div></div>' +
-    '<div class="bias-overall ' + biasClass + '">' + bias + '</div>' +
-    '<div class="bias-panels">' +
-      '<div class="bias-panel short"><div class="panel-header"><span class="panel-dir short">SHORT ▼</span>' + confBars(s.short_confidence) + '</div><div class="panel-zone">' + cf(s.short_zone) + '</div><div class="panel-reason">' + cf(s.short_reasoning) + '</div>' + panelLevels(s.short_entry, s.short_sl, s.short_tp1, s.short_tp2) + '</div>' +
-      '<div class="bias-panel long"><div class="panel-header"><span class="panel-dir long">LONG ▲</span>' + confBars(s.long_confidence) + '</div><div class="panel-zone">' + cf(s.long_zone) + '</div><div class="panel-reason">' + cf(s.long_reasoning) + '</div>' + panelLevels(s.long_entry, s.long_sl, s.long_tp1, s.long_tp2) + '</div>' +
-    '</div>' +
-    '<div class="bias-keys">' +
-      '<div class="bias-key"><div class="bias-key-lbl">RESISTANCE</div><div class="bias-key-val res">' + cf(s.resistance_levels) + '</div></div>' +
-      '<div class="bias-key"><div class="bias-key-lbl">SUPPORT</div><div class="bias-key-val sup">' + cf(s.support_levels) + '</div></div>' +
-      '<div class="bias-key"><div class="bias-key-lbl">INVALIDATION</div><div class="bias-key-val inv">' + cf(s.invalidation) + '</div></div>' +
-    '</div>' + banner + '</div>';
-}
-
-async function fetchSignal() {
-  try {
-    const data = await sbFetch('signals_nq?asset=eq.ES&order=created_at.desc&limit=10');
-    if (!data || !data.length) return;
-    const biasCard = data.find(s => s.card_type === 'BIAS');
-    const bc = document.getElementById('bias-card-container');
-    bc.innerHTML = biasCard ? buildBiasCard(biasCard) :
-      '<div class="bias-no-card"><div class="bias-no-card-title">NO ES BIAS CARD YET TODAY</div><div class="bias-no-card-sub">Check back before NY Open (08:00 EST)</div></div>';
-
-    // Show SMT callout
-    if (biasCard) {
-      const smtEl = document.getElementById('smt-callout');
-      if (smtEl) smtEl.style.display = 'block';
-    }
-
-    // Ticker signal
-    const latest = biasCard || data[0];
-    const tLabel = latest ? (latest.overall_bias || 'BIAS').toUpperCase() : 'LOADING';
-    const tClass = latest && (latest.overall_bias||'').toUpperCase().includes('BULL') ? 'tick-green' : latest && (latest.overall_bias||'').toUpperCase().includes('BEAR') ? 'tick-red' : 'tick-blue';
-    ['t-signal-1','t-signal-2'].forEach(id => { const el = document.getElementById(id); if (el) { el.textContent = tLabel; el.className = tClass; } });
-  } catch(e) {
-    document.getElementById('bias-card-container').innerHTML =
-      '<div class="bias-no-card"><div class="bias-no-card-title" style="color:var(--red);">ERROR LOADING ES BIAS</div><div class="bias-no-card-sub">' + e.message + '</div></div>';
-  }
-}
-
-fetchSignal();
-setInterval(fetchSignal, 60000);
-
-let allHistory = [], visibleCount = 10, activeFilter = 'ALL';
-
-async function fetchHistory() {
+/* Fetch ES stats — shows in hero bar to build credibility before paywall CTA */
+async function fetchESStats() {
   try {
     const data = await sbFetch('signals_nq?asset=eq.ES&order=created_at.desc&limit=100');
     if (!data || !data.length) return;
-    allHistory = data;
-    updateStats(data);
-    renderHistory();
-  } catch(e) { console.log('History error:', e); }
+    const live = data.filter(s => s.card_type === 'LIVE');
+    const wins = live.filter(s => s.outcome === 'WIN').length;
+    const losses = live.filter(s => s.outcome === 'LOSS').length;
+    const closed = wins + losses;
+    const rate = closed > 0 ? Math.round(wins / closed * 100) : 0;
+    let pts = 0;
+    live.forEach(s => { if (s.points != null) pts += Number(s.points); });
+    const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    setEl('hero-wins',   wins || '—');
+    setEl('hero-losses', losses || '—');
+    setEl('hero-wr',     closed > 0 ? rate + '%' : '—');
+    setEl('hero-pts',    closed > 0 ? (pts >= 0 ? '+' + pts.toLocaleString() : pts.toLocaleString()) : '—');
+    setEl('result-pts',  closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
+    setEl('stat-wins',   wins || '—');
+    setEl('stat-losses', losses || '—');
+    setEl('stat-wr',     closed > 0 ? rate + '%' : '—');
+    setEl('stat-pts',    closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
+  } catch(e) { console.log('ES stats error:', e); }
 }
 
-function updateStats(data) {
-  const live = data.filter(s => s.card_type === 'LIVE');
-  const wins = live.filter(s => s.outcome === 'WIN').length;
-  const losses = live.filter(s => s.outcome === 'LOSS').length;
-  const closed = wins + losses;
-  const rate = closed > 0 ? Math.round(wins / closed * 100) : 0;
-  let pts = 0;
-  live.forEach(s => { if (s.points != null) pts += Number(s.points); });
-  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  setEl('stat-wins',    wins || '—');
-  setEl('stat-losses',  losses || '—');
-  setEl('stat-wr',      closed > 0 ? rate + '%' : '—');
-  setEl('stat-pts',     closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
-  setEl('result-pts',   closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
-  setEl('hero-wins',    wins || '—');
-  setEl('hero-losses',  losses || '—');
-  setEl('hero-wr',      closed > 0 ? rate + '%' : '—');
-  setEl('hero-pts',     closed > 0 ? (pts >= 0 ? '+' + pts.toLocaleString() : pts.toLocaleString()) : '—');
-}
-
-function renderHistory() {
-  const filtered = activeFilter === 'ALL' ? allHistory.filter(s => s.card_type !== 'BIAS') : allHistory.filter(s => {
-    if (activeFilter === 'BIAS')    return s.card_type === 'BIAS';
-    if (activeFilter === 'WIN')     return s.card_type === 'LIVE' && s.outcome === 'WIN';
-    if (activeFilter === 'LOSS')    return s.card_type === 'LIVE' && s.outcome === 'LOSS';
-    if (activeFilter === 'RUNNING') return s.card_type === 'LIVE' && !s.outcome && s.status === 'OPEN';
-    return false;
-  });
-  const visible = filtered.slice(0, visibleCount);
-  document.getElementById('load-more-btn').style.display = filtered.length > visibleCount ? 'block' : 'none';
-  if (!visible.length) {
-    document.getElementById('history-rows').innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">ES signals launching Monday. Check back then.</div>';
-    return;
-  }
-  document.getElementById('history-rows').innerHTML = visible.map(s => {
-    const isBias = s.card_type === 'BIAS';
-    const outcome = (s.outcome || '').toUpperCase();
-    const dir = (s.direction || '').toUpperCase();
-    const isShort = dir === 'SHORT', isLong = dir === 'LONG';
-    const ts = new Date(s.created_at);
-    const dStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', timeZone:'America/New_York' });
-    const tStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'America/New_York' });
-    let col1 = '<span style="color:var(--muted);">' + dStr + '<br><span style="font-size:10px;">' + tStr + '</span></span>';
-    let col2, col3, col4, col5, col6, col7;
-    if (isBias) {
-      const bc = (s.overall_bias||'').toUpperCase().includes('BULL') ? 'var(--green)' : (s.overall_bias||'').toUpperCase().includes('BEAR') ? 'var(--red)' : 'var(--yellow)';
-      col2 = '<span style="color:' + bc + ';font-weight:700;">BIAS</span>';
-      col3 = '<span style="color:' + bc + ';font-size:10px;">' + (s.overall_bias||'—') + '</span>';
-      col4 = '<span style="color:var(--muted);">—</span>';
-      col5 = '<span style="color:var(--red);font-size:10px;">' + (s.short_zone||'—') + '</span>';
-      col6 = '<span style="color:var(--green);font-size:10px;">' + (s.long_zone||'—') + '</span>';
-      const brC = s.bias_result === 'HIT' ? 'var(--green)' : s.bias_result === 'MISSED' ? 'var(--red)' : s.bias_result === 'PARTIAL' ? 'var(--yellow)' : 'var(--muted)';
-      col7 = '<span style="color:' + brC + ';font-weight:700;">' + (s.bias_result||'OPEN') + '</span>';
-    } else {
-      const sc = isShort ? 'var(--red)' : isLong ? 'var(--green)' : 'var(--muted)';
-      col2 = '<span style="color:' + sc + ';font-weight:700;">' + dir + (isShort?' ▼':isLong?' ▲':'') + '</span>';
-      col3 = '<span style="color:var(--text);">' + cn(s.entry) + '</span>';
-      col4 = '<span style="color:var(--red);">' + cn(s.stop_loss) + '</span>';
-      col5 = '<span style="color:var(--green);">' + cn(s.tp1) + '</span>';
-      col6 = '<span style="color:var(--green);">' + cn(s.tp2) + '</span>';
-      const outC = outcome==='WIN' ? 'var(--green)' : outcome==='LOSS' ? 'var(--red)' : 'var(--yellow)';
-      const resL = outcome==='WIN' ? (s.result||'TP1') + ' ✓ +' + (s.points||0) + 'pts' : outcome==='LOSS' ? 'SL ✗ ' + (s.points ? s.points+'pts' : '') : 'RUNNING';
-      col7 = '<span style="color:' + outC + ';font-weight:700;">' + resL + '</span>';
-    }
-    return '<div class="history-row">' + col1 + col2 + col3 + col4 + col5 + col6 + col7 + '</div>';
-  }).join('');
-}
-
-function filterHistory(f) {
-  activeFilter = f; visibleCount = 10;
-  ['ALL','WIN','LOSS','RUNNING','BIAS'].forEach(k => { const btn = document.getElementById('filter-' + k); if (btn) btn.className = 'filter-btn' + (k === f ? ' active' : ''); });
-  renderHistory();
-}
-function loadMore() { visibleCount += 10; renderHistory(); }
-fetchHistory();
+fetchESStats();
 </script>
 </body>
 </html>
