@@ -2,9 +2,5 @@
   "rewrites": [
     { "source": "/es", "destination": "/es.html" },
     { "source": "/c", "destination": "/" }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/404.html" }
   ]
 }
