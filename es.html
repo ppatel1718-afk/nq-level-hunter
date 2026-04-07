@@ -948,16 +948,17 @@ function unlockAll() {
     navCta.style.background = 'var(--green)';
     navCta.style.pointerEvents = 'none';
   }
-  // Fetch ES data now that unlocked
-  fetchSignal();
-  fetchESStats();
+  // Fetch ES data now that unlocked — small delay to ensure DOM is ready
+  setTimeout(function() {
+    fetchSignal();
+    fetchESStats();
+  }, 300);
 }
 
 // On page load — check if already unlocked
 (function() {
   const saved = localStorage.getItem(UNLOCK_KEY);
   if (saved) {
-    // Auto-unlock without re-checking Supabase for speed
     unlockAll();
   }
 })();
