@@ -225,12 +225,29 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
 .blusky-cta { display: block; text-align: center; background: var(--green); color: var(--bg); font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; padding: 18px; text-decoration: none; transition: all 0.2s; text-transform: uppercase; }
 .blusky-cta:hover { background: var(--green2); transform: translateY(-1px); }
 .blusky-disclaimer { font-family: var(--mono); font-size: 9px; color: var(--muted); text-align: center; margin-top: 10px; letter-spacing: 0.06em; }
-.es-coming { background: var(--card); border: 1px solid var(--border); border-style: dashed; padding: 32px; display: flex; align-items: flex-start; gap: 20px; max-width: 520px; margin: 16px auto 0; position: relative; overflow: hidden; }
-.es-coming::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--border); }
-.es-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; background: rgba(255,197,52,0.1); color: var(--yellow); border: 1px solid rgba(255,197,52,0.25); padding: 4px 10px; display: inline-block; margin-bottom: 10px; }
-.es-name { font-family: var(--display); font-size: 28px; font-weight: 800; color: var(--muted); margin-bottom: 6px; }
+
+/* ── ES LIVE CARD (updated from "launching" to "live") ── */
+.es-live-card {
+  background: var(--card); border: 1px solid rgba(79,195,247,0.35);
+  padding: 32px; display: flex; align-items: flex-start; gap: 20px;
+  max-width: 520px; margin: 16px auto 0; position: relative; overflow: hidden;
+}
+.es-live-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--blue); }
+.es-badge-live { font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em; background: rgba(79,195,247,0.15); color: var(--blue); border: 1px solid rgba(79,195,247,0.35); padding: 4px 10px; display: inline-block; margin-bottom: 10px; }
+.es-name { font-family: var(--display); font-size: 28px; font-weight: 800; color: var(--blue); margin-bottom: 6px; }
 .es-desc { font-family: var(--mono); font-size: 11px; color: var(--muted); line-height: 1.9; }
 .es-price { font-family: var(--mono); font-size: 10px; color: var(--yellow); margin-top: 8px; letter-spacing: 0.06em; }
+.es-cta-btn {
+  display: inline-block; margin-top: 14px;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--bg); background: var(--blue);
+  padding: 12px 22px; text-decoration: none;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  transition: all 0.2s;
+}
+.es-cta-btn:hover { opacity: 0.85; }
+
 .join-wrap { max-width: 480px; margin: 0 auto; text-align: center; }
 .price-card { background: var(--card); border: 1px solid var(--green); padding: 48px 40px; position: relative; margin-bottom: 32px; }
 .price-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--bg); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; padding: 5px 20px; white-space: nowrap; }
@@ -301,7 +318,8 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <li><a href="#how">Process</a></li>
       <li><a href="#history">History</a></li>
       <li><a href="#broker">Broker</a></li>
-<li><a href="/es" style="font-family:'JetBrains Mono','Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;background:#4fc3f7;color:#080b0f;padding:8px 16px;border-radius:2px;text-decoration:none;text-transform:uppercase;">ES</a></li>    </ul>
+      <li><a href="/es" style="font-family:'JetBrains Mono','Courier New',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;background:#4fc3f7;color:#080b0f;padding:8px 16px;border-radius:2px;text-decoration:none;text-transform:uppercase;">ES</a></li>
+    </ul>
     <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="nav-cta">Join Free</a>
   </div>
   <div class="ticker-wrap">
@@ -311,12 +329,14 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-1" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-1" class="tick-green">TRACKING</span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
       <span class="tick"><span class="tick-label">SIGNAL</span><span id="t-signal-2" class="tick-green">LOADING</span></span>
       <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-2" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-2" class="tick-green">TRACKING</span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
     </div>
   </div>
@@ -325,7 +345,6 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
 <section class="hero">
   <div class="hero-badge"><div class="hero-badge-dot"></div>Free Smart Money Signals · NQ Futures</div>
   <h1>Stop Guessing.<br><span class="accent-green">Start Trading</span><br>with <span class="accent-red">Real Levels.</span></h1>
-  <!-- ✅ FIXED: hero-sub now reads live from Supabase via updateStats() -->
   <p class="hero-sub">Daily bias + exact entry, SL, and TP levels delivered free.<br>
   <strong><span id="hero-wr-inline">—</span> win rate · <span id="hero-pts-inline">—</span> pts tracked</strong> · London &amp; NY killzones only.</p>
   <div class="hero-stats">
@@ -475,12 +494,15 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
     <a href="https://fas.st/t/pqmnB5KZ" target="_blank" rel="noopener" class="blusky-cta">SIGN UP WITH MY LINK →</a>
     <p class="blusky-disclaimer">Affiliate link — I earn a commission at no cost to you</p>
   </div>
-  <div class="es-coming">
+
+  <!-- ── ES LIVE CARD (was "launching monday", now live) ── -->
+  <div class="es-live-card">
     <div style="flex:1;">
-      <div class="es-badge">LAUNCHING MONDAY</div>
+      <div class="es-badge-live">⚡ NOW LIVE</div>
       <div class="es-name">ES</div>
-      <div class="es-desc">S&P 500 Futures signals — same framework, same process.<br>Daily bias + SHORT/LONG zones + exact levels.<br>ES + NQ SMT divergence analysis included.</div>
-      <div class="es-price">🎁 Founding member offer: 1 month FREE → then $5/month</div>
+      <div class="es-desc">S&amp;P 500 Futures signals — same framework, same process.<br>Daily bias + SHORT/LONG zones + exact levels.<br>ES + NQ SMT divergence analysis every session.</div>
+      <div class="es-price">30 days free → then $5/month · Cancel anytime</div>
+      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="es-cta-btn">GET ES ACCESS →</a>
     </div>
   </div>
 </section>
@@ -502,7 +524,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
         <li>Live NQ trade cards with exact levels</li>
         <li>Hourly in-trade updates</li>
         <li>Full trade history + win rate</li>
-        <li>ES trade cards — launching Monday</li>
+        <li>ES signals live now — <a href="/es" style="color:var(--blue);">$5/month →</a></li>
         <li>NQ focused — zero noise</li>
         <li>Trade with Blusky — use my affiliate link</li>
       </ul>
@@ -532,6 +554,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <div class="footer-links">
         <a href="https://x.com/PratikP03691040" target="_blank">Follow on X</a>
         <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank">Join Free</a>
+        <a href="/es">ES Signals ($5/mo)</a>
         <a href="https://fas.st/t/pqmnB5KZ" target="_blank">Trade on Blusky</a>
       </div>
     </div>
@@ -653,7 +676,7 @@ function buildLiveCard(s) {
 
 async function fetchSignal() {
   try {
-    const data = await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=20');
+    const data = await sbFetch('signals_nq?order=created_at.desc&limit=20');
     if (!data || !data.length) return;
     const biasCard = data.find(s => s.card_type === 'BIAS');
     const liveCards = data.filter(s => s.card_type === 'LIVE' && (s.status || '').toUpperCase() === 'OPEN');
@@ -679,7 +702,7 @@ let allHistory = [], visibleCount = 10, activeFilter = 'ALL';
 
 async function fetchHistory() {
   try {
-    const data = await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=100');
+    const data = await sbFetch('signals_nq?order=created_at.desc&limit=100');
     if (!data || !data.length) { document.getElementById('history-rows').innerHTML = '<div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals yet.</div>'; return; }
     allHistory = data;
     updateStats(data);
@@ -689,7 +712,6 @@ async function fetchHistory() {
   }
 }
 
-// ✅ FIXED: hero-sub inline spans always match stats everywhere on page
 function updateStats(data) {
   const live = data.filter(s => s.card_type === 'LIVE');
   const wins = live.filter(s => s.outcome === 'WIN').length;
