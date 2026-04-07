@@ -630,16 +630,36 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
 
   <div class="paywall-wrap">
 
-    <!-- ══ PAYWALL OVERLAY — ACTIVE ══ -->
-    <div class="paywall-overlay">
+    <!-- ══ PAYWALL OVERLAY — EMAIL UNLOCK ══ -->
+    <div class="paywall-overlay" id="paywall-bias">
       <div class="paywall-badge">🔒 Members Only</div>
       <div class="paywall-title">Unlock ES Signals</div>
-      <div class="paywall-sub">Get the daily ES bias card, exact entry levels, SMT divergence vs NQ, and live trade alerts — every morning before NY Open.</div>
+      <div class="paywall-sub">Already a member? Enter your email to unlock. Not a member yet? Sign up below.</div>
+
+      <!-- Email form -->
+      <div id="unlock-form-bias" style="width:100%;max-width:400px;">
+        <div style="display:flex;gap:0;margin-bottom:10px;">
+          <input
+            type="email"
+            id="unlock-email-bias"
+            placeholder="your@email.com"
+            style="flex:1;background:#0f1621;border:1px solid #1e2d3d;border-right:none;color:#c8d8e8;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;"
+          />
+          <button
+            onclick="checkEmail('bias')"
+            style="background:#4fc3f7;color:#080b0f;border:none;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;cursor:pointer;white-space:nowrap;"
+          >UNLOCK →</button>
+        </div>
+        <div id="unlock-msg-bias" style="font-family:'JetBrains Mono',monospace;font-size:11px;text-align:center;min-height:18px;"></div>
+      </div>
+
+      <div style="margin:20px 0;font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a7a9a;letter-spacing:0.1em;">— OR —</div>
+
       <a href="#" data-stripe class="paywall-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         GET ACCESS — $5/MONTH
       </a>
-      <div class="paywall-price">Secure payment via Stripe · Cancel anytime · No contracts</div>
+      <div class="paywall-price">30 days free · Then $5/month · Cancel anytime</div>
       <div class="paywall-nq-note">NQ signals are always <a href="/">free at nq-level-hunter.vercel.app</a></div>
     </div>
 
@@ -696,15 +716,31 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
   <p class="section-sub">Every ES signal posted before entry. Every result logged automatically.</p>
 
   <div class="paywall-wrap">
-    <div class="paywall-overlay">
+    <div class="paywall-overlay" id="paywall-history">
       <div class="paywall-badge">🔒 Members Only</div>
       <div class="paywall-title">Full History Unlocked</div>
-      <div class="paywall-sub">See every ES trade — entry, result, points. Full transparency. Same accountability as NQ.</div>
+      <div class="paywall-sub">Already a member? Enter your email to unlock the full ES trade history.</div>
+      <div id="unlock-form-history" style="width:100%;max-width:400px;">
+        <div style="display:flex;gap:0;margin-bottom:10px;">
+          <input
+            type="email"
+            id="unlock-email-history"
+            placeholder="your@email.com"
+            style="flex:1;background:#0f1621;border:1px solid #1e2d3d;border-right:none;color:#c8d8e8;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;"
+          />
+          <button
+            onclick="checkEmail('history')"
+            style="background:#4fc3f7;color:#080b0f;border:none;padding:14px 20px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.12em;cursor:pointer;white-space:nowrap;"
+          >UNLOCK →</button>
+        </div>
+        <div id="unlock-msg-history" style="font-family:'JetBrains Mono',monospace;font-size:11px;text-align:center;min-height:18px;"></div>
+      </div>
+      <div style="margin:20px 0;font-family:'JetBrains Mono',monospace;font-size:10px;color:#5a7a9a;letter-spacing:0.1em;">— OR —</div>
       <a href="#" data-stripe class="paywall-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         GET ACCESS — $5/MONTH
       </a>
-      <div class="paywall-price">Secure payment via Stripe · Cancel anytime</div>
+      <div class="paywall-price">30 days free · Then $5/month · Cancel anytime</div>
     </div>
 
     <div class="paywall-content-blur">
@@ -853,6 +889,86 @@ async function fetchESStats() {
     setEl('stat-pts',    closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
   } catch(e) { console.log('ES stats error:', e); }
 }
+
+/* ── EMAIL UNLOCK SYSTEM ── */
+const UNLOCK_KEY = 'es_unlocked_email';
+
+async function checkEmail(section) {
+  const emailEl = document.getElementById('unlock-email-' + section);
+  const msgEl = document.getElementById('unlock-msg-' + section);
+  const email = (emailEl.value || '').trim().toLowerCase();
+
+  if (!email || !email.includes('@')) {
+    msgEl.style.color = 'var(--red)';
+    msgEl.textContent = 'Please enter a valid email.';
+    return;
+  }
+
+  msgEl.style.color = 'var(--muted)';
+  msgEl.textContent = 'Checking...';
+
+  try {
+    const res = await fetch(
+      SB_URL + '/rest/v1/es_subscribers?email=eq.' + encodeURIComponent(email) + '&active=eq.true&limit=1',
+      { headers: SB_H }
+    );
+    const data = await res.json();
+
+    if (data && data.length > 0) {
+      // Found — unlock everything
+      localStorage.setItem(UNLOCK_KEY, email);
+      unlockAll();
+    } else {
+      msgEl.style.color = 'var(--red)';
+      msgEl.textContent = 'Email not found. Sign up below or check your email.';
+    }
+  } catch(e) {
+    msgEl.style.color = 'var(--red)';
+    msgEl.textContent = 'Error checking email. Try again.';
+  }
+}
+
+function unlockAll() {
+  // Hide both paywall overlays
+  const b = document.getElementById('paywall-bias');
+  const h = document.getElementById('paywall-history');
+  if (b) b.style.display = 'none';
+  if (h) h.style.display = 'none';
+  // Remove blur from content
+  document.querySelectorAll('.paywall-content-blur').forEach(el => {
+    el.style.filter = 'none';
+    el.style.opacity = '1';
+    el.style.pointerEvents = 'auto';
+    el.style.userSelect = 'auto';
+  });
+  // Update nav CTA
+  const navCta = document.querySelector('.nav-cta');
+  if (navCta) {
+    navCta.textContent = '✓ MEMBER ACCESS';
+    navCta.style.background = 'var(--green)';
+    navCta.style.pointerEvents = 'none';
+  }
+  // Fetch ES data now that unlocked
+  fetchSignal();
+  fetchESStats();
+}
+
+// On page load — check if already unlocked
+(function() {
+  const saved = localStorage.getItem(UNLOCK_KEY);
+  if (saved) {
+    // Auto-unlock without re-checking Supabase for speed
+    unlockAll();
+  }
+})();
+
+// Allow Enter key on email inputs
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    if (document.activeElement.id === 'unlock-email-bias') checkEmail('bias');
+    if (document.activeElement.id === 'unlock-email-history') checkEmail('history');
+  }
+});
 
 fetchESStats();
 </script>
