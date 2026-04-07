@@ -751,11 +751,11 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
         <div class="stat-box"><div class="stat-box-val g" id="stat-pts">—</div><div class="stat-box-lbl">TOTAL PTS</div></div>
       </div>
       <div class="filter-bar">
-        <button class="filter-btn active">All</button>
-        <button class="filter-btn">Wins</button>
-        <button class="filter-btn">Losses</button>
-        <button class="filter-btn">Running</button>
-        <button class="filter-btn">Bias Cards</button>
+        <button class="filter-btn active" onclick="filterHistory('ALL')" id="filter-ALL">All</button>
+        <button class="filter-btn" onclick="filterHistory('WIN')" id="filter-WIN">Wins</button>
+        <button class="filter-btn" onclick="filterHistory('LOSS')" id="filter-LOSS">Losses</button>
+        <button class="filter-btn" onclick="filterHistory('RUNNING')" id="filter-RUNNING">Running</button>
+        <button class="filter-btn" onclick="filterHistory('BIAS')" id="filter-BIAS">Bias Cards</button>
       </div>
       <div class="history-wrap">
         <div class="history-header">
@@ -966,6 +966,107 @@ async function fetchSignal() {
   }
 }
 
+/* ── ES HISTORY ── */
+let allHistory = [], visibleCount = 10, activeFilter = 'ALL';
+
+async function fetchHistory() {
+  try {
+    const data = await sbFetch('signals_nq?asset=eq.ES&order=created_at.desc&limit=100');
+    if (!data || !data.length) {
+      document.getElementById('history-rows').innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No ES trades yet.</div>';
+      return;
+    }
+    allHistory = data;
+    updateStats(data);
+    renderHistory();
+  } catch(e) {
+    console.log('History error:', e);
+  }
+}
+
+function updateStats(data) {
+  const live = data.filter(s => s.card_type === 'LIVE');
+  const wins = live.filter(s => s.outcome === 'WIN').length;
+  const losses = live.filter(s => s.outcome === 'LOSS').length;
+  const closed = wins + losses;
+  const rate = closed > 0 ? Math.round(wins / closed * 100) : 0;
+  let pts = 0;
+  live.forEach(s => { if (s.points != null) pts += Number(s.points); });
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl('stat-wins',   wins || '—');
+  setEl('stat-losses', losses || '—');
+  setEl('stat-wr',     closed > 0 ? rate + '%' : '—');
+  setEl('stat-pts',    closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
+  setEl('result-pts',  closed > 0 ? (pts >= 0 ? '+' + pts : String(pts)) : '—');
+  setEl('hero-wins',   wins || '—');
+  setEl('hero-losses', losses || '—');
+  setEl('hero-wr',     closed > 0 ? rate + '%' : '—');
+  setEl('hero-pts',    closed > 0 ? (pts >= 0 ? '+' + pts.toLocaleString() : pts.toLocaleString()) : '—');
+}
+
+function renderHistory() {
+  const filtered = activeFilter === 'ALL' ? allHistory.filter(s => s.card_type !== 'BIAS') :
+    allHistory.filter(s => {
+      if (activeFilter === 'BIAS') return s.card_type === 'BIAS';
+      if (activeFilter === 'WIN') return s.card_type === 'LIVE' && s.outcome === 'WIN';
+      if (activeFilter === 'LOSS') return s.card_type === 'LIVE' && s.outcome === 'LOSS';
+      if (activeFilter === 'RUNNING') return s.card_type === 'LIVE' && !s.outcome && s.status === 'OPEN';
+      return false;
+    });
+  const visible = filtered.slice(0, visibleCount);
+  const lmBtn = document.getElementById('load-more-btn');
+  if (lmBtn) lmBtn.style.display = filtered.length > visibleCount ? 'block' : 'none';
+  const rowsEl = document.getElementById('history-rows');
+  if (!rowsEl) return;
+  if (!visible.length) {
+    rowsEl.innerHTML = '<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No trades match this filter.</div>';
+    return;
+  }
+  rowsEl.innerHTML = visible.map(s => {
+    const isBias = s.card_type === 'BIAS';
+    const outcome = (s.outcome || '').toUpperCase();
+    const dir = (s.direction || '').toUpperCase();
+    const isShort = dir === 'SHORT', isLong = dir === 'LONG';
+    const ts = new Date(s.created_at);
+    const dStr = ts.toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric', timeZone:'America/New_York' });
+    const tStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZone:'America/New_York' });
+    let col1, col2, col3, col4, col5, col6, col7;
+    col1 = '<span style="color:var(--muted);">' + dStr + '<br><span style="font-size:10px;">' + tStr + '</span></span>';
+    if (isBias) {
+      const bc = (s.overall_bias||'').toUpperCase().includes('BULL') ? 'var(--green)' : (s.overall_bias||'').toUpperCase().includes('BEAR') ? 'var(--red)' : 'var(--yellow)';
+      col2 = '<span style="color:' + bc + ';font-weight:700;">BIAS</span>';
+      col3 = '<span style="color:' + bc + ';font-size:10px;">' + (s.overall_bias||'—') + '</span>';
+      col4 = '<span style="color:var(--muted);">—</span>';
+      col5 = '<span style="color:var(--red);font-size:10px;">' + (s.short_zone||'—') + '</span>';
+      col6 = '<span style="color:var(--green);font-size:10px;">' + (s.long_zone||'—') + '</span>';
+      const brC = s.bias_result === 'HIT' ? 'var(--green)' : s.bias_result === 'MISSED' ? 'var(--red)' : s.bias_result === 'PARTIAL' ? 'var(--yellow)' : 'var(--muted)';
+      col7 = '<span style="color:' + brC + ';font-weight:700;">' + (s.bias_result||'OPEN') + '</span>';
+    } else {
+      const sc = isShort ? 'var(--red)' : isLong ? 'var(--green)' : 'var(--muted)';
+      col2 = '<span style="color:' + sc + ';font-weight:700;">' + dir + (isShort?' ▼':isLong?' ▲':'') + '</span>';
+      col3 = '<span style="color:var(--text);">' + cn(s.entry) + '</span>';
+      col4 = '<span style="color:var(--red);">' + cn(s.stop_loss) + '</span>';
+      col5 = '<span style="color:var(--green);">' + cn(s.tp1) + '</span>';
+      col6 = '<span style="color:var(--green);">' + cn(s.tp2) + '</span>';
+      const outC = outcome==='WIN' ? 'var(--green)' : outcome==='LOSS' ? 'var(--red)' : 'var(--yellow)';
+      const resL = outcome==='WIN' ? (s.result||'TP2') + ' ✓ +' + (s.points||0) + 'pts' : outcome==='LOSS' ? 'SL ✗ ' + (s.points ? s.points+'pts' : '') : 'RUNNING';
+      col7 = '<span style="color:' + outC + ';font-weight:700;">' + resL + '</span>';
+    }
+    return '<div class="history-row">' + col1 + col2 + col3 + col4 + col5 + col6 + col7 + '</div>';
+  }).join('');
+}
+
+function filterHistory(f) {
+  activeFilter = f; visibleCount = 10;
+  ['ALL','WIN','LOSS','RUNNING','BIAS'].forEach(k => {
+    const btn = document.getElementById('filter-' + k);
+    if (btn) btn.className = 'filter-btn' + (k === f ? ' active' : '');
+  });
+  renderHistory();
+}
+
+function loadMore() { visibleCount += 10; renderHistory(); }
+
 /* ── EMAIL UNLOCK SYSTEM ── */
 const UNLOCK_KEY = 'es_unlocked_email';
 
@@ -1028,6 +1129,7 @@ function unlockAll() {
   setTimeout(function() {
     fetchSignal();
     fetchESStats();
+    fetchHistory();
   }, 300);
 }
 
