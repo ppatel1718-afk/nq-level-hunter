@@ -890,6 +890,82 @@ async function fetchESStats() {
   } catch(e) { console.log('ES stats error:', e); }
 }
 
+/* ── ES BIAS CARD FETCHER ── */
+function cf(v) {
+  if (v == null || v === '') return '—';
+  if (typeof v === 'string' && v.length > 200) return v.substring(0, 200) + '...';
+  return String(v);
+}
+
+function confBars(level) {
+  const l = (level || 'LOW').toUpperCase();
+  const cfg = { HIGH: { color: '#00d4a0', bars: 3 }, MEDIUM: { color: '#ffc534', bars: 2 }, LOW: { color: '#5a7a9a', bars: 1 } };
+  const c = cfg[l] || cfg.LOW;
+  let html = '<div style="display:flex;align-items:center;gap:3px;">';
+  for (let i = 1; i <= 3; i++) html += '<div style="width:14px;height:7px;border-radius:2px;background:' + (i <= c.bars ? c.color : '#1e2d3d') + ';"></div>';
+  html += '<span style="font-size:9px;margin-left:5px;color:' + c.color + ';">' + l + '</span></div>';
+  return html;
+}
+
+async function fetchSignal() {
+  try {
+    const data = await sbFetch('signals_nq?asset=eq.ES&order=created_at.desc&limit=10');
+    if (!data || !data.length) return;
+    const biasCard = data.find(s => s.card_type === 'BIAS');
+    const bc = document.getElementById('bias-card-container');
+    if (!bc) return;
+
+    if (!biasCard) {
+      bc.innerHTML = '<div class="bias-no-card"><div class="bias-no-card-title">NO ES BIAS CARD YET TODAY</div><div class="bias-no-card-sub">Check back before NY Open (08:00 EST)</div></div>';
+      return;
+    }
+
+    const ts = new Date(biasCard.created_at);
+    const dateStr = ts.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric', year:'numeric', timeZone:'America/New_York' });
+    const timeStr = ts.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', timeZoneName:'short', timeZone:'America/New_York' });
+    const bias = (biasCard.overall_bias || 'NEUTRAL').toUpperCase();
+    const biasClass = bias.includes('BULL') ? 'bullish' : bias.includes('BEAR') ? 'bearish' : 'neutral';
+    const br = biasCard.bias_result ? biasCard.bias_result.toUpperCase() : null;
+
+    let banner = '';
+    if (br === 'HIT') banner = '<div class="bias-result-banner hit">✓ BIAS CONFIRMED — ZONES HIT</div>';
+    else if (br === 'MISSED') banner = '<div class="bias-result-banner missed">✗ ZONES MISSED</div>';
+    else if (br === 'PARTIAL') banner = '<div class="bias-result-banner partial">◐ PARTIAL — ONE ZONE HIT</div>';
+    else if (biasCard.status === 'OPEN') banner = '<div class="bias-result-banner open">⏳ SESSION IN PROGRESS</div>';
+
+    function panelLevels(entry, sl, tp1, tp2) {
+      if (!entry && !sl && !tp1 && !tp2) return '';
+      return '<div class="panel-levels">' +
+        '<div class="panel-level-item"><div class="lvl-lbl">ENTRY</div><div class="lvl-val lvl-entry">' + cn(entry) + '</div></div>' +
+        '<div class="panel-level-item"><div class="lvl-lbl">STOP LOSS</div><div class="lvl-val lvl-sl">' + cn(sl) + '</div></div>' +
+        '<div class="panel-level-item"><div class="lvl-lbl">TP1</div><div class="lvl-val lvl-tp">' + cn(tp1) + '</div></div>' +
+        '<div class="panel-level-item"><div class="lvl-lbl">TP2</div><div class="lvl-val lvl-tp">' + cn(tp2) + '</div></div>' +
+      '</div>';
+    }
+
+    bc.innerHTML = '<div>' +
+      '<div class="bias-card-header"><div class="bias-date">ES · DAILY BIAS · ' + dateStr + '</div><div class="bias-time">UPDATED ' + timeStr + '</div></div>' +
+      '<div class="bias-overall ' + biasClass + '">' + bias + '</div>' +
+      '<div class="bias-panels">' +
+        '<div class="bias-panel short"><div class="panel-header"><span class="panel-dir short">SHORT ▼</span>' + confBars(biasCard.short_confidence) + '</div><div class="panel-zone">' + cf(biasCard.short_zone) + '</div><div class="panel-reason">' + cf(biasCard.short_reasoning) + '</div>' + panelLevels(biasCard.short_entry, biasCard.short_sl, biasCard.short_tp1, biasCard.short_tp2) + '</div>' +
+        '<div class="bias-panel long"><div class="panel-header"><span class="panel-dir long">LONG ▲</span>' + confBars(biasCard.long_confidence) + '</div><div class="panel-zone">' + cf(biasCard.long_zone) + '</div><div class="panel-reason">' + cf(biasCard.long_reasoning) + '</div>' + panelLevels(biasCard.long_entry, biasCard.long_sl, biasCard.long_tp1, biasCard.long_tp2) + '</div>' +
+      '</div>' +
+      '<div class="bias-keys">' +
+        '<div class="bias-key"><div class="bias-key-lbl">RESISTANCE</div><div class="bias-key-val res">' + cf(biasCard.resistance_levels) + '</div></div>' +
+        '<div class="bias-key"><div class="bias-key-lbl">SUPPORT</div><div class="bias-key-val sup">' + cf(biasCard.support_levels) + '</div></div>' +
+        '<div class="bias-key"><div class="bias-key-lbl">INVALIDATION</div><div class="bias-key-val inv">' + cf(biasCard.invalidation) + '</div></div>' +
+      '</div>' + banner + '</div>';
+
+    // Show SMT callout
+    const smtEl = document.getElementById('smt-callout');
+    if (smtEl) smtEl.style.display = 'block';
+
+  } catch(e) {
+    const bc = document.getElementById('bias-card-container');
+    if (bc) bc.innerHTML = '<div class="bias-no-card"><div class="bias-no-card-title" style="color:#ff4757;">ERROR LOADING ES BIAS</div><div class="bias-no-card-sub">' + e.message + '</div></div>';
+  }
+}
+
 /* ── EMAIL UNLOCK SYSTEM ── */
 const UNLOCK_KEY = 'es_unlocked_email';
 
