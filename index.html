@@ -676,7 +676,7 @@ function buildLiveCard(s) {
 
 async function fetchSignal() {
   try {
-    const data = await sbFetch('signals_nq?order=created_at.desc&limit=20');
+    const data = await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=20');
     if (!data || !data.length) return;
     const biasCard = data.find(s => s.card_type === 'BIAS');
     const liveCards = data.filter(s => s.card_type === 'LIVE' && (s.status || '').toUpperCase() === 'OPEN');
@@ -702,7 +702,7 @@ let allHistory = [], visibleCount = 10, activeFilter = 'ALL';
 
 async function fetchHistory() {
   try {
-    const data = await sbFetch('signals_nq?order=created_at.desc&limit=100');
+    const data = await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=100');
     if (!data || !data.length) { document.getElementById('history-rows').innerHTML = '<div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals yet.</div>'; return; }
     allHistory = data;
     updateStats(data);
