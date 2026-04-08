@@ -225,8 +225,6 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
 .blusky-cta { display: block; text-align: center; background: var(--green); color: var(--bg); font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; padding: 18px; text-decoration: none; transition: all 0.2s; text-transform: uppercase; }
 .blusky-cta:hover { background: var(--green2); transform: translateY(-1px); }
 .blusky-disclaimer { font-family: var(--mono); font-size: 9px; color: var(--muted); text-align: center; margin-top: 10px; letter-spacing: 0.06em; }
-
-/* ── ES LIVE CARD (updated from "launching" to "live") ── */
 .es-live-card {
   background: var(--card); border: 1px solid rgba(79,195,247,0.35);
   padding: 32px; display: flex; align-items: flex-start; gap: 20px;
@@ -247,7 +245,6 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
   transition: all 0.2s;
 }
 .es-cta-btn:hover { opacity: 0.85; }
-
 .join-wrap { max-width: 480px; margin: 0 auto; text-align: center; }
 .price-card { background: var(--card); border: 1px solid var(--green); padding: 48px 40px; position: relative; margin-bottom: 32px; }
 .price-badge { position: absolute; top: -1px; left: 50%; transform: translateX(-50%); background: var(--green); color: var(--bg); font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: 0.15em; padding: 5px 20px; white-space: nowrap; }
@@ -302,6 +299,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
   .history-header span:nth-child(4), .history-header span:nth-child(5), .history-header span:nth-child(6),
   .history-row > *:nth-child(4), .history-row > *:nth-child(5), .history-row > *:nth-child(6) { display: none; }
   .steps-grid { grid-template-columns: 1fr; }
+  .membership-grid { grid-template-columns: 1fr !important; max-width: 400px !important; }
   footer { padding: 36px 20px; }
   .footer-top { flex-direction: column; }
   .x-card { flex-direction: column; text-align: center; }
@@ -329,14 +327,14 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-1" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-1" class="tick-green">TRACKING</span></span>
-      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
+      <span class="tick"><span class="tick-label">ES + GOLD</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
       <span class="tick"><span class="tick-label">SIGNAL</span><span id="t-signal-2" class="tick-green">LOADING</span></span>
       <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-2" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-2" class="tick-green">TRACKING</span></span>
-      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
+      <span class="tick"><span class="tick-label">ES + GOLD</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
       <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
     </div>
   </div>
@@ -417,7 +415,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
     <div class="step-card reveal reveal-delay-3">
       <div class="step-num">STEP 03</div><div class="step-icon">🎯</div>
       <h3>FVG Entry</h3>
-      <p>A Fair Value Gap must form on the reversal. Enter on retest. SL fixed at the sweep candle — never moved. TP1 at 2R, TP2 at 3R.</p>
+      <p>A Fair Value Gap must form on the reversal. Enter on retest. SL fixed at the sweep candle — never moved. TP1 at 1R, TP2 at 2R.</p>
     </div>
     <div class="step-card reveal reveal-delay-1">
       <div class="step-num">FILTER</div><div class="step-icon">🔍</div>
@@ -495,26 +493,28 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
     <p class="blusky-disclaimer">Affiliate link — I earn a commission at no cost to you</p>
   </div>
 
-  <!-- ── ES LIVE CARD (was "launching monday", now live) ── -->
   <div class="es-live-card">
     <div style="flex:1;">
       <div class="es-badge-live">⚡ NOW LIVE</div>
-      <div class="es-name">ES</div>
-      <div class="es-desc">S&amp;P 500 Futures signals — same framework, same process.<br>Daily bias + SHORT/LONG zones + exact levels.<br>ES + NQ SMT divergence analysis every session.</div>
+      <div class="es-name">ES + Gold</div>
+      <div class="es-desc">S&amp;P 500 + Gold Futures signals — same framework, same process.<br>Daily bias + SHORT/LONG zones + exact levels for both instruments.<br>One subscription unlocks everything.</div>
       <div class="es-price">30 days free → then $5/month · Cancel anytime</div>
-      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="es-cta-btn">GET ES ACCESS →</a>
+      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="es-cta-btn">GET ACCESS →</a>
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
+<!-- ══════════════════════════════════════════════════════════ -->
+<!--  MEMBERSHIP — simplified: NQ free / ES+Gold $5            -->
+<!-- ══════════════════════════════════════════════════════════ -->
 <section class="section reveal" id="join" style="text-align:center;">
   <div class="section-label">Membership</div>
-  <div class="section-title">Three instruments.<br>One framework.</div>
-  <p class="section-sub" style="margin:0 auto 48px;">NQ is free forever. ES and Gold are paid tiers — same Smart Money process, different instruments.</p>
+  <div class="section-title">Free or $5.<br>That's it.</div>
+  <p class="section-sub" style="margin:0 auto 48px;">NQ signals are free forever. One $5/month subscription unlocks both ES and Gold.</p>
 
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2px;max-width:960px;margin:0 auto 48px;">
+  <div class="membership-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2px;max-width:760px;margin:0 auto 48px;">
 
     <!-- NQ FREE -->
     <div class="price-card" style="border-color:var(--green);margin-bottom:0;">
@@ -533,47 +533,26 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <p class="price-note">SIGNALS DELIVERED VIA EMAIL · NO SPAM EVER</p>
     </div>
 
-    <!-- ES PAID -->
+    <!-- ES + GOLD $5/MO -->
     <div class="price-card" style="border-color:var(--blue);margin-bottom:0;">
       <div class="price-badge" style="background:var(--blue);">$5/MONTH · 30 DAYS FREE</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;margin-top:28px;margin-bottom:8px;">ES FUTURES</div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;margin-top:28px;margin-bottom:8px;">ES + GOLD</div>
       <div class="price-val" style="font-size:48px;color:var(--blue);">$5<span style="font-size:20px;color:var(--muted);font-family:var(--mono);font-weight:400;">/mo</span></div>
-      <div class="price-sub">ES SIGNALS · FOUNDING RATE</div>
+      <div class="price-sub">BOTH INSTRUMENTS · ONE SUBSCRIPTION</div>
       <ul class="price-features">
-        <li>Daily ES pre-session bias card</li>
+        <li>Daily ES + Gold pre-session bias cards</li>
         <li>SMT divergence vs NQ every session</li>
-        <li>Live ES trade cards — exact levels</li>
-        <li>Full ES trade history + win rate</li>
-        <li>London Profile A/B/C identified daily</li>
+        <li>DXY correlation analysis for Gold</li>
+        <li>Live trade cards — exact levels</li>
+        <li>Full trade history + win rate</li>
       </ul>
-      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;background:var(--blue);">GET ES ACCESS →</a>
+      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;background:var(--blue);">GET ACCESS →</a>
       <p class="price-note">30 DAYS FREE · CANCEL ANYTIME · SECURE STRIPE</p>
-    </div>
-
-    <!-- GOLD COMING SOON -->
-    <div class="price-card" style="border-color:var(--yellow);border-style:dashed;margin-bottom:0;opacity:0.7;">
-      <div class="price-badge" style="background:var(--yellow);color:var(--bg);">COMING SOON</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;margin-top:28px;margin-bottom:8px;">GOLD (XAUUSD)</div>
-      <div class="price-val" style="font-size:48px;color:var(--yellow);">$5<span style="font-size:20px;color:var(--muted);font-family:var(--mono);font-weight:400;">/mo</span></div>
-      <div class="price-sub">GOLD SIGNALS · LAUNCHING SOON</div>
-      <ul class="price-features">
-        <li>Daily Gold pre-session bias card</li>
-        <li>DXY correlation analysis</li>
-        <li>Live Gold trade cards — exact levels</li>
-        <li>Full Gold trade history + win rate</li>
-        <li>Same ICT framework as NQ + ES</li>
-      </ul>
-      <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;background:var(--yellow);color:var(--bg);">JOIN WAITLIST →</a>
-      <p class="price-note">BE FIRST TO KNOW WHEN GOLD LAUNCHES</p>
     </div>
 
   </div>
 
   <div class="join-wrap">
-    <div style="background:var(--card);border:1px solid var(--border);padding:20px 24px;margin-bottom:24px;border-left:3px solid var(--green);text-align:left;">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:0.2em;margin-bottom:6px;">NQ TRACK RECORD</div>
-      <div style="font-family:var(--mono);font-size:12px;color:var(--text);">9W / 1L · 90% win rate · +1,477 pts net — all verified, posted before entry.</div>
-    </div>
     <div class="x-card reveal">
       <div class="x-info">
         <div class="x-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
@@ -584,7 +563,6 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
         FOLLOW ON X
       </a>
     </div>
-  </div>
   </div>
 </section>
 
@@ -598,7 +576,7 @@ footer { position: relative; z-index: 1; border-top: 1px solid var(--border); ba
       <div class="footer-links">
         <a href="https://x.com/PratikP03691040" target="_blank">Follow on X</a>
         <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank">Join Free</a>
-        <a href="/es">ES Signals ($5/mo)</a>
+        <a href="/es">ES + Gold ($5/mo)</a>
         <a href="https://fas.st/t/pqmnB5KZ" target="_blank">Trade on Blusky</a>
       </div>
     </div>
@@ -713,8 +691,8 @@ function buildLiveCard(s) {
     '<div class="live-levels">' +
       '<div class="live-level"><div class="live-level-lbl">ENTRY</div><div class="live-level-val" style="color:var(--white);">' + cn(s.entry) + '</div></div>' +
       '<div class="live-level"><div class="live-level-lbl">STOP LOSS</div><div class="live-level-val" style="color:var(--red);">' + cn(s.stop_loss) + '</div></div>' +
-      '<div class="live-level"><div class="live-level-lbl">TP1 (2R)</div><div class="live-level-val" style="color:var(--green);">' + cn(s.tp1) + '</div></div>' +
-      '<div class="live-level"><div class="live-level-lbl">TP2 (3R)</div><div class="live-level-val" style="color:var(--green);">' + cn(s.tp2) + '</div></div>' +
+      '<div class="live-level"><div class="live-level-lbl">TP1 (1R)</div><div class="live-level-val" style="color:var(--green);">' + cn(s.tp1) + '</div></div>' +
+      '<div class="live-level"><div class="live-level-lbl">TP2 (2R)</div><div class="live-level-val" style="color:var(--green);">' + cn(s.tp2) + '</div></div>' +
     '</div>' + banner + '</div></div>';
 }
 
