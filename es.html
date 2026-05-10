@@ -202,6 +202,26 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 .reveal-delay-1{transition-delay:0.1s;}
 .reveal-delay-2{transition-delay:0.2s;}
 .reveal-delay-3{transition-delay:0.3s;}
+
+/* ─── PAYMENT CONFIRMATION BANNER (NEW) ─── */
+#payment-confirmation-banner{
+  position:fixed;top:108px;left:50%;transform:translateX(-50%);z-index:1000;
+  background:#0f1621;border:1px solid var(--green);border-left:3px solid var(--green);
+  padding:20px 28px;max-width:540px;width:calc(100% - 40px);
+  box-shadow:0 0 40px rgba(0,212,160,0.25);font-family:var(--mono);
+  animation:slideDown 0.4s ease-out;
+}
+@keyframes slideDown{from{opacity:0;transform:translate(-50%,-20px);}to{opacity:1;transform:translate(-50%,0);}}
+.pcb-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:12px;}
+.pcb-title{font-size:13px;font-weight:700;color:var(--green);letter-spacing:0.12em;}
+.pcb-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:0;transition:color 0.2s;}
+.pcb-close:hover{color:var(--text);}
+.pcb-msg{font-size:12px;color:var(--text);line-height:1.8;margin-bottom:12px;}
+.pcb-info{font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:12px;}
+.pcb-info strong{color:var(--yellow);}
+.pcb-help{font-size:10px;color:var(--muted);letter-spacing:0.06em;border-top:1px solid var(--border);padding-top:10px;}
+.pcb-help a{color:var(--green);text-decoration:none;}
+
 @media(max-width:768px){
   .nav-links{display:none;}
   .nav-inner{padding:0 20px;}
@@ -220,6 +240,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
   .x-card{flex-direction:column;text-align:center;}
   .nq-cta-card{flex-direction:column;text-align:center;}
   .contact-row{flex-direction:column;align-items:flex-start;}
+  #payment-confirmation-banner{top:90px;padding:16px 20px;}
 }
 </style>
 </head>
@@ -432,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <a href="#" data-stripe class="btn-primary" style="display:block;clip-path:none;text-align:center;">GET ES ACCESS — $5/MONTH →</a>
       <p class="price-note">NQ SIGNALS ARE FREE FOREVER · <a href="/" style="color:var(--green);">VIEW NQ →</a></p>
     </div>
-    <div class="x-card reveal">
+  <div class="x-card reveal" style="justify-content:center;text-align:center;">
       <div class="x-info">
         <div class="x-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
         <div><div class="x-name">NQ Level Hunter</div><div class="x-handle">LIVE CALLS · NQ + ES · REAL TIME UPDATES</div></div>
@@ -731,6 +752,36 @@ document.addEventListener('keydown', function(e) {
 });
 
 fetchESStats();
+
+/* ─── POST-PAYMENT CONFIRMATION BANNER (NEW) ───
+   Shows when user lands on /es?paid=true (after Stripe checkout success). */
+(function showPaymentBanner() {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('paid') !== 'true') return;
+  const banner = document.createElement('div');
+  banner.id = 'payment-confirmation-banner';
+  banner.innerHTML =
+    '<div class="pcb-header">' +
+      '<div class="pcb-title">✓ PAYMENT RECEIVED</div>' +
+      '<button class="pcb-close" onclick="document.getElementById(\'payment-confirmation-banner\').remove()" aria-label="Close">×</button>' +
+    '</div>' +
+    '<div class="pcb-msg">Welcome to ES Level Hunter. Your subscription is active on Stripe.</div>' +
+    '<div class="pcb-info">Access will be activated within <strong>24 hours</strong>. You\'ll receive a confirmation email once your account is unlocked.</div>' +
+    '<div class="pcb-help">Need help? Email <a href="mailto:ppatel1718@gmail.com">ppatel1718@gmail.com</a></div>';
+  document.body.appendChild(banner);
+  // Auto-dismiss after 60 seconds
+  setTimeout(function() {
+    const b = document.getElementById('payment-confirmation-banner');
+    if (!b) return;
+    b.style.transition = 'opacity 0.5s';
+    b.style.opacity = '0';
+    setTimeout(function() { if (b && b.parentNode) b.remove(); }, 500);
+  }, 60000);
+  // Clean URL — remove ?paid=true so a refresh doesn't show banner again
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
+})();
 </script>
 </body>
 </html>
