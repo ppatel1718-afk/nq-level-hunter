@@ -182,6 +182,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,15,0.92
 .history-row{display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:13px 20px;border-bottom:1px solid rgba(30,45,61,0.6);font-family:var(--mono);font-size:11px;align-items:center;transition:background 0.15s;}
 .history-row:hover{background:rgba(255,255,255,0.02);}
 .history-row:last-child{border-bottom:none;}
+
+/* ─── MONTH GROUP HEADER (NEW) ─── */
+.month-header{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 20px;background:rgba(15,22,33,0.7);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  font-family:var(--mono);
+}
+.month-header:first-child{border-top:none;}
+.month-header-title{
+  font-size:12px;font-weight:700;color:var(--green);
+  letter-spacing:0.18em;text-transform:uppercase;
+}
+.month-header-stats{
+  display:flex;align-items:center;gap:18px;
+  font-size:10px;color:var(--muted);letter-spacing:0.08em;
+}
+.month-stat-val{color:var(--green);font-weight:700;}
+.month-stat-val.r{color:var(--red);}
+.month-stat-val.y{color:var(--yellow);}
+.month-stat-sep{color:var(--border);}
+
 #load-more-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:11px 28px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-transform:uppercase;display:none;margin:20px auto 0;}
 #load-more-btn:hover{border-color:var(--green);color:var(--green);}
 .blusky-card{max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--border);padding:36px;position:relative;}
@@ -270,6 +292,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
   .history-header,.history-row{grid-template-columns:110px 70px 80px 1fr;}
   .history-header span:nth-child(4),.history-header span:nth-child(5),.history-header span:nth-child(6),
   .history-row>*:nth-child(4),.history-row>*:nth-child(5),.history-row>*:nth-child(6){display:none;}
+  .month-header{padding:14px 16px;flex-direction:column;align-items:flex-start;gap:6px;}
+  .month-header-stats{gap:12px;font-size:9px;}
   .steps-grid{grid-template-columns:1fr;}
   .membership-grid{grid-template-columns:1fr !important;max-width:400px !important;}
   footer{padding:36px 20px;}
@@ -560,9 +584,107 @@ return '<div class="live-card-wrap"><div class="live-card-label">LIVE TRADE CARD
 async function fetchSignal(){try{const data=await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=20');if(!data||!data.length)return;const biasCard=data.find(s=>s.card_type==='BIAS');const liveCards=data.filter(s=>s.card_type==='LIVE'&&(s.status||'').toUpperCase()==='OPEN');const bc=document.getElementById('bias-card-container');bc.innerHTML=biasCard?buildBiasCard(biasCard):'<div class="bias-no-card"><div class="bias-no-card-title">NO BIAS CARD YET TODAY</div><div class="bias-no-card-sub">Check back before NY Open (08:00 EST)</div></div>';const lc=document.getElementById('live-card-container');lc.innerHTML=liveCards.length?liveCards.map(buildLiveCard).join(''):'';const latest=biasCard||data[0];const isBias=latest.card_type==='BIAS';const isClosed=(latest.status||'').toUpperCase()==='CLOSED';const dir=(latest.direction||'').toUpperCase();const tLabel=isBias?(latest.overall_bias||'BIAS').toUpperCase():isClosed?(latest.outcome==='WIN'?'TP HIT ✓':'SL HIT ✗'):dir==='SHORT'?'SHORT ACTIVE ▼':dir==='LONG'?'LONG ACTIVE ▲':'WAIT';const tClass=isBias?((latest.overall_bias||'').toUpperCase().includes('BULL')?'tick-green':(latest.overall_bias||'').toUpperCase().includes('BEAR')?'tick-red':'tick-yellow'):isClosed?(latest.outcome==='WIN'?'tick-green':'tick-red'):dir==='SHORT'?'tick-red':dir==='LONG'?'tick-green':'tick-val';['t-signal-1','t-signal-2'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=tLabel;el.className=tClass;}});}catch(e){document.getElementById('bias-card-container').innerHTML='<div class="bias-no-card"><div class="bias-no-card-title" style="color:var(--red)">ERROR LOADING BIAS</div><div class="bias-no-card-sub">'+e.message+'</div></div>';}}
 fetchSignal();setInterval(fetchSignal,60000);
 let allHistory=[],visibleCount=10,activeFilter='ALL';
-async function fetchHistory(){try{const data=await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=100');if(!data||!data.length){document.getElementById('history-rows').innerHTML='<div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals yet.</div>';return;}allHistory=data;updateStats(data);renderHistory();}catch(e){document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--red);">'+e.message+'</div>';}}
+async function fetchHistory(){try{const data=await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=200');if(!data||!data.length){document.getElementById('history-rows').innerHTML='<div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals yet.</div>';return;}allHistory=data;updateStats(data);renderHistory();}catch(e){document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--red);">'+e.message+'</div>';}}
 function updateStats(data){const live=data.filter(s=>s.card_type==='LIVE');const wins=live.filter(s=>s.outcome==='WIN').length;const losses=live.filter(s=>s.outcome==='LOSS').length;const closed=wins+losses;const rate=closed>0?Math.round(wins/closed*100):0;let pts=0;live.forEach(s=>{if(s.points!=null)pts+=Number(s.points);});const setEl=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};setEl('stat-wins',wins||'—');setEl('stat-losses',losses||'—');setEl('stat-wr',closed>0?rate+'%':'—');setEl('stat-pts',closed>0?(pts>=0?'+'+pts:String(pts)):'—');setEl('result-pts',closed>0?(pts>=0?'+'+pts:String(pts)):'—');setEl('hero-wins',wins||'—');setEl('hero-losses',losses||'—');setEl('hero-wr',closed>0?rate+'%':'—');setEl('hero-pts',closed>0?(pts>=0?'+'+pts.toLocaleString():pts.toLocaleString()):'—');setEl('hero-wr-inline',closed>0?rate+'%':'—');setEl('hero-pts-inline',closed>0?(pts>=0?'+'+pts.toLocaleString():pts.toLocaleString()):'—');const ptsT=closed>0?(pts>=0?'+'+pts+' PTS':pts+' PTS'):'LOADING...';const wrT=closed>0?rate+'% · '+wins+'W / '+losses+'L':'TRACKING';['t-pts-1','t-pts-2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ptsT;});['t-wr-1','t-wr-2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=wrT;});}
-function renderHistory(){const filtered=activeFilter==='ALL'?allHistory.filter(s=>s.card_type!=='BIAS'):allHistory.filter(s=>{if(activeFilter==='BIAS')return s.card_type==='BIAS';if(activeFilter==='WIN')return s.card_type==='LIVE'&&s.outcome==='WIN';if(activeFilter==='LOSS')return s.card_type==='LIVE'&&s.outcome==='LOSS';if(activeFilter==='RUNNING')return s.card_type==='LIVE'&&!s.outcome&&s.status==='OPEN';return false;});const visible=filtered.slice(0,visibleCount);document.getElementById('load-more-btn').style.display=filtered.length>visibleCount?'block':'none';if(!visible.length){document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals match this filter.</div>';return;}document.getElementById('history-rows').innerHTML=visible.map(s=>{const isBias=s.card_type==='BIAS';const outcome=(s.outcome||'').toUpperCase();const dir=(s.direction||'').toUpperCase();const isShort=dir==='SHORT',isLong=dir==='LONG';const ts=new Date(s.created_at);const dStr=ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'America/New_York'});const tStr=ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'});let col1='<span style="color:var(--muted)">'+dStr+'<br><span style="font-size:10px">'+tStr+'</span></span>';let col2,col3,col4,col5,col6,col7;if(isBias){const bc=(s.overall_bias||'').toUpperCase().includes('BULL')?'var(--green)':(s.overall_bias||'').toUpperCase().includes('BEAR')?'var(--red)':'var(--yellow)';col2='<span style="color:'+bc+';font-weight:700">BIAS</span>';col3='<span style="color:'+bc+';font-size:10px">'+(s.overall_bias||'—')+'</span>';col4='<span style="color:var(--muted)">—</span>';col5='<span style="color:var(--red);font-size:10px">'+(s.short_zone||'—')+'</span>';col6='<span style="color:var(--green);font-size:10px">'+(s.long_zone||'—')+'</span>';const brC=s.bias_result==='HIT'?'var(--green)':s.bias_result==='MISSED'?'var(--red)':s.bias_result==='PARTIAL'?'var(--yellow)':'var(--muted)';col7='<span style="color:'+brC+';font-weight:700">'+(s.bias_result||'OPEN')+'</span>';}else{const sc=isShort?'var(--red)':isLong?'var(--green)':'var(--muted)';col2='<span style="color:'+sc+';font-weight:700">'+dir+(isShort?' ▼':isLong?' ▲':'')+'</span>';col3='<span style="color:var(--text)">'+cn(s.entry)+'</span>';col4='<span style="color:var(--red)">'+cn(s.stop_loss)+'</span>';col5='<span style="color:var(--green)">'+cn(s.tp1)+'</span>';col6='<span style="color:var(--green)">'+cn(s.tp2)+'</span>';const outC=outcome==='WIN'?'var(--green)':outcome==='LOSS'?'var(--red)':dir==='WAIT'?'var(--muted)':'var(--yellow)';const resL=outcome==='WIN'?(s.result||'TP1')+' ✓ +'+(s.points||0)+'pts':outcome==='LOSS'?'SL ✗ '+(s.points?s.points+'pts':''):dir==='WAIT'?'WAIT —':'RUNNING';col7='<span style="color:'+outC+';font-weight:700">'+resL+'</span>';}return '<div class="history-row">'+col1+col2+col3+col4+col5+col6+col7+'</div>';}).join('');}
+
+// ─── HELPER: format a single history row ───
+function buildHistoryRow(s){
+  const isBias=s.card_type==='BIAS';
+  const outcome=(s.outcome||'').toUpperCase();
+  const dir=(s.direction||'').toUpperCase();
+  const isShort=dir==='SHORT',isLong=dir==='LONG';
+  const ts=new Date(s.created_at);
+  const dStr=ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'America/New_York'});
+  const tStr=ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'});
+  let col1='<span style="color:var(--muted)">'+dStr+'<br><span style="font-size:10px">'+tStr+'</span></span>';
+  let col2,col3,col4,col5,col6,col7;
+  if(isBias){
+    const bc=(s.overall_bias||'').toUpperCase().includes('BULL')?'var(--green)':(s.overall_bias||'').toUpperCase().includes('BEAR')?'var(--red)':'var(--yellow)';
+    col2='<span style="color:'+bc+';font-weight:700">BIAS</span>';
+    col3='<span style="color:'+bc+';font-size:10px">'+(s.overall_bias||'—')+'</span>';
+    col4='<span style="color:var(--muted)">—</span>';
+    col5='<span style="color:var(--red);font-size:10px">'+(s.short_zone||'—')+'</span>';
+    col6='<span style="color:var(--green);font-size:10px">'+(s.long_zone||'—')+'</span>';
+    const brC=s.bias_result==='HIT'?'var(--green)':s.bias_result==='MISSED'?'var(--red)':s.bias_result==='PARTIAL'?'var(--yellow)':'var(--muted)';
+    col7='<span style="color:'+brC+';font-weight:700">'+(s.bias_result||'OPEN')+'</span>';
+  }else{
+    const sc=isShort?'var(--red)':isLong?'var(--green)':'var(--muted)';
+    col2='<span style="color:'+sc+';font-weight:700">'+dir+(isShort?' ▼':isLong?' ▲':'')+'</span>';
+    col3='<span style="color:var(--text)">'+cn(s.entry)+'</span>';
+    col4='<span style="color:var(--red)">'+cn(s.stop_loss)+'</span>';
+    col5='<span style="color:var(--green)">'+cn(s.tp1)+'</span>';
+    col6='<span style="color:var(--green)">'+cn(s.tp2)+'</span>';
+    const outC=outcome==='WIN'?'var(--green)':outcome==='LOSS'?'var(--red)':dir==='WAIT'?'var(--muted)':'var(--yellow)';
+    const resL=outcome==='WIN'?(s.result||'TP1')+' ✓ +'+(s.points||0)+'pts':outcome==='LOSS'?'SL ✗ '+(s.points?s.points+'pts':''):dir==='WAIT'?'WAIT —':'RUNNING';
+    col7='<span style="color:'+outC+';font-weight:700">'+resL+'</span>';
+  }
+  return '<div class="history-row">'+col1+col2+col3+col4+col5+col6+col7+'</div>';
+}
+
+// ─── HELPER: build month-group header with W/L/pts summary ───
+function buildMonthHeader(monthKey,trades){
+  const live=trades.filter(s=>s.card_type==='LIVE');
+  const wins=live.filter(s=>s.outcome==='WIN').length;
+  const losses=live.filter(s=>s.outcome==='LOSS').length;
+  let pts=0;
+  live.forEach(s=>{if(s.points!=null)pts+=Number(s.points);});
+  const ptsStr=pts>=0?'+'+pts.toLocaleString():pts.toLocaleString();
+  const ptsClass=pts>=0?'':'r';
+  const wlStr=wins+'W / '+losses+'L';
+  return '<div class="month-header">'+
+    '<div class="month-header-title">'+monthKey+'</div>'+
+    '<div class="month-header-stats">'+
+      '<span><span class="month-stat-val '+ptsClass+'">'+ptsStr+'</span> PTS</span>'+
+      '<span class="month-stat-sep">·</span>'+
+      '<span><span class="month-stat-val">'+wlStr+'</span></span>'+
+      '<span class="month-stat-sep">·</span>'+
+      '<span>'+trades.length+' SIGNALS</span>'+
+    '</div>'+
+  '</div>';
+}
+
+// ─── HELPER: group trades by month-year key ───
+function groupByMonth(trades){
+  const groups={};
+  const order=[];
+  trades.forEach(s=>{
+    const ts=new Date(s.created_at);
+    const monthKey=ts.toLocaleDateString('en-US',{month:'long',year:'numeric',timeZone:'America/New_York'}).toUpperCase();
+    if(!groups[monthKey]){groups[monthKey]=[];order.push(monthKey);}
+    groups[monthKey].push(s);
+  });
+  return {groups,order};
+}
+
+function renderHistory(){
+  const filtered=activeFilter==='ALL'?allHistory.filter(s=>s.card_type!=='BIAS'):allHistory.filter(s=>{
+    if(activeFilter==='BIAS')return s.card_type==='BIAS';
+    if(activeFilter==='WIN')return s.card_type==='LIVE'&&s.outcome==='WIN';
+    if(activeFilter==='LOSS')return s.card_type==='LIVE'&&s.outcome==='LOSS';
+    if(activeFilter==='RUNNING')return s.card_type==='LIVE'&&!s.outcome&&s.status==='OPEN';
+    return false;
+  });
+  const visible=filtered.slice(0,visibleCount);
+  document.getElementById('load-more-btn').style.display=filtered.length>visibleCount?'block':'none';
+  if(!visible.length){
+    document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals match this filter.</div>';
+    return;
+  }
+
+  // Build month-grouped HTML for ALL view
+  if(activeFilter==='ALL'){
+    const {groups,order}=groupByMonth(visible);
+    let html='';
+    order.forEach(monthKey=>{
+      html+=buildMonthHeader(monthKey,groups[monthKey]);
+      html+=groups[monthKey].map(buildHistoryRow).join('');
+    });
+    document.getElementById('history-rows').innerHTML=html;
+  }else{
+    // Other filters render as flat list (no month headers)
+    document.getElementById('history-rows').innerHTML=visible.map(buildHistoryRow).join('');
+  }
+}
 function filterHistory(f){activeFilter=f;visibleCount=10;['ALL','WIN','LOSS','RUNNING','BIAS'].forEach(k=>{const btn=document.getElementById('filter-'+k);if(btn)btn.className='filter-btn'+(k===f?' active':'');});renderHistory();}
 function loadMore(){visibleCount+=10;renderHistory();}
 fetchHistory();
