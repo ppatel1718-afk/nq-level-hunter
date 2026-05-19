@@ -19,73 +19,85 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,15,0.92
 .nav-logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--white);letter-spacing:0.12em;display:flex;align-items:center;gap:10px;}
 .nav-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse-dot 2s ease-in-out infinite;}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none;}
+.nav-links{display:flex;align-items:center;gap:24px;list-style:none;}
 .nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;color:var(--muted);text-decoration:none;transition:color 0.2s;text-transform:uppercase;}
 .nav-links a:hover{color:var(--white);}
-.nav-cta{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--green);padding:10px 22px;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all 0.2s;}
-.nav-cta:hover{background:var(--green2);transform:translateY(-1px);}
-.ticker-wrap{background:var(--card);border-bottom:1px solid var(--border);height:38px;overflow:hidden;display:flex;align-items:center;position:relative;}
+.nav-cta{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--blue);padding:10px 22px;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all 0.2s;}
+.nav-cta:hover{opacity:0.88;transform:translateY(-1px);}
+.ticker-wrap{background:var(--card);border-bottom:1px solid var(--border);height:36px;overflow:hidden;display:flex;align-items:center;position:relative;}
 .ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;}
 .ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--card),transparent);}
 .ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--card),transparent);}
 .ticker-track{display:inline-flex;align-items:center;animation:ticker 40s linear infinite;white-space:nowrap;}
 @keyframes ticker{from{transform:translateX(0);}to{transform:translateX(-50%);}}
-.tick{font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 24px;display:inline-flex;align-items:center;gap:8px;border-right:1px solid var(--border);height:38px;}
+.tick{font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 24px;display:inline-flex;align-items:center;gap:8px;border-right:1px solid var(--border);height:36px;}
 .tick-label{color:var(--muted);letter-spacing:0.08em;}
 .tick-val{color:var(--text);}
 .tick-green{color:var(--green);font-weight:700;}
 .tick-red{color:var(--red);font-weight:700;}
 .tick-yellow{color:var(--yellow);}
-.hero{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:140px 24px 100px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--green);text-transform:uppercase;border:1px solid rgba(0,212,160,0.3);padding:6px 16px;margin-bottom:32px;background:rgba(0,212,160,0.05);}
+
+/* ── HERO (condensed) ── */
+.hero{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 60px;min-height:auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--green);text-transform:uppercase;border:1px solid rgba(0,212,160,0.3);padding:6px 16px;margin-bottom:24px;background:rgba(0,212,160,0.05);}
 .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 1.5s ease-in-out infinite;}
-.hero h1{font-family:var(--display);font-size:clamp(36px,7vw,76px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-0.02em;max-width:900px;margin:0 auto 24px;}
+.hero h1{font-family:var(--display);font-size:clamp(32px,6vw,64px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-0.02em;max-width:900px;margin:0 auto 20px;}
 .hero h1 .accent-green{color:var(--green);}
 .hero h1 .accent-red{color:var(--red);}
-.hero-sub{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto 48px;line-height:1.8;font-weight:400;}
+.hero-sub{font-size:16px;color:var(--muted);max-width:540px;margin:0 auto 32px;line-height:1.7;font-weight:400;}
 .hero-sub strong{color:var(--green);font-weight:600;}
-.hero-stats{display:flex;align-items:center;gap:0;margin-bottom:48px;flex-wrap:wrap;justify-content:center;}
-.hero-stat{padding:16px 32px;border:1px solid var(--border);background:var(--card);text-align:center;border-right:none;}
+.hero-stats{display:flex;align-items:center;gap:0;margin-bottom:32px;flex-wrap:wrap;justify-content:center;}
+.hero-stat{padding:14px 28px;border:1px solid var(--border);background:var(--card);text-align:center;border-right:none;}
 .hero-stat:last-child{border-right:1px solid var(--border);}
-.hero-stat-val{font-family:var(--mono);font-size:26px;font-weight:700;color:var(--green);display:block;line-height:1;}
+.hero-stat-val{font-family:var(--mono);font-size:24px;font-weight:700;color:var(--green);display:block;line-height:1;}
 .hero-stat-val.red{color:var(--red);}
+.hero-stat-val.blue{color:var(--blue);}
 .hero-stat-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.18em;margin-top:4px;display:block;}
-.btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--green);padding:18px 44px;text-decoration:none;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);transition:all 0.25s;margin-bottom:20px;box-shadow:0 0 40px rgba(0,212,160,0.25);}
-.btn-primary:hover{background:var(--green2);transform:translateY(-2px);box-shadow:0 0 60px rgba(0,212,160,0.4);}
-.btn-primary svg{width:16px;height:16px;}
-.trust-bar{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:center;}
+
+/* ── DUAL CTA ROW ── */
+.hero-cta-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center;margin-bottom:18px;}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--blue);padding:16px 32px;text-decoration:none;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);transition:all 0.25s;box-shadow:0 0 40px rgba(79,195,247,0.25);}
+.btn-primary:hover{opacity:0.88;transform:translateY(-2px);}
+.btn-primary svg{width:14px;height:14px;}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);background:transparent;padding:15px 28px;text-decoration:none;border:1px solid var(--green);transition:all 0.2s;}
+.btn-secondary:hover{background:rgba(0,212,160,0.08);}
+.trust-bar{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;}
 .trust-bar span{display:flex;align-items:center;gap:6px;}
 .trust-bar span::before{content:'✓';color:var(--green);}
-.section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:100px 32px;}
-.section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--green);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+
+/* ── SECTIONS (tightened) ── */
+.section{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:64px 32px;}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.25em;color:var(--green);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
 .section-label::before{content:'';display:block;width:24px;height:1px;background:var(--green);opacity:0.5;}
-.section-title{font-family:var(--display);font-size:clamp(32px,5vw,54px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-0.02em;margin-bottom:16px;}
-.section-sub{font-size:16px;color:var(--muted);max-width:480px;margin-bottom:56px;line-height:1.8;}
+.section-title{font-family:var(--display);font-size:clamp(28px,4.5vw,44px);font-weight:800;color:var(--white);line-height:1.05;letter-spacing:-0.02em;margin-bottom:12px;}
+.section-sub{font-size:15px;color:var(--muted);max-width:520px;margin-bottom:36px;line-height:1.7;}
 .divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0;}
-.bias-wrapper{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
-.bias-main{flex:1;min-width:300px;}
-.bias-sidebar{flex:0 0 280px;}
+
+/* ── BIAS WRAPPER (sidebar inline on desktop, full-width side-by-side panels) ── */
+.bias-wrapper{display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:flex-start;}
+.bias-main{min-width:0;}
+.bias-sidebar{display:flex;flex-direction:column;gap:12px;}
 .bias-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:10px;}
 .bias-date{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.15em;}
 .bias-time{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;}
-.bias-overall{font-family:var(--display);font-size:32px;font-weight:800;margin-bottom:24px;letter-spacing:-0.02em;}
+.bias-overall{font-family:var(--display);font-size:28px;font-weight:800;margin-bottom:18px;letter-spacing:-0.02em;}
 .bias-overall.bearish{color:var(--red);}
 .bias-overall.bullish{color:var(--green);}
 .bias-overall.neutral{color:var(--yellow);}
 .bias-panels{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2px;}
-.bias-panel{background:var(--card);border:1px solid var(--border);padding:20px;position:relative;overflow:hidden;}
+.bias-panel{background:var(--card);border:1px solid var(--border);padding:18px;position:relative;overflow:hidden;}
 .bias-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 .bias-panel.short::before{background:var(--red);}
 .bias-panel.long::before{background:var(--green);}
-.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.panel-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 .panel-dir{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.14em;}
 .panel-dir.short{color:var(--red);}
 .panel-dir.long{color:var(--green);}
 .conf-bar{display:flex;align-items:center;gap:3px;}
 .conf-pip{width:14px;height:7px;border-radius:2px;transition:background 0.3s;}
 .conf-label{font-family:var(--mono);font-size:9px;margin-left:5px;letter-spacing:0.08em;}
-.panel-zone{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;}
-.panel-reason{font-size:11px;color:var(--muted);line-height:1.8;border-top:1px solid var(--border);padding-top:10px;margin-bottom:12px;}
+.panel-zone{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.panel-reason{font-size:11px;color:var(--muted);line-height:1.7;border-top:1px solid var(--border);padding-top:9px;margin-bottom:10px;}
 .panel-levels{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--card2);padding:10px;margin-top:4px;}
 .panel-level-item{font-family:var(--mono);}
 .panel-level-item .lvl-lbl{font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:2px;}
@@ -94,29 +106,31 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,15,0.92
 .lvl-sl{color:var(--red);}
 .lvl-tp{color:var(--green);}
 .bias-keys{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;}
-.bias-key{background:var(--card);border:1px solid var(--border);padding:12px 14px;}
+.bias-key{background:var(--card);border:1px solid var(--border);padding:11px 13px;}
 .bias-key-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.14em;margin-bottom:4px;}
-.bias-key-val{font-family:var(--mono);font-size:11px;}
+.bias-key-val{font-family:var(--mono);font-size:10px;}
 .bias-key-val.res{color:var(--red);}
 .bias-key-val.sup{color:var(--green);}
 .bias-key-val.inv{color:var(--yellow);}
-.bias-result-banner{margin-top:14px;padding:12px 16px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-align:center;}
+.bias-result-banner{margin-top:12px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-align:center;}
 .bias-result-banner.hit{background:rgba(0,212,160,0.1);color:var(--green);border:1px solid rgba(0,212,160,0.3);}
 .bias-result-banner.missed{background:rgba(255,71,87,0.1);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
 .bias-result-banner.partial{background:rgba(255,197,52,0.1);color:var(--yellow);border:1px solid rgba(255,197,52,0.3);}
 .bias-result-banner.open{background:rgba(90,122,154,0.1);color:var(--muted);border:1px solid rgba(90,122,154,0.3);}
-.bias-no-card{background:var(--card);border:1px solid var(--border);padding:48px;text-align:center;font-family:var(--mono);}
-.bias-no-card-title{font-size:14px;color:var(--muted);margin-bottom:8px;letter-spacing:0.1em;}
+.bias-no-card{background:var(--card);border:1px solid var(--border);padding:40px;text-align:center;font-family:var(--mono);}
+.bias-no-card-title{font-size:13px;color:var(--muted);margin-bottom:6px;letter-spacing:0.1em;}
 .bias-no-card-sub{font-size:11px;color:var(--muted);opacity:0.6;}
-.live-card-wrap{margin-top:16px;}
+
+/* ── LIVE CARD ── */
+.live-card-wrap{margin-top:14px;}
 .live-card-label{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.2em;margin-bottom:8px;}
-.live-card{background:var(--card);border:1px solid var(--border);padding:20px;position:relative;max-width:520px;}
+.live-card{background:var(--card);border:1px solid var(--border);padding:18px;position:relative;}
 .live-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 .live-card.short-card::before{background:var(--red);}
 .live-card.long-card::before{background:var(--green);}
 .live-card.neutral-card::before{background:var(--muted);}
-.live-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;}
-.live-card-asset{font-family:var(--display);font-size:18px;font-weight:700;color:var(--white);}
+.live-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.live-card-asset{font-family:var(--display);font-size:17px;font-weight:700;color:var(--white);}
 .live-card-time{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
 .live-badge{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.14em;padding:5px 12px;}
 .live-badge.short{background:rgba(255,71,87,0.1);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
@@ -125,181 +139,197 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,11,15,0.92
 .live-badge.win{background:rgba(0,212,160,0.1);color:var(--green);border:1px solid rgba(0,212,160,0.3);}
 .live-badge.loss{background:rgba(255,71,87,0.1);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
 .live-rows{font-size:10px;}
-.live-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(30,45,61,0.8);font-family:var(--mono);}
+.live-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(30,45,61,0.8);font-family:var(--mono);}
 .live-row:last-of-type{border-bottom:none;}
 .live-row-lbl{color:var(--muted);letter-spacing:0.07em;}
 .live-row-val{color:var(--text);}
 .live-row-val.g{color:var(--green);}
 .live-row-val.r{color:var(--red);}
 .live-row-val.y{color:var(--yellow);}
-.live-levels{background:var(--card2);padding:12px;margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.live-levels{background:var(--card2);padding:10px;margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .live-level{font-family:var(--mono);}
 .live-level-lbl{font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-bottom:3px;}
-.live-level-val{font-size:14px;font-weight:700;}
-.live-banner{margin-top:12px;padding:10px 14px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-align:center;}
+.live-level-val{font-size:13px;font-weight:700;}
+.live-banner{margin-top:10px;padding:9px 12px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;text-align:center;}
 .live-banner.win{background:rgba(0,212,160,0.1);color:var(--green);border:1px solid rgba(0,212,160,0.3);}
 .live-banner.loss{background:rgba(255,71,87,0.1);color:var(--red);border:1px solid rgba(255,71,87,0.3);}
-.sidebar-card{background:var(--card);border:1px solid var(--border);padding:24px;}
-.sidebar-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.15em;margin-bottom:16px;}
-.sidebar-pts{font-family:var(--display);font-size:52px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;}
-.sidebar-pts-sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:24px;}
+
+/* ── SIDEBAR ── */
+.sidebar-card{background:var(--card);border:1px solid var(--border);padding:20px;}
+.sidebar-title{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.15em;margin-bottom:12px;}
+.sidebar-pts{font-family:var(--display);font-size:44px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px;}
+.sidebar-pts-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:18px;}
 .sidebar-list{list-style:none;}
-.sidebar-list li{font-family:var(--mono);font-size:11px;color:var(--text);padding:7px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.sidebar-list li{font-family:var(--mono);font-size:10px;color:var(--text);padding:6px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
 .sidebar-list li:last-child{border-bottom:none;}
 .sidebar-list li::before{content:'✓';color:var(--green);font-size:10px;flex-shrink:0;}
-.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2px;}
-.step-card{background:var(--card);border:1px solid var(--border);padding:32px 28px;transition:border-color 0.25s,transform 0.25s;position:relative;overflow:hidden;}
+
+/* ── SIDEBAR ES UPSELL ── */
+.sidebar-es{background:var(--card);border:1px solid rgba(79,195,247,0.35);padding:18px;position:relative;}
+.sidebar-es::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);}
+.sidebar-es-label{font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:0.18em;margin-bottom:8px;}
+.sidebar-es-title{font-family:var(--display);font-size:20px;font-weight:800;color:var(--white);margin-bottom:6px;line-height:1.1;}
+.sidebar-es-desc{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
+.sidebar-es-btn{display:block;text-align:center;background:var(--blue);color:var(--bg);font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;padding:12px;text-decoration:none;transition:opacity 0.2s;}
+.sidebar-es-btn:hover{opacity:0.88;}
+
+/* ── PROCESS + KILLZONE MERGED SECTION ── */
+.process-kz-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:24px;align-items:start;}
+.steps-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.step-card{background:var(--card);border:1px solid var(--border);padding:22px 20px;transition:border-color 0.25s,transform 0.25s;position:relative;overflow:hidden;}
 .step-card:hover{border-color:var(--green);transform:translateY(-2px);}
 .step-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
 .step-card:hover::after{transform:scaleX(1);}
-.step-num{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:0.2em;margin-bottom:14px;}
-.step-icon{width:40px;height:40px;margin-bottom:16px;background:rgba(0,212,160,0.08);border:1px solid rgba(0,212,160,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;}
-.step-card h3{font-family:var(--display);font-size:17px;font-weight:700;color:var(--white);margin-bottom:10px;}
-.step-card p{font-size:13px;color:var(--muted);line-height:1.8;}
-.kz-wrap{background:var(--card);border:1px solid var(--border);padding:28px;margin-top:40px;}
-.kz-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.18em;margin-bottom:18px;}
-.kz-bar{height:28px;background:var(--bg);position:relative;border:1px solid var(--border);margin-bottom:8px;border-radius:2px;overflow:hidden;}
+.step-num{font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:0.2em;margin-bottom:10px;}
+.step-icon{width:32px;height:32px;margin-bottom:12px;background:rgba(0,212,160,0.08);border:1px solid rgba(0,212,160,0.2);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.step-card h3{font-family:var(--display);font-size:15px;font-weight:700;color:var(--white);margin-bottom:8px;}
+.step-card p{font-size:12px;color:var(--muted);line-height:1.7;}
+.kz-wrap{background:var(--card);border:1px solid var(--border);padding:22px;height:fit-content;}
+.kz-title{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.18em;margin-bottom:16px;}
+.kz-bar{height:26px;background:var(--bg);position:relative;border:1px solid var(--border);margin-bottom:8px;border-radius:2px;overflow:hidden;}
 .kz-zone{position:absolute;height:100%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;font-weight:700;}
 .kz-asia{left:83.3%;width:16.7%;background:rgba(79,195,247,0.15);color:var(--blue);border-left:2px solid var(--blue);}
 .kz-london{left:8.33%;width:12.5%;background:rgba(0,212,160,0.15);color:var(--green);border-left:2px solid var(--green);}
 .kz-ny{left:33.3%;width:16.7%;background:rgba(255,197,52,0.15);color:var(--yellow);border-left:2px solid var(--yellow);}
 .kz-labels{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);}
-.kz-legend{margin-top:14px;display:flex;gap:24px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;}
+.kz-legend{margin-top:14px;display:flex;flex-direction:column;gap:8px;font-family:var(--mono);font-size:10px;}
 .kz-legend-item{display:flex;align-items:center;gap:6px;color:var(--muted);}
-.kz-legend-dot{width:8px;height:8px;border-radius:50%;}
-.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:32px;}
-.stat-box{background:var(--card);border:1px solid var(--border);padding:24px;text-align:center;}
-.stat-box-val{font-family:var(--display);font-size:36px;font-weight:800;line-height:1;margin-bottom:6px;}
+.kz-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── HISTORY ── */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:24px;}
+.stat-box{background:var(--card);border:1px solid var(--border);padding:20px;text-align:center;}
+.stat-box-val{font-family:var(--display);font-size:32px;font-weight:800;line-height:1;margin-bottom:6px;}
 .stat-box-val.g{color:var(--green);}
 .stat-box-val.r{color:var(--red);}
 .stat-box-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.15em;}
-.filter-bar{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.filter-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
 .filter-btn{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;padding:7px 16px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
 .filter-btn:hover{border-color:var(--green);color:var(--green);}
 .filter-btn.active{background:var(--green);color:var(--bg);border-color:var(--green);font-weight:700;}
 .history-wrap{background:var(--card);border:1px solid var(--border);}
 .history-header{display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:10px 20px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;}
-.history-row{display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:13px 20px;border-bottom:1px solid rgba(30,45,61,0.6);font-family:var(--mono);font-size:11px;align-items:center;transition:background 0.15s;}
+.history-row{display:grid;grid-template-columns:130px 80px 90px 90px 90px 90px 1fr;padding:12px 20px;border-bottom:1px solid rgba(30,45,61,0.6);font-family:var(--mono);font-size:11px;align-items:center;transition:background 0.15s;}
 .history-row:hover{background:rgba(255,255,255,0.02);}
 .history-row:last-child{border-bottom:none;}
-
-/* ─── MONTH GROUP HEADER (NEW) ─── */
-.month-header{
-  display:flex;justify-content:space-between;align-items:center;
-  padding:18px 20px;background:rgba(15,22,33,0.7);
-  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
-  font-family:var(--mono);
-}
+.month-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:rgba(15,22,33,0.7);border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:var(--mono);}
 .month-header:first-child{border-top:none;}
-.month-header-title{
-  font-size:12px;font-weight:700;color:var(--green);
-  letter-spacing:0.18em;text-transform:uppercase;
-}
-.month-header-stats{
-  display:flex;align-items:center;gap:18px;
-  font-size:10px;color:var(--muted);letter-spacing:0.08em;
-}
+.month-header-title{font-size:12px;font-weight:700;color:var(--green);letter-spacing:0.18em;text-transform:uppercase;}
+.month-header-stats{display:flex;align-items:center;gap:16px;font-size:10px;color:var(--muted);letter-spacing:0.08em;}
 .month-stat-val{color:var(--green);font-weight:700;}
 .month-stat-val.r{color:var(--red);}
-.month-stat-val.y{color:var(--yellow);}
 .month-stat-sep{color:var(--border);}
-
-#load-more-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:11px 28px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-transform:uppercase;display:none;margin:20px auto 0;}
+#load-more-btn{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;padding:11px 28px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-transform:uppercase;display:none;margin:18px auto 0;}
 #load-more-btn:hover{border-color:var(--green);color:var(--green);}
-.blusky-card{max-width:520px;margin:0 auto;background:var(--card);border:1px solid var(--border);padding:36px;position:relative;}
-.blusky-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),var(--blue));}
-.blusky-logo-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
-.blusky-icon{width:48px;height:48px;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:800;color:var(--bg);clip-path:polygon(10% 0%,100% 0%,90% 100%,0% 100%);}
-.blusky-name{font-family:var(--display);font-size:18px;font-weight:700;color:var(--white);}
-.blusky-type{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;}
-.blusky-desc{font-size:14px;color:var(--text);line-height:1.8;margin-bottom:20px;}
-.blusky-features{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
-.blusky-feature{background:var(--card2);padding:10px 14px;font-family:var(--mono);font-size:10px;color:var(--text);display:flex;align-items:center;gap:8px;}
-.blusky-feature::before{content:'✓';color:var(--green);}
-#blusky-promo{display:none;margin-bottom:20px;}
-.promo-box{background:rgba(255,197,52,0.06);border:1px solid rgba(255,197,52,0.25);padding:16px 18px;}
-.promo-label{font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:0.2em;margin-bottom:10px;}
-.promo-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.promo-code-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--white);}
-.promo-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
-.copy-btn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.1em;padding:9px 18px;background:var(--yellow);color:var(--bg);border:none;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
+
+/* ── PARTNERS GRID (Blusky + TPT side by side) ── */
+.partners-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:920px;margin:0 auto;}
+.partner-card{background:var(--card);border:1px solid var(--border);padding:28px;position:relative;display:flex;flex-direction:column;}
+.partner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.partner-card.blusky::before{background:linear-gradient(90deg,var(--green),var(--blue));}
+.partner-card.tpt::before{background:linear-gradient(90deg,var(--yellow),var(--green));}
+.partner-logo-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.partner-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:18px;font-weight:800;color:var(--bg);clip-path:polygon(10% 0%,100% 0%,90% 100%,0% 100%);flex-shrink:0;}
+.partner-icon.blusky{background:var(--green);}
+.partner-icon.tpt{background:var(--yellow);}
+.partner-name{font-family:var(--display);font-size:17px;font-weight:700;color:var(--white);}
+.partner-type{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:0.1em;margin-top:2px;}
+.partner-desc{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:16px;flex:1;}
+.partner-features{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:18px;}
+.partner-feature{background:var(--card2);padding:8px 12px;font-family:var(--mono);font-size:10px;color:var(--text);display:flex;align-items:center;gap:6px;}
+.partner-feature::before{content:'✓';color:var(--green);font-size:10px;}
+.partner-cta{display:block;text-align:center;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.14em;padding:14px;text-decoration:none;transition:all 0.2s;text-transform:uppercase;}
+.partner-cta.active{background:var(--green);color:var(--bg);}
+.partner-cta.active:hover{background:var(--green2);transform:translateY(-1px);}
+.partner-cta.disabled{background:transparent;color:var(--muted);border:1px solid var(--border);cursor:not-allowed;pointer-events:none;}
+.partner-disclaimer{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center;margin-top:8px;letter-spacing:0.06em;}
+#blusky-promo{display:none;margin-bottom:14px;}
+.promo-box{background:rgba(255,197,52,0.06);border:1px solid rgba(255,197,52,0.25);padding:12px 14px;}
+.promo-label{font-family:var(--mono);font-size:9px;color:var(--yellow);letter-spacing:0.2em;margin-bottom:8px;}
+.promo-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.promo-code-val{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--white);}
+.promo-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px;}
+.copy-btn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.1em;padding:8px 14px;background:var(--yellow);color:var(--bg);border:none;cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
 .copy-btn:hover{opacity:0.85;}
-.blusky-cta{display:block;text-align:center;background:var(--green);color:var(--bg);font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.14em;padding:18px;text-decoration:none;transition:all 0.2s;text-transform:uppercase;}
-.blusky-cta:hover{background:var(--green2);transform:translateY(-1px);}
-.blusky-disclaimer{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:center;margin-top:10px;letter-spacing:0.06em;}
-.es-live-card{background:var(--card);border:1px solid rgba(79,195,247,0.35);padding:32px;display:flex;align-items:flex-start;gap:20px;max-width:520px;margin:16px auto 0;position:relative;overflow:hidden;}
-.es-live-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);}
+
+/* ── ES UPSELL FULL-WIDTH ── */
+.es-full-card{background:var(--card);border:1px solid rgba(79,195,247,0.35);padding:36px;max-width:920px;margin:32px auto 0;position:relative;overflow:hidden;display:grid;grid-template-columns:1.5fr 1fr;gap:32px;align-items:center;}
+.es-full-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);}
 .es-badge-live{font-family:var(--mono);font-size:9px;letter-spacing:0.18em;background:rgba(79,195,247,0.15);color:var(--blue);border:1px solid rgba(79,195,247,0.35);padding:4px 10px;display:inline-block;margin-bottom:10px;}
-.es-name{font-family:var(--display);font-size:28px;font-weight:800;color:var(--blue);margin-bottom:6px;}
-.es-desc{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.9;}
-.es-price{font-family:var(--mono);font-size:10px;color:var(--yellow);margin-top:8px;letter-spacing:0.06em;}
-.es-cta-btn{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--bg);background:var(--blue);padding:12px 22px;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all 0.2s;}
-.es-cta-btn:hover{opacity:0.85;}
-.join-wrap{max-width:480px;margin:0 auto;text-align:center;}
-.price-card{background:var(--card);border:1px solid var(--green);padding:48px 40px;position:relative;margin-bottom:32px;}
-.price-badge{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--green);color:var(--bg);font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.15em;padding:5px 20px;white-space:nowrap;}
-.price-val{font-family:var(--display);font-size:64px;font-weight:800;color:var(--white);line-height:1;margin:28px 0 4px;}
-.price-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.1em;margin-bottom:28px;}
-.price-features{list-style:none;text-align:left;margin-bottom:32px;}
-.price-features li{font-family:var(--mono);font-size:12px;color:var(--text);padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
-.price-features li:last-child{border-bottom:none;}
-.price-features li::before{content:'✓';color:var(--green);font-size:11px;flex-shrink:0;}
-.price-note{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:12px;}
-.x-card{background:var(--card);border:1px solid var(--border);padding:28px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.x-info{display:flex;align-items:center;gap:14px;}
-.x-icon{width:42px;height:42px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.x-icon svg{width:18px;height:18px;fill:#000;}
-.x-name{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--white);}
+.es-name{font-family:var(--display);font-size:32px;font-weight:800;color:var(--blue);margin-bottom:6px;line-height:1.05;}
+.es-desc{font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:14px;}
+.es-price-line{font-family:var(--mono);font-size:11px;color:var(--yellow);letter-spacing:0.06em;margin-bottom:14px;}
+.es-features{list-style:none;margin-bottom:0;}
+.es-features li{font-family:var(--mono);font-size:11px;color:var(--text);padding:6px 0;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
+.es-features li:last-child{border-bottom:none;}
+.es-features li::before{content:'✓';color:var(--blue);font-size:10px;flex-shrink:0;}
+.es-cta-btn{display:block;text-align:center;margin-top:18px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--bg);background:var(--blue);padding:16px 22px;text-decoration:none;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:opacity 0.2s;}
+.es-cta-btn:hover{opacity:0.88;}
+
+/* ── X CARD ── */
+.x-card{background:var(--card);border:1px solid var(--border);padding:24px;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;max-width:520px;margin:24px auto 0;}
+.x-info{display:flex;align-items:center;gap:12px;}
+.x-icon{width:38px;height:38px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.x-icon svg{width:16px;height:16px;fill:#000;}
+.x-name{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--white);}
 .x-handle{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;}
-.x-btn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--bg);background:var(--white);padding:12px 28px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:opacity 0.2s;}
+.x-btn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.12em;color:var(--bg);background:var(--white);padding:11px 24px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:opacity 0.2s;}
 .x-btn:hover{opacity:0.85;}
-.x-btn svg{width:13px;height:13px;fill:#000;}
-footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--bg2);padding:48px 32px;}
+.x-btn svg{width:12px;height:12px;fill:#000;}
+
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--bg2);padding:36px 32px;}
 .footer-inner{max-width:1200px;margin:0 auto;}
-.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:32px;margin-bottom:40px;padding-bottom:40px;border-bottom:1px solid var(--border);}
+.footer-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:24px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid var(--border);}
 .footer-brand{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--white);letter-spacing:0.1em;}
 .footer-brand span{color:var(--green);}
 .footer-tagline{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:0.08em;}
-.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap;}
+.footer-links{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
 .footer-links a{font-family:var(--mono);font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:0.08em;transition:color 0.2s;}
 .footer-links a:hover{color:var(--green);}
-.footer-disclaimer{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:2;max-width:900px;}
-.footer-disclaimer p{margin-bottom:10px;}
+.footer-disclaimer{font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.9;max-width:900px;}
+.footer-disclaimer p{margin-bottom:8px;}
 .footer-disclaimer strong{color:var(--text);}
-.footer-bottom{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.footer-bottom{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 .footer-copy{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.06em;}
-.contact-row{margin-top:24px;padding-top:20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.contact-row{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .contact-btn{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:0.1em;padding:10px 20px;background:transparent;color:var(--muted);border:1px solid var(--border);cursor:pointer;transition:all 0.2s;text-transform:uppercase;}
 .contact-btn:hover{color:var(--green);border-color:var(--green);}
-.membership-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;max-width:760px;margin:0 auto 48px;}
+
 .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
 .reveal.visible{opacity:1;transform:none;}
 .reveal-delay-1{transition-delay:0.1s;}
 .reveal-delay-2{transition-delay:0.2s;}
 .reveal-delay-3{transition-delay:0.3s;}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  .bias-wrapper{grid-template-columns:1fr;}
+  .process-kz-grid{grid-template-columns:1fr;}
+  .partners-grid{grid-template-columns:1fr;}
+  .es-full-card{grid-template-columns:1fr;gap:20px;padding:28px;}
+}
 @media(max-width:768px){
   .nav-links{display:none;}
   .nav-inner{padding:0 20px;}
-  .hero{padding:120px 20px 80px;}
+  .hero{padding:110px 20px 50px;}
   .hero-stats{flex-direction:column;width:100%;}
-  .hero-stat{border-right:1px solid var(--border) !important;}
-  .section{padding:70px 20px;}
+  .hero-stat{border-right:1px solid var(--border) !important;width:100%;}
+  .section{padding:48px 20px;}
   .bias-panels{grid-template-columns:1fr;}
   .bias-keys{grid-template-columns:1fr;}
-  .bias-wrapper{flex-direction:column;}
-  .bias-sidebar{flex:none;width:100%;}
+  .steps-grid{grid-template-columns:1fr;}
   .stats-bar{grid-template-columns:1fr 1fr;}
   .history-header,.history-row{grid-template-columns:110px 70px 80px 1fr;}
   .history-header span:nth-child(4),.history-header span:nth-child(5),.history-header span:nth-child(6),
   .history-row>*:nth-child(4),.history-row>*:nth-child(5),.history-row>*:nth-child(6){display:none;}
   .month-header{padding:14px 16px;flex-direction:column;align-items:flex-start;gap:6px;}
   .month-header-stats{gap:12px;font-size:9px;}
-  .steps-grid{grid-template-columns:1fr;}
-  .membership-grid{grid-template-columns:1fr !important;max-width:400px !important;}
-  footer{padding:36px 20px;}
+  footer{padding:28px 20px;}
   .footer-top{flex-direction:column;}
   .x-card{flex-direction:column;text-align:center;}
   .contact-row{flex-direction:column;align-items:flex-start;}
+  .partner-features{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -312,56 +342,59 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
       <li><a href="#signal">Signals</a></li>
       <li><a href="#how">Process</a></li>
       <li><a href="#history">History</a></li>
-      <li><a href="#broker">Broker</a></li>
+      <li><a href="#partners">Brokers</a></li>
       <li><a href="/es" style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.1em;background:#4fc3f7;color:#080b0f;padding:8px 16px;border-radius:2px;text-decoration:none;text-transform:uppercase;">ES</a></li>
     </ul>
-    <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="nav-cta">Join Free</a>
+    <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="nav-cta">Get ES — $5/MO</a>
   </div>
   <div class="ticker-wrap">
     <div class="ticker-track">
       <span class="tick"><span class="tick-label">SIGNAL</span><span id="t-signal-1" class="tick-green">LOADING</span></span>
-      <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
+      <span class="tick"><span class="tick-label">NQ</span><span class="tick-green">FREE FOREVER</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-1" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-1" class="tick-green">TRACKING</span></span>
-      <span class="tick"><span class="tick-label">ES + GOLD</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
-      <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
+      <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://trader.blusky.pro/sign-up?referral_id=4a2f7936665a" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
       <span class="tick"><span class="tick-label">SIGNAL</span><span id="t-signal-2" class="tick-green">LOADING</span></span>
-      <span class="tick"><span class="tick-label">200 EMA</span><span class="tick-val">OVERHEAD</span><span class="tick-red">BEARISH</span></span>
+      <span class="tick"><span class="tick-label">NQ</span><span class="tick-green">FREE FOREVER</span></span>
       <span class="tick"><span class="tick-label">KILLZONE</span><span class="tick-yellow">NY OPEN 08:00–12:00 EST</span></span>
       <span class="tick"><span class="tick-label">TOTAL PTS</span><span id="t-pts-2" class="tick-green">+0 PTS</span></span>
       <span class="tick"><span class="tick-label">WIN RATE</span><span id="t-wr-2" class="tick-green">TRACKING</span></span>
-      <span class="tick"><span class="tick-label">ES + GOLD</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
-      <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://fas.st/t/pqmnB5KZ" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
+      <span class="tick"><span class="tick-label">ES SIGNALS</span><span class="tick-green"><a href="/es" style="color:inherit;text-decoration:none;">LIVE NOW — $5/MO →</a></span></span>
+      <span class="tick"><span class="tick-label">BROKER</span><span class="tick-green"><a href="https://trader.blusky.pro/sign-up?referral_id=4a2f7936665a" target="_blank" style="color:inherit;text-decoration:none;">BLUSKY — SIGN UP →</a></span></span>
     </div>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-badge"><div class="hero-badge-dot"></div>Free Smart Money Signals · NQ Futures</div>
-  <h1>Stop Guessing.<br><span class="accent-green">Start Trading</span><br>with <span class="accent-red">Real Levels.</span></h1>
-  <p class="hero-sub">Daily bias + exact entry, SL, and TP levels delivered free.<br>
-  <strong><span id="hero-wr-inline">—</span> win rate · <span id="hero-pts-inline">—</span> pts tracked</strong> · London &amp; NY killzones only.</p>
+  <h1>Stop Guessing.<br><span class="accent-green">Start Trading</span> with <span class="accent-red">Real Levels.</span></h1>
+  <p class="hero-sub">NQ signals are <strong>100% free</strong> — no signup, no email needed. Daily bias + exact entry, SL, and TP levels.<br><strong><span id="hero-wr-inline">—</span> win rate · <span id="hero-pts-inline">—</span> pts tracked.</p>
   <div class="hero-stats">
     <div class="hero-stat"><span class="hero-stat-val" id="hero-wins">—</span><span class="hero-stat-lbl">WINS</span></div>
     <div class="hero-stat"><span class="hero-stat-val red" id="hero-losses">—</span><span class="hero-stat-lbl">LOSSES</span></div>
     <div class="hero-stat"><span class="hero-stat-val" id="hero-wr">—</span><span class="hero-stat-lbl">WIN RATE</span></div>
     <div class="hero-stat"><span class="hero-stat-val" id="hero-pts">—</span><span class="hero-stat-lbl">TOTAL PTS</span></div>
   </div>
-  <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="btn-primary">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    JOIN FREE — GET SIGNALS
-  </a>
+  <div class="hero-cta-row">
+    <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      GET ES ACCESS — $5/MONTH
+    </a>
+    <a href="#signal" class="btn-secondary">VIEW FREE NQ BIAS ↓</a>
+  </div>
   <div class="trust-bar">
-    <span>Zero cost</span><span>No credit card</span><span>Unsubscribe anytime</span><span>Traded live on Blusky</span>
+    <span>NQ free forever</span><span>ES $5/mo cancel anytime</span><span>Traded live on Blusky</span>
   </div>
 </section>
 
 <div class="divider"></div>
 
+<!-- BIAS + SIDEBAR (side by side on desktop) -->
 <section class="section reveal" id="signal">
   <div class="section-label">Today's Bias</div>
-  <div class="section-title">Daily plan.<br>Clear levels.</div>
+  <div class="section-title">Daily plan. Clear levels.</div>
   <p class="section-sub">Every morning we analyse HTF charts and post short and long zones with confidence levels. Updated before NY Open.</p>
   <div class="bias-wrapper">
     <div class="bias-main">
@@ -383,10 +416,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
           <li>London + NY killzone alerts</li>
           <li>Live trade card on signal</li>
           <li>Entry, SL, TP1 + TP2</li>
-          <li>Hourly in-trade updates</li>
           <li>Full trade history</li>
-          <li>Follow on X for live updates</li>
+          <li>Follow on X for updates</li>
         </ul>
+      </div>
+      <div class="sidebar-es">
+        <div class="sidebar-es-label">⚡ ALSO LIVE</div>
+        <div class="sidebar-es-title">ES + Gold $5/mo</div>
+        <div class="sidebar-es-desc">Same Smart Money framework, applied to S&amp;P 500 + Gold Futures. SMT divergence vs NQ on every call.</div>
+        <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="sidebar-es-btn">GET ACCESS →</a>
       </div>
     </div>
   </div>
@@ -394,38 +432,42 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 
 <div class="divider"></div>
 
+<!-- PROCESS + KILLZONE (merged side by side on desktop) -->
 <section class="section reveal" id="how">
   <div class="section-label">The Process</div>
-  <div class="section-title">No discretion.<br>Just three rules.</div>
+  <div class="section-title">No discretion. Just three rules.</div>
   <p class="section-sub">Applied identically every session. No interpretation. No gut feel.</p>
-  <div class="steps-grid">
-    <div class="step-card reveal reveal-delay-1"><div class="step-num">STEP 01</div><div class="step-icon">📊</div><h3>4H Bias</h3><p>Mark 4H swing highs and lows. Identify which liquidity pool price is targeting. This is the only direction we trade — no exceptions.</p></div>
-    <div class="step-card reveal reveal-delay-2"><div class="step-num">STEP 02</div><div class="step-icon">⚡</div><h3>15M Sweep</h3><p>Wait for price to breach a key 15M level inside the London or NY killzone. The sweep triggers the setup — nothing before it counts.</p></div>
-    <div class="step-card reveal reveal-delay-3"><div class="step-num">STEP 03</div><div class="step-icon">🎯</div><h3>FVG Entry</h3><p>A Fair Value Gap must form on the reversal. Enter on retest. SL fixed at the sweep candle — never moved. TP1 at 1R, TP2 at 2R.</p></div>
-    <div class="step-card reveal reveal-delay-1"><div class="step-num">FILTER</div><div class="step-icon">🔍</div><h3>EMA Confluence</h3><p>Price must be on the correct side of the 200 EMA. 21 EMA slope confirms momentum. Both must align with HTF bias — or it's a WAIT.</p></div>
-  </div>
-  <div class="kz-wrap reveal">
-    <div class="kz-title">TRADING WINDOWS — EST (24-HOUR CLOCK)</div>
-    <div class="kz-bar">
-      <div class="kz-zone kz-asia">ASIA</div>
-      <div class="kz-zone kz-london">LONDON</div>
-      <div class="kz-zone kz-ny">NY OPEN</div>
+  <div class="process-kz-grid">
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1"><div class="step-num">STEP 01</div><div class="step-icon">📊</div><h3>4H Bias</h3><p>Mark 4H swing highs/lows. Identify which liquidity pool price targets. Only direction we trade.</p></div>
+      <div class="step-card reveal reveal-delay-2"><div class="step-num">STEP 02</div><div class="step-icon">⚡</div><h3>15M Sweep</h3><p>Wait for price to breach a key 15M level inside London or NY killzone. The sweep triggers the setup.</p></div>
+      <div class="step-card reveal reveal-delay-3"><div class="step-num">STEP 03</div><div class="step-icon">🎯</div><h3>FVG Entry</h3><p>FVG must form on the reversal. Enter on retest. SL fixed at sweep candle. TP1 at 1R, TP2 at 2R.</p></div>
+      <div class="step-card reveal reveal-delay-1"><div class="step-num">FILTER</div><div class="step-icon">🔍</div><h3>EMA Confluence</h3><p>Price on correct side of 200 EMA. 21 EMA slope confirms momentum. Both align with HTF — or WAIT.</p></div>
     </div>
-    <div class="kz-labels"><span>00:00</span><span>02:00</span><span>05:00</span><span>08:00</span><span>10:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>24:00</span></div>
-    <div class="kz-legend">
-      <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--blue)"></span>Asia: 08:00–12:00 PM EST (prev day)</span>
-      <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--green)"></span>London: 02:00–05:00 EST</span>
-      <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--yellow)"></span>NY Open: 08:00–12:00 EST</span>
-      <span class="kz-legend-item" style="color:var(--red);">⚠ No new entries after 12:00 PM EST</span>
+    <div class="kz-wrap reveal">
+      <div class="kz-title">TRADING WINDOWS — EST</div>
+      <div class="kz-bar">
+        <div class="kz-zone kz-asia">ASIA</div>
+        <div class="kz-zone kz-london">LONDON</div>
+        <div class="kz-zone kz-ny">NY</div>
+      </div>
+      <div class="kz-labels"><span>00</span><span>04</span><span>08</span><span>12</span><span>16</span><span>20</span><span>24</span></div>
+      <div class="kz-legend">
+        <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--blue)"></span>Asia 20:00–00:00</span>
+        <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--green)"></span>London 02:00–05:00</span>
+        <span class="kz-legend-item"><span class="kz-legend-dot" style="background:var(--yellow)"></span>NY Open 08:00–12:00</span>
+        <span class="kz-legend-item" style="color:var(--red);">⚠ No entries after 12:00 PM</span>
+      </div>
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
+<!-- HISTORY -->
 <section class="section reveal" id="history">
   <div class="section-label">Verified Calls</div>
-  <div class="section-title">Public calls.<br>Real levels.</div>
+  <div class="section-title">Public calls. Real levels.</div>
   <p class="section-sub">Every signal posted before entry. Every result logged automatically.</p>
   <div class="stats-bar">
     <div class="stat-box"><div class="stat-box-val g" id="stat-wins">—</div><div class="stat-box-lbl">WINS</div></div>
@@ -438,7 +480,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
     <button class="filter-btn" onclick="filterHistory('WIN')" id="filter-WIN">Wins</button>
     <button class="filter-btn" onclick="filterHistory('LOSS')" id="filter-LOSS">Losses</button>
     <button class="filter-btn" onclick="filterHistory('RUNNING')" id="filter-RUNNING">Running</button>
-    <button class="filter-btn" onclick="filterHistory('BIAS')" id="filter-BIAS">Bias Cards</button>
+    <button class="filter-btn" onclick="filterHistory('BIAS')" id="filter-BIAS">Bias</button>
   </div>
   <div class="history-wrap">
     <div class="history-header"><span>DATE</span><span>SIGNAL</span><span>ENTRY</span><span>SL</span><span>TP1</span><span>TP2</span><span>RESULT</span></div>
@@ -449,86 +491,78 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 
 <div class="divider"></div>
 
-<section class="section reveal" id="broker" style="text-align:center;">
-  <div class="section-label">Trading With</div>
-  <div class="section-title">The broker behind<br>every trade.</div>
-  <p class="section-sub" style="margin:0 auto 48px;">Every signal on this site is traded live with Blusky. Fast execution, low commissions, built for futures.</p>
-  <div class="blusky-card">
-    <div class="blusky-logo-row">
-      <div class="blusky-icon">B</div>
-      <div><div class="blusky-name">BLUSKY</div><div class="blusky-type">FUTURES BROKER</div></div>
+<!-- PARTNERS (Blusky + Take Profit Trader side by side) + ES UPSELL -->
+<section class="section reveal" id="partners" style="text-align:center;">
+  <div class="section-label" style="justify-content:center;">Partners</div>
+  <div class="section-title">The brokers behind every trade.</div>
+  <p class="section-sub" style="margin:0 auto 36px;">Every signal on this site is traded live. Fast execution, low commissions, built for futures.</p>
+  <div class="partners-grid">
+    <!-- BLUSKY -->
+    <div class="partner-card blusky">
+      <div class="partner-logo-row">
+        <div class="partner-icon blusky">B</div>
+        <div style="text-align:left;"><div class="partner-name">BLUSKY</div><div class="partner-type">PROP FIRM · LIVE BROKER</div></div>
+      </div>
+      <p class="partner-desc" style="text-align:left;">Great deal on prop firm accounts. The broker I personally use for every NQ trade on this site.</p>
+      <div class="partner-features">
+        <div class="partner-feature">Prop accounts</div>
+        <div class="partner-feature">Low commissions</div>
+        <div class="partner-feature">Fast execution</div>
+        <div class="partner-feature">NQ · ES · Gold</div>
+      </div>
+      <div id="blusky-promo"></div>
+      <a href="https://trader.blusky.pro/sign-up?referral_id=4a2f7936665a" target="_blank" rel="noopener" class="partner-cta active">SIGN UP WITH MY LINK →</a>
+      <p class="partner-disclaimer">Affiliate link — I earn at no cost to you</p>
     </div>
-    <p class="blusky-desc">The broker I personally use for every NQ trade on this site. Fast execution, low commissions, and a platform built specifically for futures traders.</p>
-    <div class="blusky-features">
-      <div class="blusky-feature">Micro futures</div>
-      <div class="blusky-feature">Low commissions</div>
-      <div class="blusky-feature">Fast execution</div>
-      <div class="blusky-feature">NQ · ES · Gold</div>
+    <!-- TAKE PROFIT TRADER -->
+    <div class="partner-card tpt">
+      <div class="partner-logo-row">
+        <div class="partner-icon tpt">T</div>
+        <div style="text-align:left;"><div class="partner-name">TAKE PROFIT TRADER</div><div class="partner-type">PROP FIRM · COMING SOON</div></div>
+      </div>
+      <p class="partner-desc" style="text-align:left;">Second prop firm option for funded trading accounts. Affiliate partnership launching soon — sign-up link coming in the next week.</p>
+      <div class="partner-features">
+        <div class="partner-feature">Prop accounts</div>
+        <div class="partner-feature">Funded payouts</div>
+        <div class="partner-feature">Daily drawdown</div>
+        <div class="partner-feature">NQ · ES · Gold</div>
+      </div>
+      <div style="height:38px;"></div>
+      <a class="partner-cta disabled" aria-disabled="true" title="Link coming soon">🔒 LINK COMING SOON</a>
+      <p class="partner-disclaimer">Affiliate partnership in progress</p>
     </div>
-    <div id="blusky-promo"></div>
-    <a href="https://fas.st/t/pqmnB5KZ" target="_blank" rel="noopener" class="blusky-cta">SIGN UP WITH MY LINK →</a>
-    <p class="blusky-disclaimer">Affiliate link — I earn a commission at no cost to you</p>
   </div>
-  <div class="es-live-card">
-    <div style="flex:1;">
+
+  <!-- ES + GOLD UPSELL -->
+  <div class="es-full-card">
+    <div style="text-align:left;">
       <div class="es-badge-live">⚡ NOW LIVE</div>
-      <div class="es-name">ES + Gold</div>
-      <div class="es-desc">S&amp;P 500 + Gold Futures signals — same framework, same process.<br>Daily bias + SHORT/LONG zones + exact levels for both instruments.<br>One subscription unlocks everything.</div>
-      <div class="es-price">30 days free → then $5/month · Cancel anytime</div>
-      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="es-cta-btn">GET ACCESS →</a>
+      <div class="es-name">ES + Gold · $5/mo</div>
+      <div class="es-desc">S&amp;P 500 + Gold Futures signals — same Smart Money framework as NQ. Daily bias + SHORT/LONG zones + exact levels for both instruments. One subscription unlocks everything.</div>
+      <div class="es-price-line">30 days free → then $5/month · Cancel anytime</div>
     </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<section class="section reveal" id="join" style="text-align:center;">
-  <div class="section-label">Membership</div>
-  <div class="section-title">Free or $5.<br>That's it.</div>
-  <p class="section-sub" style="margin:0 auto 48px;">NQ signals are free forever. One $5/month subscription unlocks both ES and Gold.</p>
-  <div class="membership-grid">
-    <div class="price-card" style="border-color:var(--green);margin-bottom:0;">
-      <div class="price-badge">FREE — NO CREDIT CARD</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;margin-top:28px;margin-bottom:8px;">NQ FUTURES</div>
-      <div class="price-val" style="font-size:48px;">FREE</div>
-      <div class="price-sub">NQ SIGNALS · FREE FOREVER</div>
-      <ul class="price-features">
-        <li>Daily NQ pre-session bias card</li>
-        <li>London + NY killzone alerts</li>
-        <li>Live NQ trade cards — exact levels</li>
-        <li>Full NQ trade history + win rate</li>
-        <li>Email delivery · No spam</li>
-      </ul>
-      <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;">JOIN FREE →</a>
-      <p class="price-note">SIGNALS DELIVERED VIA EMAIL · NO SPAM EVER</p>
-    </div>
-    <div class="price-card" style="border-color:var(--blue);margin-bottom:0;">
-      <div class="price-badge" style="background:var(--blue);">$5/MONTH · 30 DAYS FREE</div>
-      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:0.2em;margin-top:28px;margin-bottom:8px;">ES + GOLD</div>
-      <div class="price-val" style="font-size:48px;color:var(--blue);">$5<span style="font-size:20px;color:var(--muted);font-family:var(--mono);font-weight:400;">/mo</span></div>
-      <div class="price-sub">BOTH INSTRUMENTS · ONE SUBSCRIPTION</div>
-      <ul class="price-features">
-        <li>Daily ES + Gold pre-session bias cards</li>
-        <li>SMT divergence vs NQ every session</li>
-        <li>DXY correlation analysis for Gold</li>
+    <div>
+      <ul class="es-features">
+        <li>Daily ES + Gold bias cards</li>
+        <li>SMT divergence vs NQ</li>
+        <li>DXY correlation for Gold</li>
         <li>Live trade cards — exact levels</li>
         <li>Full trade history + win rate</li>
       </ul>
-      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="btn-primary" style="display:block;clip-path:none;text-align:center;background:var(--blue);">GET ACCESS →</a>
-      <p class="price-note">30 DAYS FREE · CANCEL ANYTIME · SECURE STRIPE</p>
+      <a href="https://buy.stripe.com/00w8wR9guehtay2akW4F200" target="_blank" class="es-cta-btn">GET ACCESS — $5/MONTH →</a>
     </div>
   </div>
-  <div class="join-wrap">
-    <div class="x-card reveal">
-      <div class="x-info">
-        <div class="x-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
-        <div><div class="x-name">NQ Level Hunter</div><div class="x-handle">LIVE CALLS · NQ + ES + GOLD · REAL TIME UPDATES</div></div>
-      </div>
-      <a href="https://x.com/PratikP03691040" target="_blank" rel="noopener" class="x-btn">
-        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-        FOLLOW ON X
-      </a>
+
+  <!-- X CARD -->
+  <div class="x-card reveal">
+    <div class="x-info">
+      <div class="x-icon"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+      <div style="text-align:left;"><div class="x-name">NQ Level Hunter</div><div class="x-handle">LIVE CALLS · NQ + ES · REAL TIME</div></div>
     </div>
+    <a href="https://x.com/PratikP03691040" target="_blank" rel="noopener" class="x-btn">
+      <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      FOLLOW ON X
+    </a>
   </div>
 </section>
 
@@ -541,16 +575,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
       </div>
       <div class="footer-links">
         <a href="https://x.com/PratikP03691040" target="_blank">Follow on X</a>
-        <a href="https://nqlevelhunter.beehiiv.com/subscribe" target="_blank">Join Free</a>
         <a href="/es">ES + Gold ($5/mo)</a>
-        <a href="https://fas.st/t/pqmnB5KZ" target="_blank">Trade on Blusky</a>
+        <a href="https://trader.blusky.pro/sign-up?referral_id=4a2f7936665a" target="_blank">Trade on Blusky</a>
       </div>
     </div>
     <div class="footer-disclaimer">
       <p><strong>RISK DISCLOSURE:</strong> This website and its content is for informational and educational purposes only and does not constitute financial advice, investment advice, trading advice, or any other advice. Nothing on this site should be construed as a recommendation to buy or sell any security or financial instrument.</p>
-      <p>Trading futures contracts involves substantial risk of loss and is not appropriate for all investors. You could lose some or all of your initial investment. Past performance is not necessarily indicative of future results. The high degree of leverage that is often obtainable in futures trading can work against you as well as for you.</p>
-      <p>NQ Level Hunter is not a registered investment advisor, broker-dealer, or member of any financial regulatory organization. The signals and analysis provided are based on publicly available information and the personal trading methodology of the site operator. No guarantees are made regarding the accuracy, timeliness, or completeness of the information provided.</p>
-      <p>All trades shown on this website were executed using the operator's personal capital. Results shown are for informational purposes only and individual results will vary. By using this website, you acknowledge that you are solely responsible for your own investment decisions.</p>
+      <p>Trading futures contracts involves substantial risk of loss and is not appropriate for all investors. You could lose some or all of your initial investment. Past performance is not necessarily indicative of future results.</p>
+      <p>NQ Level Hunter is not a registered investment advisor, broker-dealer, or member of any financial regulatory organization. The signals and analysis provided are based on publicly available information and the personal trading methodology of the site operator.</p>
     </div>
     <div class="footer-bottom">
       <div class="footer-copy">© 2026 NQ Level Hunter · All rights reserved</div>
@@ -586,105 +618,10 @@ fetchSignal();setInterval(fetchSignal,60000);
 let allHistory=[],visibleCount=10,activeFilter='ALL';
 async function fetchHistory(){try{const data=await sbFetch('signals_nq?asset=eq.NQ&order=created_at.desc&limit=200');if(!data||!data.length){document.getElementById('history-rows').innerHTML='<div style="padding:32px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals yet.</div>';return;}allHistory=data;updateStats(data);renderHistory();}catch(e){document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--red);">'+e.message+'</div>';}}
 function updateStats(data){const live=data.filter(s=>s.card_type==='LIVE');const wins=live.filter(s=>s.outcome==='WIN').length;const losses=live.filter(s=>s.outcome==='LOSS').length;const closed=wins+losses;const rate=closed>0?Math.round(wins/closed*100):0;let pts=0;live.forEach(s=>{if(s.points!=null)pts+=Number(s.points);});const setEl=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};setEl('stat-wins',wins||'—');setEl('stat-losses',losses||'—');setEl('stat-wr',closed>0?rate+'%':'—');setEl('stat-pts',closed>0?(pts>=0?'+'+pts:String(pts)):'—');setEl('result-pts',closed>0?(pts>=0?'+'+pts:String(pts)):'—');setEl('hero-wins',wins||'—');setEl('hero-losses',losses||'—');setEl('hero-wr',closed>0?rate+'%':'—');setEl('hero-pts',closed>0?(pts>=0?'+'+pts.toLocaleString():pts.toLocaleString()):'—');setEl('hero-wr-inline',closed>0?rate+'%':'—');setEl('hero-pts-inline',closed>0?(pts>=0?'+'+pts.toLocaleString():pts.toLocaleString()):'—');const ptsT=closed>0?(pts>=0?'+'+pts+' PTS':pts+' PTS'):'LOADING...';const wrT=closed>0?rate+'% · '+wins+'W / '+losses+'L':'TRACKING';['t-pts-1','t-pts-2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=ptsT;});['t-wr-1','t-wr-2'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=wrT;});}
-
-// ─── HELPER: format a single history row ───
-function buildHistoryRow(s){
-  const isBias=s.card_type==='BIAS';
-  const outcome=(s.outcome||'').toUpperCase();
-  const dir=(s.direction||'').toUpperCase();
-  const isShort=dir==='SHORT',isLong=dir==='LONG';
-  const ts=new Date(s.created_at);
-  const dStr=ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'America/New_York'});
-  const tStr=ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'});
-  let col1='<span style="color:var(--muted)">'+dStr+'<br><span style="font-size:10px">'+tStr+'</span></span>';
-  let col2,col3,col4,col5,col6,col7;
-  if(isBias){
-    const bc=(s.overall_bias||'').toUpperCase().includes('BULL')?'var(--green)':(s.overall_bias||'').toUpperCase().includes('BEAR')?'var(--red)':'var(--yellow)';
-    col2='<span style="color:'+bc+';font-weight:700">BIAS</span>';
-    col3='<span style="color:'+bc+';font-size:10px">'+(s.overall_bias||'—')+'</span>';
-    col4='<span style="color:var(--muted)">—</span>';
-    col5='<span style="color:var(--red);font-size:10px">'+(s.short_zone||'—')+'</span>';
-    col6='<span style="color:var(--green);font-size:10px">'+(s.long_zone||'—')+'</span>';
-    const brC=s.bias_result==='HIT'?'var(--green)':s.bias_result==='MISSED'?'var(--red)':s.bias_result==='PARTIAL'?'var(--yellow)':'var(--muted)';
-    col7='<span style="color:'+brC+';font-weight:700">'+(s.bias_result||'OPEN')+'</span>';
-  }else{
-    const sc=isShort?'var(--red)':isLong?'var(--green)':'var(--muted)';
-    col2='<span style="color:'+sc+';font-weight:700">'+dir+(isShort?' ▼':isLong?' ▲':'')+'</span>';
-    col3='<span style="color:var(--text)">'+cn(s.entry)+'</span>';
-    col4='<span style="color:var(--red)">'+cn(s.stop_loss)+'</span>';
-    col5='<span style="color:var(--green)">'+cn(s.tp1)+'</span>';
-    col6='<span style="color:var(--green)">'+cn(s.tp2)+'</span>';
-    const outC=outcome==='WIN'?'var(--green)':outcome==='LOSS'?'var(--red)':dir==='WAIT'?'var(--muted)':'var(--yellow)';
-    const resL=outcome==='WIN'?(s.result||'TP1')+' ✓ +'+(s.points||0)+'pts':outcome==='LOSS'?'SL ✗ '+(s.points?s.points+'pts':''):dir==='WAIT'?'WAIT —':'RUNNING';
-    col7='<span style="color:'+outC+';font-weight:700">'+resL+'</span>';
-  }
-  return '<div class="history-row">'+col1+col2+col3+col4+col5+col6+col7+'</div>';
-}
-
-// ─── HELPER: build month-group header with W/L/pts summary ───
-function buildMonthHeader(monthKey,trades){
-  const live=trades.filter(s=>s.card_type==='LIVE');
-  const wins=live.filter(s=>s.outcome==='WIN').length;
-  const losses=live.filter(s=>s.outcome==='LOSS').length;
-  let pts=0;
-  live.forEach(s=>{if(s.points!=null)pts+=Number(s.points);});
-  const ptsStr=pts>=0?'+'+pts.toLocaleString():pts.toLocaleString();
-  const ptsClass=pts>=0?'':'r';
-  const wlStr=wins+'W / '+losses+'L';
-  return '<div class="month-header">'+
-    '<div class="month-header-title">'+monthKey+'</div>'+
-    '<div class="month-header-stats">'+
-      '<span><span class="month-stat-val '+ptsClass+'">'+ptsStr+'</span> PTS</span>'+
-      '<span class="month-stat-sep">·</span>'+
-      '<span><span class="month-stat-val">'+wlStr+'</span></span>'+
-      '<span class="month-stat-sep">·</span>'+
-      '<span>'+trades.length+' SIGNALS</span>'+
-    '</div>'+
-  '</div>';
-}
-
-// ─── HELPER: group trades by month-year key ───
-function groupByMonth(trades){
-  const groups={};
-  const order=[];
-  trades.forEach(s=>{
-    const ts=new Date(s.created_at);
-    const monthKey=ts.toLocaleDateString('en-US',{month:'long',year:'numeric',timeZone:'America/New_York'}).toUpperCase();
-    if(!groups[monthKey]){groups[monthKey]=[];order.push(monthKey);}
-    groups[monthKey].push(s);
-  });
-  return {groups,order};
-}
-
-function renderHistory(){
-  const filtered=activeFilter==='ALL'?allHistory.filter(s=>s.card_type!=='BIAS'):allHistory.filter(s=>{
-    if(activeFilter==='BIAS')return s.card_type==='BIAS';
-    if(activeFilter==='WIN')return s.card_type==='LIVE'&&s.outcome==='WIN';
-    if(activeFilter==='LOSS')return s.card_type==='LIVE'&&s.outcome==='LOSS';
-    if(activeFilter==='RUNNING')return s.card_type==='LIVE'&&!s.outcome&&s.status==='OPEN';
-    return false;
-  });
-  const visible=filtered.slice(0,visibleCount);
-  document.getElementById('load-more-btn').style.display=filtered.length>visibleCount?'block':'none';
-  if(!visible.length){
-    document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals match this filter.</div>';
-    return;
-  }
-
-  // Build month-grouped HTML for ALL view
-  if(activeFilter==='ALL'){
-    const {groups,order}=groupByMonth(visible);
-    let html='';
-    order.forEach(monthKey=>{
-      html+=buildMonthHeader(monthKey,groups[monthKey]);
-      html+=groups[monthKey].map(buildHistoryRow).join('');
-    });
-    document.getElementById('history-rows').innerHTML=html;
-  }else{
-    // Other filters render as flat list (no month headers)
-    document.getElementById('history-rows').innerHTML=visible.map(buildHistoryRow).join('');
-  }
-}
+function buildHistoryRow(s){const isBias=s.card_type==='BIAS';const outcome=(s.outcome||'').toUpperCase();const dir=(s.direction||'').toUpperCase();const isShort=dir==='SHORT',isLong=dir==='LONG';const ts=new Date(s.created_at);const dStr=ts.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'America/New_York'});const tStr=ts.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZone:'America/New_York'});let col1='<span style="color:var(--muted)">'+dStr+'<br><span style="font-size:10px">'+tStr+'</span></span>';let col2,col3,col4,col5,col6,col7;if(isBias){const bc=(s.overall_bias||'').toUpperCase().includes('BULL')?'var(--green)':(s.overall_bias||'').toUpperCase().includes('BEAR')?'var(--red)':'var(--yellow)';col2='<span style="color:'+bc+';font-weight:700">BIAS</span>';col3='<span style="color:'+bc+';font-size:10px">'+(s.overall_bias||'—')+'</span>';col4='<span style="color:var(--muted)">—</span>';col5='<span style="color:var(--red);font-size:10px">'+(s.short_zone||'—')+'</span>';col6='<span style="color:var(--green);font-size:10px">'+(s.long_zone||'—')+'</span>';const brC=s.bias_result==='HIT'?'var(--green)':s.bias_result==='MISSED'?'var(--red)':s.bias_result==='PARTIAL'?'var(--yellow)':'var(--muted)';col7='<span style="color:'+brC+';font-weight:700">'+(s.bias_result||'OPEN')+'</span>';}else{const sc=isShort?'var(--red)':isLong?'var(--green)':'var(--muted)';col2='<span style="color:'+sc+';font-weight:700">'+dir+(isShort?' ▼':isLong?' ▲':'')+'</span>';col3='<span style="color:var(--text)">'+cn(s.entry)+'</span>';col4='<span style="color:var(--red)">'+cn(s.stop_loss)+'</span>';col5='<span style="color:var(--green)">'+cn(s.tp1)+'</span>';col6='<span style="color:var(--green)">'+cn(s.tp2)+'</span>';const outC=outcome==='WIN'?'var(--green)':outcome==='LOSS'?'var(--red)':dir==='WAIT'?'var(--muted)':'var(--yellow)';const resL=outcome==='WIN'?(s.result||'TP1')+' ✓ +'+(s.points||0)+'pts':outcome==='LOSS'?'SL ✗ '+(s.points?s.points+'pts':''):dir==='WAIT'?'WAIT —':'RUNNING';col7='<span style="color:'+outC+';font-weight:700">'+resL+'</span>';}return '<div class="history-row">'+col1+col2+col3+col4+col5+col6+col7+'</div>';}
+function buildMonthHeader(monthKey,trades){const live=trades.filter(s=>s.card_type==='LIVE');const wins=live.filter(s=>s.outcome==='WIN').length;const losses=live.filter(s=>s.outcome==='LOSS').length;let pts=0;live.forEach(s=>{if(s.points!=null)pts+=Number(s.points);});const ptsStr=pts>=0?'+'+pts.toLocaleString():pts.toLocaleString();const ptsClass=pts>=0?'':'r';const wlStr=wins+'W / '+losses+'L';return '<div class="month-header"><div class="month-header-title">'+monthKey+'</div><div class="month-header-stats"><span><span class="month-stat-val '+ptsClass+'">'+ptsStr+'</span> PTS</span><span class="month-stat-sep">·</span><span><span class="month-stat-val">'+wlStr+'</span></span><span class="month-stat-sep">·</span><span>'+trades.length+' SIGNALS</span></div></div>';}
+function groupByMonth(trades){const groups={};const order=[];trades.forEach(s=>{const ts=new Date(s.created_at);const monthKey=ts.toLocaleDateString('en-US',{month:'long',year:'numeric',timeZone:'America/New_York'}).toUpperCase();if(!groups[monthKey]){groups[monthKey]=[];order.push(monthKey);}groups[monthKey].push(s);});return {groups,order};}
+function renderHistory(){const filtered=activeFilter==='ALL'?allHistory.filter(s=>s.card_type!=='BIAS'):allHistory.filter(s=>{if(activeFilter==='BIAS')return s.card_type==='BIAS';if(activeFilter==='WIN')return s.card_type==='LIVE'&&s.outcome==='WIN';if(activeFilter==='LOSS')return s.card_type==='LIVE'&&s.outcome==='LOSS';if(activeFilter==='RUNNING')return s.card_type==='LIVE'&&!s.outcome&&s.status==='OPEN';return false;});const visible=filtered.slice(0,visibleCount);document.getElementById('load-more-btn').style.display=filtered.length>visibleCount?'block':'none';if(!visible.length){document.getElementById('history-rows').innerHTML='<div style="padding:24px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);">No signals match this filter.</div>';return;}if(activeFilter==='ALL'){const {groups,order}=groupByMonth(visible);let html='';order.forEach(monthKey=>{html+=buildMonthHeader(monthKey,groups[monthKey]);html+=groups[monthKey].map(buildHistoryRow).join('');});document.getElementById('history-rows').innerHTML=html;}else{document.getElementById('history-rows').innerHTML=visible.map(buildHistoryRow).join('');}}
 function filterHistory(f){activeFilter=f;visibleCount=10;['ALL','WIN','LOSS','RUNNING','BIAS'].forEach(k=>{const btn=document.getElementById('filter-'+k);if(btn)btn.className='filter-btn'+(k===f?' active':'');});renderHistory();}
 function loadMore(){visibleCount+=10;renderHistory();}
 fetchHistory();
