@@ -1,6 +1,6 @@
 {
   "rewrites": [
     { "source": "/es", "destination": "/es.html" },
-    { "source": "/c", "destination": "/" }
+    { "source": "/gold", "destination": "/gold.html" }
   ]
 }
